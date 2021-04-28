@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 19:11:54 by mhufflep          #+#    #+#             */
-/*   Updated: 2020/11/02 07:41:00 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:26:47 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ char	*ft_strchr(const char *s, int c)
 	while (s[i] != '\0')
 	{
 		if (s[i] == c)
-			return (&s[i]);
+			return ((char *)&s[i]);
 		i++;
 	}
 	if (s[i] == c)
-		return (&s[i]);
+		return ((char *)&s[i]);
 	return (0);
 }
