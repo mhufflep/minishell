@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 11:49:12 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/04/28 23:15:42 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:29:06 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static int	count_digits(int n)
 {
-	int		c;
-	int		digits;
-	
+	int	digits;
+
 	digits = 1;
 	if (n < 0)
 		digits++;
@@ -25,7 +24,7 @@ static int	count_digits(int n)
 		n /= 10;
 		digits++;
 	}
-	return (digits);	
+	return (digits);
 }
 
 char	*ft_itoa(int n)
@@ -45,8 +44,8 @@ char	*ft_itoa(int n)
 	{
 		if (n < 0)
 			str[--digits] = (n % 10) * (-1) + '0';
-		else	
-			str[--digits] = (n % 10) + '0';	
+		else
+			str[--digits] = (n % 10) + '0';
 		n /= 10;
 	}
 	return (str);

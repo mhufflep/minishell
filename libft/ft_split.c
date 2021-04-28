@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 21:53:29 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/04/28 23:04:51 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:40:26 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,14 @@ static char	**free_memory(char **s)
 	return ((char **)0);
 }
 
-char	**ft_split(char const *s, char c)
+char *split_cycle(const char *s, char c, char **result, int count)
 {
-	int		i;
-	int		count;
-	int		arr_i;
-	int		length;
-	char	**result;
+	int	i;
+	int j;
+	int	length;
 
-	arr_i = 0;
-	count = count_parts(s, c);
-	result = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!result)
-		return (free_memory(result));
-	result[count] = NULL;
 	i = 0;
+	j = 0;  
 	while (count--)
 	{
 		length = 0;
@@ -67,10 +60,25 @@ char	**ft_split(char const *s, char c)
 			i++;
 		while (s[i + length] != c && s[i + length] != '\0')
 			length++;
-		result[arr_i++] = ft_substr(s, i, length);
-		if (!result[arr_i++])
+		result[j++] = ft_substr(s, i, length);
+		if (!result[j++])
 			return (free_memory(result));
 		i += length;
 	}
+	return ((char *)s);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	int		count;
+	char	**result;
+
+	count = count_parts(s, c);
+	result = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!result)
+		return (free_memory(result));
+	result[count] = NULL;
+	if (!split_cycle(s, c, result, count))
+		return (NULL);
 	return (result);
 }
