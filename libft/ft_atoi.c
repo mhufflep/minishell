@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:11:01 by mhufflep          #+#    #+#             */
-/*   Updated: 2020/11/05 19:22:51 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/28 22:45:40 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,21 @@ int	ft_atoi(const char *s)
 {
 	unsigned long long	result;
 	int					sign;
-	int					len;
 
-	len = 0;
 	sign = 1;
 	result = 0;
 	s = skip_spaces(s);
-	if (s[0] == '-' && (sign = -1) < 0)
-		s++;
-	else if (s[0] == '+')
-		s++;
+	if (s[0] == '-' && s++)
+		sign = -1;
+	else if (s[0] == '+' && s++)
+		sign = 1;
 	while (*s >= '0' && *s <= '9')
 	{
-		result = result * 10;
-		result += *s - '0';
+		result = result * 10 + (*s - '0');
 		s++;
-		if (result != 0)
-			len++;
-		if (len > 19 && sign > 0)
+		if (result > 9223372036854775807 && sign > 0)
 			return (-1);
-		if (len > 19 && sign < 0)
+		if (result > 9223372036854775808 && sign < 0)
 			return (0);
 	}
 	return (result * sign);
