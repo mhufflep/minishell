@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 21:53:29 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/04/28 23:40:26 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/29 00:18:58 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ static char	**free_memory(char **s)
 	return ((char **)0);
 }
 
-char *split_cycle(const char *s, char c, char **result, int count)
+char	*split_cycle(const char *s, char c, char **result, int count)
 {
 	int	i;
-	int j;
+	int	j;
 	int	length;
 
 	i = 0;
-	j = 0;  
+	j = 0;
 	while (count--)
 	{
 		length = 0;
