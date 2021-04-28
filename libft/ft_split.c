@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 21:53:29 by mhufflep          #+#    #+#             */
-/*   Updated: 2020/11/05 19:27:30 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:04:51 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ char	**ft_split(char const *s, char c)
 
 	arr_i = 0;
 	count = count_parts(s, c);
-	if (!(result = (char **)malloc(sizeof(char *) * (count + 1))))
+	result = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!result)
 		return (free_memory(result));
 	result[count] = NULL;
 	i = 0;
@@ -66,7 +67,8 @@ char	**ft_split(char const *s, char c)
 			i++;
 		while (s[i + length] != c && s[i + length] != '\0')
 			length++;
-		if (!(result[arr_i++] = ft_substr(s, i, length)))
+		result[arr_i++] = ft_substr(s, i, length);
+		if (!result[arr_i++])
 			return (free_memory(result));
 		i += length;
 	}

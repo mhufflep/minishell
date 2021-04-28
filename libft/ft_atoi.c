@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 17:11:01 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/04/28 22:45:40 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/04/28 23:07:08 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ft_atoi(const char *s)
 		s++;
 		if (result > 9223372036854775807 && sign > 0)
 			return (-1);
-		if (result > 9223372036854775808 && sign < 0)
+		if (result > 9223372036854775807 && sign < 0)
 			return (0);
 	}
 	return (result * sign);
