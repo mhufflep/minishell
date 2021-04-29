@@ -62,7 +62,7 @@ char	*split_cycle(const char *s, char c, char **result, int count)
 			length++;
 		result[j++] = ft_substr(s, i, length);
 		if (!result[j++])
-			return (free_memory(result));
+			return ((char *)free_memory(result));
 		i += length;
 	}
 	return ((char *)s);
