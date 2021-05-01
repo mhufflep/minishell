@@ -22,11 +22,13 @@ GNL_DIR = get_next_line
 
 ######################### SOURCES ############################
 
-SOURCES =	
+SOURCES = main.c
 
-HEADER_FILES = 
+HEADER_FILES =	minishell.h \
+				get_next_line.h
 
-GNL_SRC = 	get_next_line.c
+GNL_SRC =	get_next_line.c \
+			get_next_line_utils.c
 
 ######################## OBJECT FILES ########################
 
