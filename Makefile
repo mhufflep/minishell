@@ -27,12 +27,11 @@ SOURCES = main.c
 HEADER_FILES =	minishell.h \
 				get_next_line.h
 
-GNL_SRC =	get_next_line.c \
-			get_next_line_utils.c
+GNL_SRC =	get_next_line.c
 
 ######################## OBJECT FILES ########################
 
-GNL_OBJ = $(addprefix $(OBJ_DIR)/, $(GNL_SRC:.c=.o))
+GNL_OBJ = $(addprefix $(GNL_DIR)/, $(GNL_SRC:.c=.o))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
 
 
@@ -47,7 +46,7 @@ all: libft create_dir $(GNL_OBJ) $(NAME)
 create_dir:
 	@mkdir -p $(OBJ_DIR)
 
-$(GNL_OBJ): $(GNL_DIR)/$(GNL_SRC)
+$(GNL_DIR)/%.o: $(GNL_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
 
 libft:

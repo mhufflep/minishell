@@ -1,69 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/12 07:10:17 by mhufflep          #+#    #+#             */
+/*   Updated: 2021/04/02 09:03:09 by mhufflep         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-int		add_rest(char **rest, char **line)
+int		check_init_errors(int fd, char **line, char **buf)
 {
-	int		n;
-
-	if ((n = tofind_c(*rest)) < 0)
-	{
-		*line = gnl_strjoin(*line, *rest);
-		free(*rest);
-		*rest = 0;
-		return (0);
-	}
-	else
-	{
-		(*rest)[n] = '\0';
-		*line = gnl_strjoin(*line, *rest);
-		*rest = gnl_strdup(&((*rest)[n + 1]), *rest);
-	}
-	return (1);
+	if (fd < 0 || read(fd, &buf[0], 0) || !line)
+		return (1);
+	*buf = malloc(BUFFER_SIZE);
+	if (*buf == NULL)
+		return (1);
+	return (0);
 }
 
-int		cursus(t_gnl *gnl, char **line, char **rest, int fd)
+void	check_read_errors(int res, char **line, char *buf)
 {
-	if (*rest)
-		gnl->q = add_rest(rest, line);
-	while (!gnl->q && gnl->count > 0)
+	if (res == -1)
+		free(buf);
+	else
+		*line = buf;
+}
+
+int		read_cycle(int fd, char *buf)
+{
+	int i;
+	int res;
+
+	i = 0;
+	while (1)
 	{
-		gnl_memset(gnl->buff, '\0', gnl->size + 1);
-		if ((gnl->count = read(fd, gnl->buff, gnl->size)) <= 0)
+		if (i == BUFFER_SIZE)
+			return (-1);
+		res = read(fd, &buf[i], 1);
+		if (res <= 0 || buf[i] == '\n')
 			break ;
-		if ((gnl->n = tofind_c(gnl->buff)) > -1)
-		{
-			gnl->buff[gnl->n] = '\0';
-			*line = gnl_strjoin(*line, gnl->buff);
-			*rest = gnl_strdup(&gnl->buff[gnl->n + 1], *rest);
-			break ;
-		}
-		else
-			*line = gnl_strjoin(*line, gnl->buff);
+		i++;
 	}
-	free(gnl->buff);
-	return (0);
+	buf[i] = '\0';
+	return (res);
 }
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*rest;
-	t_gnl		gnl;
+	char	*buf;
+	int		res;
 
-	gnl.size = BUFFER_SIZE;
-	if (fd < 0 || gnl.size < 1 || !line || !(gnl.buff = malloc(gnl.size + 1)))
+	buf = 0;
+	if (check_init_errors(fd, line, &buf))
 		return (-1);
-	*line = gnl_strdup("", 0);
-	gnl.count = 1;
-	gnl.q = 0;
-	cursus(&gnl, line, &rest, fd);
-	if (gnl.count == -1)
-		return (-1);
-	gnl.count = gnl.count || ft_strlen(rest);
-	if (gnl.count)
-		return (1);
-	if (rest)
-	{
-		free(rest);
-		rest = 0;
-	}
-	return (0);
+	res = read_cycle(fd, buf);
+	check_read_errors(res, line, buf);
+	return (res);
 }

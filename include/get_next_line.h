@@ -17,21 +17,6 @@
 # include <stdlib.h>
 # define BUFFER_SIZE 1
 
-typedef struct	s_gnl
-{
-	int			count;
-	char		*buff;
-	int			n;
-	int			q;
-	int			size;
-}				t_gnl;
-
-size_t			ft_strlen(const char *str);
-int				tofind_c(char *s);
 int				get_next_line(int fd, char **line);
-char			*gnl_strdup(const char *s1, char *rest);
-char			*gnl_strjoin(char *s1, char *s2);
-void			*gnl_memset(void *dest, int c, size_t n);
-int				cursus(t_gnl *gnl, char **line, char **rest, int fd);
 
 #endif
