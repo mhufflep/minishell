@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-int		check_init_errors(int fd, char **line, char **buf)
+int	check_init_errors(int fd, char **line, char **buf)
 {
 	if (fd < 0 || read(fd, &buf[0], 0) || !line)
 		return (1);
@@ -30,10 +30,10 @@ void	check_read_errors(int res, char **line, char *buf)
 		*line = buf;
 }
 
-int		read_cycle(int fd, char *buf)
+int	read_cycle(int fd, char *buf)
 {
-	int i;
-	int res;
+	int	i;
+	int	res;
 
 	i = 0;
 	while (1)
@@ -49,7 +49,7 @@ int		read_cycle(int fd, char *buf)
 	return (res);
 }
 
-int		get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	char	*buf;
 	int		res;

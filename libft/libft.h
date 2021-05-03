@@ -50,7 +50,7 @@ int					ft_tolower(int c);
 void				*ft_calloc(size_t count, size_t type_size);
 char				*ft_strdup(const char *src);
 
-int	ft_strcmp(const char *str1, const char *str2);
+int					ft_strcmp(const char *str1, const char *str2);
 
 /*
 **PART 2 FUNCTIONS
