@@ -27,7 +27,7 @@ void	ft_lstsort(t_list *lst)
 		while (tmp && tmp->next != NULL)
 		{
 			len = ft_strlen(tmp->content) + 1;
-			if (ft_memcmp(tmp->content, tmp->next->content, len > 0))
+			if (ft_memcmp(tmp->content, tmp->next->content, len) > 0)
 			{
 				str = tmp->content;
 				tmp->content = tmp->next->content;

@@ -1,4 +1,4 @@
-.PHONY: all clean fclean re bonus libft create_dir
+.PHONY: all clean fclean re bonus libft create_dir debug_prm
 .SILENT: libft
 
 NAME = minishell
@@ -7,8 +7,9 @@ LIBFT_NAME = libft.a
 ######################### CC && FLAGS ########################
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
+TERMCAP = -ltermcap
 LIBFT_FLAGS		= -L $(LFT_DIR) -lft
 INCLUDE_FLAGS 	= -I $(INC_DIR) -I $(LFT_DIR) -I $(GNL_DIR)
 
@@ -22,12 +23,17 @@ GNL_DIR = get_next_line
 
 ######################### SOURCES ############################
 
-SOURCES = main.c
+SOURCES		=	main.c \
+				set_default.c \
+				bidirectional_list.c\
 
 HEADER_FILES =	minishell.h \
-				get_next_line.h
+				get_next_line.h\
+				bidirectional_list.h\
 
 GNL_SRC =	get_next_line.c
+
+DEBUG = -g
 
 ######################## OBJECT FILES ########################
 
@@ -41,22 +47,24 @@ HEADERS = $(addprefix $(INC_DIR)/, $(HEADER_FILES))
 
 ######################## INSTRUCTIONS ########################
 
+debug: all
+
 all: libft create_dir $(GNL_OBJ) $(NAME)
 
 create_dir:
 	@mkdir -p $(OBJ_DIR)
 
 $(GNL_DIR)/%.o: $(GNL_DIR)/%.c
-	@$(CC) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
+	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
 
 libft:
 	@$(MAKE) -C $(LFT_DIR) bonus
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(GNL_OBJ)
-	@$(CC) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
+	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
 
 $(NAME): $(OBJECTS) $(GNL_OBJ) $(HEADERS) 
-	@$(CC) $(CFLAGS) $(GNL_OBJ) $(OBJECTS) $(LIBFT_FLAGS) -o $@ 
+	@$(CC) $(DEBUG) $(CFLAGS) $(GNL_OBJ) $(OBJECTS) $(LIBFT_FLAGS) $(TERMCAP) -o $@ 
 	@echo "${NAME} created"
 
 clean:
