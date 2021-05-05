@@ -2,7 +2,6 @@
 # define BIDIRECTIONAL_LIST_H
 
 #include <stdlib.h>
-#include "libft.h"
 #include <stdio.h>
 
 typedef struct s_bd_lst
@@ -11,6 +10,11 @@ typedef struct s_bd_lst
 	struct s_bd_lst		*prev;
 	void				*content;
 }						t_bd_lst;
+
+size_t	bd_strlen(const char *s);
+int	bd_memcmp(const void *s1, const void *s2, size_t n);
+char	*bd_strdup(const char *src);
+
 
 void					bd_lstprint(t_bd_lst *lst);
 t_bd_lst				*bd_parse_from_arr(char **arr);

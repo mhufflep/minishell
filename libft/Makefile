@@ -1,8 +1,12 @@
+.PHONY: all clean fclean re create_dir
+
 NAME	= libft.a
 CC		= gcc
 
 CFLAGS	= -Wall -Wextra -Werror
 INCLUDE = -I./
+
+OBJ_DIR = obj
 
 SRCS	=	ft_atoi.c		ft_bzero.c		ft_isalnum.c \
 			ft_isalpha.c	ft_isascii.c	ft_isdigit.c \
@@ -15,7 +19,7 @@ SRCS	=	ft_atoi.c		ft_bzero.c		ft_isalnum.c \
 			ft_putchar_fd.c	ft_itoa.c 		ft_substr.c \
 			ft_putstr_fd.c	ft_putendl_fd.c	ft_putnbr_fd.c \
 			ft_strjoin.c	ft_strtrim.c 	ft_strmapi.c ft_split.c 
-			
+
 SRCS_B	= 	ft_lstmap.c \
 			ft_lstnew.c \
 			ft_lstsize.c \
@@ -32,10 +36,13 @@ SRCS_B	= 	ft_lstmap.c \
 OBJS	= $(SRCS:.c=.o)
 OBJS_B	= $(SRCS_B:.c=.o)
 
-all: $(NAME)
+all: create_dir $(NAME)
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
 	@$(CC) $(CFLAGS) -c $< $(INCLUDE) -o $@
+
+create_dir:
+	@mkdir -p $(OBJ_DIR)
 
 clean: 
 	@rm -rf $(OBJS) $(OBJS_B)
@@ -47,9 +54,10 @@ re: fclean all
 
 $(NAME): $(OBJS)
 	@ar rcs $@ $?
-	@echo '${NAME} created.'
 
-bonus: $(OBJS) $(OBJS_B)
+bonus: all bonus_ar
+
+bonus_ar: $(OBJS) $(OBJS_B)
 	@ar rcs $(NAME) $?
 	@echo 'bonus ${NAME} created.'
 

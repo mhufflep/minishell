@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 19:38:51 by mhufflep          #+#    #+#             */
-/*   Updated: 2020/11/05 23:44:11 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/05 00:10:58 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void				ft_putnbr_fd(int n, int fd);
 **BONUS FUNCTIONS
 */
 
+t_list				*parse_to_list(char **arr);
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);
 void				ft_lstadd_front(t_list **lst, t_list *new);

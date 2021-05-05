@@ -125,7 +125,7 @@ t_bd_lst	*bd_lstcopy(t_bd_lst *list) //add copy content function as a second par
 	head = NULL;
 	while (list && list->content)
 	{
-		new = bd_lstnew(ft_strdup(list->content));
+		new = bd_lstnew(bd_strdup(list->content));
 		if (!new)
 		{
 			bd_lstclear(&head, free);
@@ -159,8 +159,8 @@ void	bd_lstsort(t_bd_lst *lst) // this is gonna be fun
 		sorted = 1;
 		while (tmp && tmp->next != NULL)
 		{
-			len = ft_strlen(tmp->content) + 1;
-			if (ft_memcmp(tmp->content, tmp->next->content, len) > 0)
+			len = bd_strlen(tmp->content) + 1;
+			if (bd_memcmp(tmp->content, tmp->next->content, len) > 0)
 			{
 				str = tmp->content;
 				tmp->content = tmp->next->content;
@@ -186,7 +186,7 @@ t_bd_lst	*bd_parse_from_arr(char **arr)
 	{
 		while (arr[i] != NULL)
 		{
-			new = bd_lstnew(ft_strdup(arr[i]));
+			new = bd_lstnew(bd_strdup(arr[i]));
 			if (new == NULL)
 			{
 				bd_lstclear(&head, free);

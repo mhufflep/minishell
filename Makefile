@@ -1,39 +1,40 @@
-.PHONY: all clean fclean re bonus libft create_dir debug_prm
-.SILENT: libft
+.PHONY: all clean fclean re bonus libft libbdlst create_dir debug_prm
+.SILENT: libft libbdlst
 
-NAME = minishell
-LIBFT_NAME = libft.a
+NAME			= minishell
+LIBFT_NAME		= libft.a
+LIBBDLST_NAME	= libbdlst.a
 
 ######################### CC && FLAGS ########################
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror 
+CC		= gcc
+CFLAGS	= -Wall -Wextra -Werror 
 
-TERMCAP = -ltermcap
+TERMCAP 		= -ltermcap
 LIBFT_FLAGS		= -L $(LFT_DIR) -lft
-INCLUDE_FLAGS 	= -I $(INC_DIR) -I $(LFT_DIR) -I $(GNL_DIR)
+LIBBDLST_FLAGS	= -L $(LBDLST_DIR) -lbdlst
+INCLUDE_FLAGS 	= -I $(INC_DIR) -I $(LFT_DIR) -I $(GNL_DIR) -I $(LBDLST_DIR)
 
 ######################### DIRECTORIES ########################
 
-SRC_DIR = src
-OBJ_DIR = obj
-LFT_DIR = libft
-INC_DIR = include
-GNL_DIR = get_next_line
+SRC_DIR		= src
+OBJ_DIR		= obj
+LFT_DIR		= libft
+INC_DIR		= include
+LBDLST_DIR	= libbdlst
+GNL_DIR		= get_next_line
 
 ######################### SOURCES ############################
 
-SOURCES		=	main.c \
-				set_default.c \
-				bidirectional_list.c\
+SOURCES			=	main.c \
+					set_default.c \
+					
+HEADER_FILES	=	minishell.h \
+					get_next_line.h\
 
-HEADER_FILES =	minishell.h \
-				get_next_line.h\
-				bidirectional_list.h\
+GNL_SRC			=	get_next_line.c
 
-GNL_SRC =	get_next_line.c
-
-DEBUG = -g
+DEBUG			= -g
 
 ######################## OBJECT FILES ########################
 
@@ -49,32 +50,37 @@ HEADERS = $(addprefix $(INC_DIR)/, $(HEADER_FILES))
 
 debug: all
 
-all: libft create_dir $(GNL_OBJ) $(NAME)
+all: libft libbdlst create_dir $(GNL_OBJ) $(NAME)
 
 create_dir:
 	@mkdir -p $(OBJ_DIR)
 
-$(GNL_DIR)/%.o: $(GNL_DIR)/%.c
-	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
-
 libft:
 	@$(MAKE) -C $(LFT_DIR) bonus
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(GNL_OBJ)
+libbdlst:
+	@$(MAKE) -C $(LBDLST_DIR)
+
+$(GNL_DIR)/%.o: $(GNL_DIR)/%.c
 	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
 
-$(NAME): $(OBJECTS) $(GNL_OBJ) $(HEADERS) 
-	@$(CC) $(DEBUG) $(CFLAGS) $(GNL_OBJ) $(OBJECTS) $(LIBFT_FLAGS) $(TERMCAP) -o $@ 
-	@echo "${NAME} created"
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(GNL_OBJ)
+	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) $() -o $@
+
+$(NAME): $(OBJECTS) $(GNL_OBJ) $(HEADERS)
+	@$(CC) $(DEBUG) $(CFLAGS) $(GNL_OBJ) $(OBJECTS) $(LIBFT_FLAGS) $(LIBBDLST_FLAGS) $(TERMCAP) -o $@ 
+	@echo "${NAME} created."
 
 clean:
-	@$(MAKE) clean -C $(LFT_DIR) --no-print-directory 
+	@$(MAKE) clean -C $(LFT_DIR) --no-print-directory
+	@$(MAKE) clean -C $(LBDLST_DIR) --no-print-directory 
 	@rm -rf $(OBJ_DIR)/*.o
 
 fclean: clean
 	@$(MAKE) fclean -C $(LFT_DIR) --no-print-directory
+	@$(MAKE) fclean -C $(LBDLST_DIR) --no-print-directory
 	@rm -rf ${NAME}
-	@echo "${NAME} has been deleted"
+	@echo "${NAME} has been deleted."
 
 
 clean_bonus:
