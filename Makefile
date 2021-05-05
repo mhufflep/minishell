@@ -5,6 +5,7 @@ NAME			= minishell
 LIBFT_NAME		= libft.a
 LIBBDLST_NAME	= libbdlst.a
 
+
 ######################### CC && FLAGS ########################
 
 CC		= gcc
