@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   shell_keys.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/30 21:52:10 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/06 01:29:56 by mhufflep         ###   ########.fr       */
+/*   Created: 2021/05/06 03:00:31 by mhufflep          #+#    #+#             */
+/*   Updated: 2021/05/06 03:06:07 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef SHELL_KEYS
+# define SHELL_KEYS
 
-int	ft_putchar(int c)
-{
-	write(1, &c, 1);
-	return (0);
-}
-
-void	ft_putchar_fd(char c, int fd)
-{
-	char	arr[2];
-
-	if (c < 0)
-	{
-		arr[0] = ((c & 0xC0) >> 6) | 0xC0;
-		arr[1] = (c & 0x3F) | 0x80;
-		write(fd, arr, 2);
-	}
-	else
-		write(fd, &c, 1);
-}
+# define KEY_ARROW_UP		"\e[A"
+# define KEY_ARROW_DOWN		"\e[B"
+# define KEY_ARROW_LEFT		"\e[D"
+# define KEY_ARROW_RIGHT	"\e[C"
+# define KEY_BACKSPACE		"\177"
+# define KEY_ENTER			"\n"
+# define KEY_CTRL_D			"\4"
+#endif

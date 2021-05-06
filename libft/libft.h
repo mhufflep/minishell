@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 19:38:51 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/05 00:10:58 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/06 01:30:10 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void				*ft_calloc(size_t count, size_t type_size);
 char				*ft_strdup(const char *src);
 
 int					ft_strcmp(const char *str1, const char *str2);
+int					ft_putchar(int c);
 
 /*
 **PART 2 FUNCTIONS

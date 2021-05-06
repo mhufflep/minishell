@@ -9,6 +9,7 @@ LIBBDLST_NAME	= libbdlst.a
 ######################### CC && FLAGS ########################
 
 CC		= gcc
+DEBUG	= -g
 CFLAGS	= -Wall -Wextra -Werror 
 
 TERMCAP 		= -ltermcap
@@ -29,13 +30,16 @@ GNL_DIR		= get_next_line
 
 SOURCES			=	main.c \
 					set_default.c \
+					history.c \
+					commands.c \
 					
 HEADER_FILES	=	minishell.h \
-					get_next_line.h\
+					get_next_line.h \
+					shell_keys.h
 
 GNL_SRC			=	get_next_line.c
 
-DEBUG			= -g
+
 
 ######################## OBJECT FILES ########################
 
@@ -56,6 +60,9 @@ all: libft libbdlst create_dir $(GNL_OBJ) $(NAME)
 create_dir:
 	@mkdir -p $(OBJ_DIR)
 
+test: libft libbdlst
+	gcc -g src/test.c $(LBDLST_DIR)/$(LIBBDLST_NAME) $(LFT_DIR)/$(LIBFT_NAME) $(INCLUDE_FLAGS)
+
 libft:
 	@$(MAKE) -C $(LFT_DIR) bonus
 
@@ -65,7 +72,7 @@ libbdlst:
 $(GNL_DIR)/%.o: $(GNL_DIR)/%.c
 	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(GNL_OBJ)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS) $(GNL_OBJ)
 	@$(CC) $(DEBUG) $(CFLAGS) -c $< $(INCLUDE_FLAGS) $() -o $@
 
 $(NAME): $(OBJECTS) $(GNL_OBJ) $(HEADERS)

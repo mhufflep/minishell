@@ -3,3 +3,5 @@
 *.out
 *.o
 test.c
+*.dSYM
+.e-bash_history

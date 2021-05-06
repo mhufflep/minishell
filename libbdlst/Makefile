@@ -23,14 +23,17 @@ SRCS	= 	bidirectional_list.c\
 			#bd_lstadd_front.c \
 			#bd_lstmax_cont_len.c
 
+
+HEADER = bidirectional_list.h
+
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 all: create_dir $(NAME)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c $(HEADER)
 	@$(CC) $(CFLAGS) -c $< $(INCLUDE) -o $@
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(HEADER)
 	@ar rcs $@ $?
 	@echo "${NAME} created."
 
