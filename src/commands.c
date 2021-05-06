@@ -19,8 +19,7 @@ void 	print_env(t_prm *prm)
 	i = 0;
 	while (prm->env[i] != NULL)
 	{
-		write(1, prm->env[i], ft_strlen(prm->env[i]));
-		write(1, "\n", 1);
+		printf("%s\n", prm->env[i]);
 		i++;
 	}
 }

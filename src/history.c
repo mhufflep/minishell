@@ -16,7 +16,7 @@ char	*get_history_filename(void)
 {
 	char *path;
 
-	path = ft_strjoin(HISTORY_FILEPATH, HISTORY_FILENAME);
+	path = ft_strjoin(HISTORY_FILEPATH, HISTORY_FILENAME); //memory leak
 	return (path);
 }
 
@@ -30,7 +30,7 @@ int		read_history(t_bd_lst **history)
 
 	line = NULL;
 	path = get_history_filename();
-	fd = open(path, O_CREAT | O_RDONLY);
+	fd = open(path, O_CREAT | O_RDONLY, 777);
 	if (fd < 0)
 		return (-2);
 	res = get_next_line(fd, &line);
@@ -65,7 +65,7 @@ int		save_history(t_bd_lst **history)
 	if (!path)
 		return (-1);
 		
-	fd = open(path, O_TRUNC | O_RDWR, 0666);
+	fd = open(path, O_TRUNC | O_WRONLY);
 	if (fd < 0)
 		return (-2);
 	

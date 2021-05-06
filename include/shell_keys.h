@@ -20,4 +20,5 @@
 # define KEY_BACKSPACE		"\177"
 # define KEY_ENTER			"\n"
 # define KEY_CTRL_D			"\4"
+# define KEY_CTRL_L			"^[12"
 #endif

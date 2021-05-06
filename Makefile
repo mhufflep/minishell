@@ -32,6 +32,10 @@ SOURCES			=	main.c \
 					set_default.c \
 					history.c \
 					commands.c \
+					execute.c \
+					key_actions.c \
+					term_utils.c \
+					init.c
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \
