@@ -33,9 +33,9 @@ SOURCES			=	main.c \
 					history.c \
 					commands.c \
 					execute.c \
-					key_actions.c \
 					term_utils.c \
-					init.c
+					init.c \
+					parser.c
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \

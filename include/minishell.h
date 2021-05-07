@@ -40,6 +40,8 @@ typedef struct  s_prm
 	int argc;
 	int cursor_pos;
 
+	char *line;
+
 	t_term	*term;
 	t_term	*def_term;
 
@@ -88,4 +90,8 @@ int		init_resources(t_prm **prm, int argc, char **argv, char **env);
 int		init_env_lists(t_prm *prm);
 int		init_prm_struct(t_prm **prm);
 int		init_term_struct(t_prm	*prm);
+
+/* PARSER */
+void parse_line(t_prm *prm);
+
 #endif

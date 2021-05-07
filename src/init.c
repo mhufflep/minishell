@@ -29,8 +29,8 @@ int init_term_struct(t_prm	*prm)
 	if (prm->term == NULL || prm->def_term == NULL)
 		exit(-1);
 	change_term_settings(prm->term);
-	if (tcsetattr(0, TCSANOW, prm->term))
-		exit(-1);
+	// if (tcsetattr(0, TCSANOW, prm->term))
+		// exit(-1);
 	return (0);
 }
 
