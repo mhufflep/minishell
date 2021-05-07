@@ -12,7 +12,7 @@ int		init_prm_struct(t_prm **prm)
 int init_env_lists(t_prm *prm)
 {
 	prm->unsorted_env = bd_parse_from_arr(prm->env);
-	prm->sorted_env = bd_lstcopy(prm->unsorted_env);
+	prm->sorted_env = bd_lstcopy(prm->unsorted_env, def_node_cont_copy);
 	bd_lstsort(prm->sorted_env);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 01:32:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/06 07:50:38 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/07 02:25:44 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,30 +54,23 @@ int		read_history(t_bd_lst **history)
 	return (res);
 }
 
-int		save_history(t_bd_lst **history)
+int		save_history(t_bd_lst *node)
 {
-	t_bd_lst *tmp;
 	char *path;
 	int fd;
 
-	tmp = *history;
 	path = get_history_filename();
 	if (!path)
 		return (-1);
-		
-	fd = open(path, O_TRUNC | O_WRONLY);
+	fd = open(path, O_APPEND | O_WRONLY);
 	if (fd < 0)
 		return (-2);
 	
-	while (tmp)
+	if (node->content)
 	{
-		if (tmp->content)
-		{
-			write(fd, tmp->content, bd_strlen((char *)tmp->content));
-			if (tmp->next)
-				write(fd, "\n", 1);
-		}
-		tmp = tmp->next;
+		write(fd, node->content, bd_strlen((char *)node->content));
+		if (node->next)
+			write(fd, "\n", 1);
 	}
 	close(fd);
 	return (0);

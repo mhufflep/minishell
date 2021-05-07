@@ -17,14 +17,40 @@ void	clear_prompt(void)
 //		return (0);
 //	}
 
+void handler_kill(int num)
+{
+	printf("%d\n", num);
+	exit(1);
+}
+
+void handler_quit(int num)
+{
+	printf("Quit: %d\n", num);
+	exit(1);
+}
+
+int is_spec_key(char *input)
+{
+	if (!ft_strcmp(input, KEY_ARROW_UP) || 
+	    !ft_strcmp(input, KEY_ARROW_DOWN) ||
+		!ft_strcmp(input, KEY_ARROW_LEFT) || 
+		!ft_strcmp(input, KEY_ARROW_RIGHT) || 
+		!ft_strcmp(input, KEY_BACKSPACE) ||
+		(*input == 12))
+		return (1);
+	else
+	{
+		return (0);
+	}
+}
 
 int main(int argc, char **argv, char **env)
 {
 	t_prm	*prm;
-	char input[2000] = {'\0'};
-	int l;
-	int n;
-	int status = 1;
+	char	input[2000] = {'\0'};
+	int 	l;
+	int 	n;
+	int 	status = 1;
 
 	init_resources(&prm, argc, argv, env);
 
@@ -34,15 +60,22 @@ int main(int argc, char **argv, char **env)
 	// read history from file
 	int num = read_history(&(prm->history));
 	printf("read status: %d\n", num);
+
+
+	signal(SIGINT, handler_kill); //CTRL-C
+	signal(SIGQUIT, handler_quit); //CTRL-BSLASH
+
+	
 	while (ft_strcmp(input, KEY_CTRL_D) && status == 1)
 	{
-		prm->cursor_pos = 0; //it's like cursor's index, allow us write to the buffer and not deleting prompt when erasing symbols
+		//it's like cursor's index, allow us write to the buffer and not deleting prompt when erasing symbols
+		prm->cursor_pos = 0;
 		char buff[200] = {'\0'};
 
 		//first printing prompt then save cursor position
 		write(1, SHELL_PROMPT, strlen(SHELL_PROMPT));
 		tputs(save_cursor, 1, ft_putchar);
-		do // DO WHILE CYCLE IS FORBIDDEN
+		do	// DO WHILE CYCLE IS FORBIDDEN
 		{
 			ioctl(0, FIONREAD, &n);
 			ioctl(1, TIOCGWINSZ, &win);
@@ -51,15 +84,15 @@ int main(int argc, char **argv, char **env)
 			input[l] = 0;
 			buff[prm->cursor_pos] = input[0];
 
-			if (ft_strcmp(input, KEY_BACKSPACE))
+			if (!is_spec_key(input))
 				prm->cursor_pos++;
-			if (!ft_strcmp(input, KEY_ARROW_UP))
+		 	if (!ft_strcmp(input, KEY_ARROW_UP))
 				key_up_action(prm);
 			else if (!ft_strcmp(input, KEY_ARROW_DOWN))
 				key_down_action(prm);
 			else if (!ft_strcmp(input, KEY_ARROW_LEFT) && prm->cursor_pos > 0)
 				key_left_action(prm);
-			else if (!ft_strcmp(input, KEY_ARROW_RIGHT))
+			else if (!ft_strcmp(input, KEY_ARROW_RIGHT) && prm->cursor_pos < (int)ft_strlen(buff))
 				key_right_action(prm);
 			else if (!ft_strcmp(input, KEY_BACKSPACE) && prm->cursor_pos > 0)
 			{
@@ -68,15 +101,15 @@ int main(int argc, char **argv, char **env)
 				tputs(cursor_left, 1, ft_putchar);
 				tputs(tigetstr("ed"), 1, ft_putchar);
 			}
-			// else if (!ft_strcmp(input, KEY_CTRL_L))
-			// 	printf("\e[1;1H\e[2J");
+			else if (*input == 0x0C)//(!ft_strcmp(input, KEY_CTRL_L))
+			{
+				printf("\e[1;1H\e[2J\n");
+			}
 			else
 			{
 				write (1, input, l);
-				// i++;
 			}
-			// printf("Columns = %d, lines = %d\n", win.ws_col, win.ws_row);
-			// printf("i: %d\n", i);
+			
 		} while (ft_strcmp(input, KEY_ENTER) && ft_strcmp(input, KEY_CTRL_D));
 		
 		//deleting '\n' at the end of the line
@@ -89,6 +122,7 @@ int main(int argc, char **argv, char **env)
 			t_bd_lst *new = bd_lstnew(bd_strdup(input));
 			prm->history_ptr = new;
 			bd_lstadd_back(&(prm->history), new);
+			save_history(new);
 		}
 		status = execute(buff, prm);
 	}
@@ -97,8 +131,5 @@ int main(int argc, char **argv, char **env)
 	if (tcsetattr(0, TCSANOW, prm->def_term))
 		return (-1);
 
-	//save history to file
-	num = save_history(&(prm->history));
-	printf("save status: %d\n", num);
 	return (0);
 }

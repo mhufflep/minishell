@@ -154,27 +154,21 @@ static void	node_print(void *content)
 {
 	if (content != NULL)
 	{
-		printf("|%s|\n", (char *)content);
+		printf("%s\n", (char *)content);
 	}
 }
 
-// static 	t_bd_lst *node_copy(t_bd_lst *cur, size_t size)
-// {
-// 	(void)size; //need for deep copy
-// 	t_bd_lst *copy = (t_bd_lst *)malloc(sizeof(t_bd_lst));
-// 	copy->next = cur->next;
-// 	copy->prev = cur->prev;
-// 	copy->content = cur->content;
-
-// 	return (copy);
-// }
+void		*def_node_cont_copy(void *content)
+{
+	return ((void *)bd_strdup((char *)content));
+}
 
 void		bd_lstprint(t_bd_lst *lst)
 {
 	bd_lstiter(lst, node_print);
 }
 
-t_bd_lst	*bd_lstcopy(t_bd_lst *list) //add copy content function as a second parameter
+t_bd_lst	*bd_lstcopy(t_bd_lst *list, void *(*content_copy)(void *))
 {
 	t_bd_lst	*head;
 	t_bd_lst	*new;
@@ -182,7 +176,7 @@ t_bd_lst	*bd_lstcopy(t_bd_lst *list) //add copy content function as a second par
 	head = NULL;
 	while (list && list->content)
 	{
-		new = bd_lstnew(bd_strdup(list->content));
+		new = bd_lstnew(content_copy(list->content));
 		if (!new)
 		{
 			bd_lstclear(&head, free);
@@ -239,7 +233,7 @@ int		bd_lstmax_cont_len(t_bd_lst *lst)
 	return (max);
 }
 
-void	bd_lstsort(t_bd_lst *lst) // this is gonna be fun
+void	bd_lstsort(t_bd_lst *lst) //rewrite using insert or add second method
 {
 	int			len;
 	t_bd_lst	*tmp;

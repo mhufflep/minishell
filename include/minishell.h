@@ -56,7 +56,7 @@ void	set_default(void *prm, int size);
 
 /* HISTORY */
 int		read_history(t_bd_lst **history);
-int		save_history(t_bd_lst **history);
+int		save_history(t_bd_lst *node);
 
 
 /* COMMANDS */

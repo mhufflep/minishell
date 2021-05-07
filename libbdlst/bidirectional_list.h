@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <unistd.h>
 typedef struct s_bd_lst
 {
 	struct s_bd_lst		*next;
@@ -15,6 +15,7 @@ size_t					bd_strlen(const char *s);
 int						bd_memcmp(const void *s1, const void *s2, size_t n);
 char					*bd_strdup(const char *src);
 
+void					*def_node_cont_copy(void *content);
 
 void					bd_lstprint(t_bd_lst *lst);
 t_bd_lst				*bd_parse_from_arr(char **arr);
@@ -23,7 +24,7 @@ t_bd_lst				*bd_lstlast(t_bd_lst *lst);
 void					bd_lstadd_front(t_bd_lst **lst, t_bd_lst *new);
 int						bd_lstsize(t_bd_lst *lst);
 t_bd_lst				*bd_lstlast(t_bd_lst *lst);
-t_bd_lst				*bd_lstcopy(t_bd_lst *list);
+t_bd_lst				*bd_lstcopy(t_bd_lst *lst, void *(*cont_copy)(void *));
 void					bd_lstsort(t_bd_lst *lst);
 void					bd_lstadd_back(t_bd_lst **lst, t_bd_lst *new);
 void					bd_lstdelone(t_bd_lst **head, t_bd_lst *lst, void (*del)(void*));

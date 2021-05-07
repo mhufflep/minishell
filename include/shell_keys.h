@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 03:00:31 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/06 03:06:07 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/07 01:45:43 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@
 # define KEY_BACKSPACE		"\177"
 # define KEY_ENTER			"\n"
 # define KEY_CTRL_D			"\4"
-# define KEY_CTRL_L			"^[12"
+# define KEY_CTRL_L			"\12"
 #endif

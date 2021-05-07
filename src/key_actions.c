@@ -26,7 +26,7 @@ void	key_left_action(t_prm *prm)
 
 void	key_right_action(t_prm *prm)
 {
-	(void)prm;
+	prm->cursor_pos++;
 	tputs(cursor_right, 1, ft_putchar);	
 }
 
