@@ -20,5 +20,6 @@
 # define KEY_BACKSPACE		"\177"
 # define KEY_ENTER			"\n"
 # define KEY_CTRL_D			"\4"
-# define KEY_CTRL_L			"\12"
+# define KEY_CTRL_L			"\f"
+# define DELETE_CURS_BORD "\x1b[0J"
 #endif

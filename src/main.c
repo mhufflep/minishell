@@ -1,3 +1,11 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*            Я считаю, что если знаешь указатели – знаешь СИ,                */
+/*            Если не знаешь, ну, хуй соси.                                   */
+/*                                                  © mhufflep                */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	clear_prompt(void)
@@ -20,13 +28,13 @@ void	clear_prompt(void)
 void handler_kill(int num)
 {
 	printf("%d\n", num);
-	exit(1);
+	exit(0);
 }
 
 void handler_quit(int num)
 {
 	printf("Quit: %d\n", num);
-	exit(1);
+	exit(0);
 }
 
 int is_spec_key(char *input)
@@ -101,16 +109,20 @@ int main(int argc, char **argv, char **env)
 				tputs(cursor_left, 1, ft_putchar);
 				tputs(tigetstr("ed"), 1, ft_putchar);
 			}
-			else if (*input == 0x0C)//(!ft_strcmp(input, KEY_CTRL_L))
+			else if (!ft_strcmp(input, KEY_CTRL_L))// else if (*input == 0x0C)//
 			{
 				printf("\e[1;1H\e[2J\n");
 			}
 			else
 			{
-				write (1, input, l);
+				// write(1, DELETE_CURS_BORD, ft_strlen(DELETE_CURS_BORD));
+				write(1, input, ft_strlen(input));
+				// write(1, "\e[s", ft_strlen("\e[s"));
+				// write(1, "\e[u", ft_strlen("\e[u"));
 			}
 			
-		} while (ft_strcmp(input, KEY_ENTER) && ft_strcmp(input, KEY_CTRL_D));
+		} while (ft_strcmp(input, KEY_ENTER) && ft_strcmp(input, KEY_CTRL_L) \
+				&& ft_strcmp(input, KEY_CTRL_D));
 		
 		//deleting '\n' at the end of the line
 		buff[prm->cursor_pos - 1] = '\0';
@@ -130,6 +142,5 @@ int main(int argc, char **argv, char **env)
 	//reset terminal settings to default values
 	if (tcsetattr(0, TCSANOW, prm->def_term))
 		return (-1);
-
-	return (0);
+	exit(0);
 }

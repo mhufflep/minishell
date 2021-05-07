@@ -101,4 +101,7 @@ clean_bonus:
 bonus: clean_bonus
 	@$(MAKE) BONUS=1 all --no-print-directory
 
+run: all
+	./minishell
+
 re: fclean all
