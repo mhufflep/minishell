@@ -3,7 +3,7 @@
 int		execute(char buff[], t_prm *prm)
 {
 	if (!ft_strncmp("exit", buff, 4))
-		return (0);
+		prm->status = 1;
 	else if (!ft_strncmp("export", buff, 6))
 		cmd_export(prm);
 	else if (!ft_strncmp("env", buff, 3))

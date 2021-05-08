@@ -39,6 +39,9 @@ typedef struct  s_prm
 	char **argv;
 	int argc;
 	int cursor_pos;
+	int	line_len;
+	int status;
+	char *line;
 
 	t_term	*term;
 	t_term	*def_term;
@@ -51,11 +54,20 @@ typedef struct  s_prm
 	t_bd_lst	*cmds; //лист команд, в поле content каждой будет лежать t_cmd *
 }               t_prm;
 
-/* SET ANY STRUCT TO ZERO */
-void	set_default(void *prm, int size);
+
+/* MAIN FUNCTIONS */
+t_prm	*setup_settings(int, char **, char **);
+void	read_line(t_prm *);
+void	parse_line(t_prm *);
+void	execute_line(t_prm *);
+void	reset_parameters(t_prm *);
 
 /* HISTORY */
-int		read_history(t_bd_lst **history);
+int		read_history(t_prm *prm);
+int		history_add(t_bd_lst *node);
+int		history_next(t_prm *prm);
+int		history_prev(t_prm *prm);
+
 int		save_history(t_bd_lst *node);
 
 
@@ -72,10 +84,13 @@ int		execute(char buff[], t_prm *prm);
 
 /* TERMINAL */
 void	change_term_settings(t_term *term);
-int		init_term_struct(t_prm	*prm);
+int		setup_terminal(t_prm	*prm);
 t_term	*create_term_struct(void);
 
 /* KEYS */
+int		is_printable_sym(unsigned int input);
+int		is_printable(char *input);
+int		is_spec_key(char *input);
 void	key_up_action(t_prm *prm);
 void	key_down_action(t_prm *prm);
 void	key_left_action(t_prm *prm);
@@ -84,8 +99,9 @@ void	key_right_action(t_prm *prm);
 void	clear_prompt(void);
 
 /* INITIALIZATION */
-int		init_resources(t_prm **prm, int argc, char **argv, char **env);
-int		init_env_lists(t_prm *prm);
-int		init_prm_struct(t_prm **prm);
-int		init_term_struct(t_prm	*prm);
+t_prm	*setup_settings(int argc, char **argv, char **env);
+int		setup_env_lists(t_prm *prm);
+int		setup_parameters(t_prm **prm);
+int		setup_terminal(t_prm	*prm);
+
 #endif

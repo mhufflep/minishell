@@ -16,7 +16,7 @@ t_term *create_term_struct(void)
 	term = (t_term *)malloc(sizeof(t_term));
 	if (term == NULL)
 		return (NULL);
-	if (tcgetattr(0, term))
+	if (tcgetattr(STDIN_FILENO, term))
 	{
 		free(term);
 		return (NULL);

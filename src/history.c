@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 01:32:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/07 02:25:44 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/08 06:08:59 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ char	*get_history_filename(void)
 {
 	char *path;
 
-	path = ft_strjoin(HISTORY_FILEPATH, HISTORY_FILENAME); //memory leak
+	path = ft_strjoin(HISTORY_FILEPATH, HISTORY_FILENAME); //memory leak, fuck
 	return (path);
 }
 
-int		read_history(t_bd_lst **history)
+int		read_history(t_prm *prm)
 {
 	t_bd_lst *new;
 	char *path;
@@ -42,19 +42,20 @@ int		read_history(t_bd_lst **history)
 			res = -3;
 			break ;
 		}
-		bd_lstadd_back(history, new);
+		bd_lstadd_back(&(prm->history), new);
 		res = get_next_line(fd, &line);
 	}
 	//need to free line
 	if (res < 0)
 	{
-		bd_lstclear(history, free);
+		bd_lstclear(&(prm->history), free);
 	}
+	prm->history_ptr = bd_lstlast(prm->history);
 	close(fd);
 	return (res);
 }
 
-int		save_history(t_bd_lst *node)
+int		history_add(t_bd_lst *node)
 {
 	char *path;
 	int fd;
@@ -66,7 +67,7 @@ int		save_history(t_bd_lst *node)
 	if (fd < 0)
 		return (-2);
 	
-	if (node->content)
+	if (node && node->content)
 	{
 		write(fd, node->content, bd_strlen((char *)node->content));
 		if (node->next)
@@ -75,5 +76,3 @@ int		save_history(t_bd_lst *node)
 	close(fd);
 	return (0);
 }
-
-//add to history

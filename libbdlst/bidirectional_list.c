@@ -158,7 +158,7 @@ static void	node_print(void *content)
 	}
 }
 
-void		*def_node_cont_copy(void *content)
+void		*def_cont_copy(void *content)
 {
 	return ((void *)bd_strdup((char *)content));
 }

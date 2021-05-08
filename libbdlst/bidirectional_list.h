@@ -15,7 +15,7 @@ size_t					bd_strlen(const char *s);
 int						bd_memcmp(const void *s1, const void *s2, size_t n);
 char					*bd_strdup(const char *src);
 
-void					*def_node_cont_copy(void *content);
+void					*def_cont_copy(void *content);
 
 void					bd_lstprint(t_bd_lst *lst);
 t_bd_lst				*bd_parse_from_arr(char **arr);
