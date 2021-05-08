@@ -20,7 +20,6 @@ void	buffer_shift_right(char *buf, int start, int end)
 	}
 }
 
-
 void	cursor_save(void)
 {
 	write(1, "\e[s", ft_strlen("\e[s"));
@@ -31,6 +30,7 @@ void	cursor_restore(void)
 	write(1, "\e[u", ft_strlen("\e[u"));
 }
 
+// MAIN FUNCTIONS
 void	read_line(t_prm *prm)
 {
 	// t_bd_lst *cur; 
@@ -99,7 +99,8 @@ void	read_line(t_prm *prm)
 
 	} while (ft_strcmp(input, KEY_ENTER) && ft_strcmp(input, KEY_CTRL_L) && ft_strcmp(input, KEY_CTRL_D));
 	
-	prm->line = ft_strdup(buff);
+	prm->history_ptr->content = ft_strdup(buff);
+	// prm->line = ft_strdup(buff);
 }
 
 void	parse_line(t_prm *prm)
@@ -108,7 +109,7 @@ void	parse_line(t_prm *prm)
 	t_bd_lst *new;
 
 	cmd = malloc(sizeof(t_cmd)); //protect
-	cmd->cmd = prm->line;
+	cmd->cmd = prm->history_ptr->content;
 	new = bd_lstnew(cmd);
 	if (!new)
 	{

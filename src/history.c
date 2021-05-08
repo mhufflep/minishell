@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 01:32:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/08 06:08:59 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/08 08:46:08 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ int		read_history(t_prm *prm)
 	fd = open(path, O_CREAT | O_RDONLY, 777);
 	if (fd < 0)
 		return (-2);
-	res = get_next_line(fd, &line);
-	while (res == 1)
+	res = 1;
+	while (res > 0)
 	{
+		res = get_next_line(fd, &line);
 		new = bd_lstnew(line);
 		if (new == NULL)
 		{
@@ -43,14 +44,12 @@ int		read_history(t_prm *prm)
 			break ;
 		}
 		bd_lstadd_back(&(prm->history), new);
-		res = get_next_line(fd, &line);
 	}
 	//need to free line
 	if (res < 0)
 	{
 		bd_lstclear(&(prm->history), free);
 	}
-	prm->history_ptr = bd_lstlast(prm->history);
 	close(fd);
 	return (res);
 }
@@ -69,9 +68,8 @@ int		history_add(t_bd_lst *node)
 	
 	if (node && node->content)
 	{
+		write(fd, "\n", 1);
 		write(fd, node->content, bd_strlen((char *)node->content));
-		if (node->next)
-			write(fd, "\n", 1);
 	}
 	close(fd);
 	return (0);

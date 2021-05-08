@@ -29,7 +29,6 @@ GNL_DIR		= get_next_line
 ######################### SOURCES ############################
 
 SOURCES			=	main.c \
-					set_default.c \
 					history.c \
 					commands.c \
 					execute.c \
