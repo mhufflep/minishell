@@ -13,7 +13,7 @@ int setup_env_lists(t_prm *prm)
 {
 	prm->unsorted_env = bd_parse_from_arr(prm->env);
 	prm->sorted_env = bd_lstcopy(prm->unsorted_env, def_cont_copy);
-	bd_lstsort(prm->sorted_env);
+	bd_lstsort_merge(&(prm->sorted_env), ft_strcmp);
 	return (0);
 }
 

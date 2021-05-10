@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/07 01:20:16 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/08 21:26:11 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,20 @@ void	print_env_node(void *content)
 
 void	cmd_cd(t_prm *prm)
 {
-	(void)prm;
+	t_cmd *cmd;
+
+	cmd = (t_cmd *)prm->cmds_ptr->content;
+	printf("\n%s %s\n", cmd->cmd, cmd->args);
+	printf("%d\n", chdir(cmd->args));
+	//update pwd
+}
+
+void	cmd_echo(t_prm *prm)
+{
+	t_cmd *cmd;
+
+	cmd = (t_cmd *)prm->cmds_ptr->content;
+	printf("%s\n", cmd->args);
 }
 
 void cmd_export(t_prm *prm)
@@ -56,21 +69,24 @@ void cmd_env(t_prm *prm)
 	bd_lstiter(prm->unsorted_env, print_env_node);
 }
 
-void cmd_pwd(void)
+void cmd_pwd(t_prm *prm)
 {
+	(void)prm;
 	printf("%s\n", getcwd(NULL, 0)); // need to free returned string (probably yes)
 }
 
 void cmd_unset(t_prm *prm)
 {
 	t_bd_lst *tmp;
+	t_cmd *cmd;
 
 	tmp = prm->sorted_env;
+	cmd = (t_cmd *)prm->cmds_ptr->content;
 	while (tmp && tmp->next)
 	{
 		// if (tmp && !ft_strncmp((char *)tmp->content, prm->cmds_ptr->args, ft_strlen(prm->cmds_ptr->args))))
 		// 	bd_lstdelone(&prm->sorted_env, tmp, free);
-		if (tmp && !ft_strncmp((char *)tmp->content, "LANG", 4))
+		if (tmp && !ft_strncmp((char *)tmp->content, cmd->args, ft_strlen(cmd->args)))
 			bd_lstdelone(&prm->sorted_env, tmp, free);
 		tmp = tmp->next;
 	}

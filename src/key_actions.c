@@ -40,6 +40,7 @@ void	key_up_action(t_prm *prm)
 	clear_prompt();
 	if (prm->history_ptr && prm->history_ptr->prev != NULL)
 		prm->history_ptr = prm->history_ptr->prev;
+	//set cursor pos and line len to the end of the line
 	ft_putstr_fd(prm->history_ptr->content, 1); //segfault when trying to press arrow exactly after start of the program
 	//copy from history to buffer and set i to len of buffer
 }
@@ -49,6 +50,7 @@ void	key_down_action(t_prm *prm)
 	clear_prompt();
 	if (prm->history_ptr && prm->history_ptr->next != NULL)
 		prm->history_ptr = prm->history_ptr->next;
+		//set cursor pos and line len to the end of the lines
 	ft_putstr_fd(prm->history_ptr->content, 1); //segfault when trying to press arrow exactly after start of the program
 	//copy from history to buffer and set i to len of buffer
 }

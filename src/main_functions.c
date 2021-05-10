@@ -110,6 +110,7 @@ void	parse_line(t_prm *prm)
 
 	cmd = malloc(sizeof(t_cmd)); //protect
 	cmd->cmd = prm->history_ptr->content;
+	cmd->args = "..";
 	new = bd_lstnew(cmd);
 	if (!new)
 	{

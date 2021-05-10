@@ -39,7 +39,8 @@ SOURCES			=	main.c \
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \
-					shell_keys.h
+					shell_keys.h \
+					builtin.h
 
 GNL_SRC			=	get_next_line.c
 

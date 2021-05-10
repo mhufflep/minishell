@@ -1,5 +1,5 @@
 #include "bidirectional_list.h"
-
+	
 t_bd_lst	*bd_lstnew(void *content)
 {
 	t_bd_lst	*new;
@@ -61,7 +61,7 @@ void		bd_lstadd_back(t_bd_lst **lst, t_bd_lst *new)
 	}
 }
 
-void		bd_lst_insert(t_bd_lst **cur, t_bd_lst *new)
+void		bd_lst_insert(t_bd_lst **cur, t_bd_lst *new) //CHECK IF WORKS CORRECTLY
 {
 	t_bd_lst *tmp;
 
@@ -87,7 +87,7 @@ void		bd_lst_insert(t_bd_lst **cur, t_bd_lst *new)
 	}
 }
 
-void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *))
+void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *)) //CHECK IF WORKS CORRECTLY
 {
 	t_bd_lst *tmp;
 
@@ -217,7 +217,7 @@ t_bd_lst	*bd_lstmap(t_bd_lst *lst, void *(*f)(void *), void (*del)(void *))
 	return (newlist);
 }
 
-int		bd_lstmax_cont_len(t_bd_lst *lst)
+int			bd_lstmax_cont_len(t_bd_lst *lst)
 {
 	int	max;
 	int	curr;
@@ -233,13 +233,110 @@ int		bd_lstmax_cont_len(t_bd_lst *lst)
 	return (max);
 }
 
-void	bd_lstsort(t_bd_lst *lst) //rewrite using insert or add second method
+int			def_cont_comp(void *data1, void *data2)
+{
+	if (data1 && !data2)
+		return (1);
+	else if (!data2 && data2)
+		return (-1);
+	else if (!data1 && !data2)
+		return (0);
+	return (bd_strcmp((char *)data1, (char *)data2));
+}
+
+t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int (*comp)()) //CHECK IF WORKS CORRECTLY
+{
+	while (lst)
+	{
+		if (comp(lst->content, data) == 0)
+		{
+			return (lst);
+		}
+		lst = lst->next;
+	}
+	return (NULL);
+}
+
+void		bd_lstsort_merge(t_bd_lst **head, int (*comp)())
+{
+	// t_bd_lst	*tmp;
+	t_bd_lst	*n1;
+	t_bd_lst	*n2;
+
+	// tmp = *head;
+	if ((*head == NULL) || ((*head)->next == NULL))
+		return;
+
+	/* Split list until 1 node remains, n1 splitted first, then n2 */
+	bd_lstsplit(*head, &n1, &n2);
+	bd_lstsort_merge(&n1, comp);
+	bd_lstsort_merge(&n2, comp);
+
+	/* new list compiled by merging sorted nodes */
+	*head = bd_lst_compared_merge(n1, n2, comp);
+}
+
+void		bd_lstsplit(t_bd_lst *lst, t_bd_lst **first_part, t_bd_lst **second_part)
+{
+	t_bd_lst	*end;
+	t_bd_lst	*middle;
+
+	middle = lst;
+	end = lst->next;
+	while (end != NULL)
+	{
+		end = end->next;
+		if (end != NULL)
+		{
+			middle = middle->next;
+			end = end->next;
+		}
+	}
+	*first_part = lst;
+	*second_part = middle->next;
+	middle->next = NULL;
+}
+
+t_bd_lst	*bd_lst_compared_merge(t_bd_lst *n1, t_bd_lst *n2, int (*comp)())
+{
+	t_bd_lst	*merged;
+
+	merged = NULL;
+	if (n1 == NULL)
+		return (n2);
+	else if (n2 == NULL)
+		return (n1);
+
+	if (comp(n1->content, n2->content) <= 0)//(n1->content <= n2->content) 
+	{
+		merged = n1;
+		merged->next = bd_lst_compared_merge(n1->next, n2, comp);
+	}
+	else {
+		merged = n2;
+		merged->next = bd_lst_compared_merge(n1, n2->next, comp);
+	}
+	return (merged);
+}
+
+
+t_bd_lst	*bd_lst_merge(t_bd_lst **n1, t_bd_lst **n2)
+{
+	if (n1 == NULL || *n1 == NULL)
+		return (NULL);
+	if (n2 == NULL)
+		return (*n1);
+	(*n1)->next = *n2;
+	*n2 = NULL;
+	return (*n1);
+}
+
+void		bd_lstsort(t_bd_lst *lst) //not working well, need to rewrite using merge sort
 {
 	int			len;
 	t_bd_lst	*tmp;
 	int			sorted;
 	char		*str;
-
 	sorted = 0;
 	while (!sorted)
 	{
@@ -261,7 +358,7 @@ void	bd_lstsort(t_bd_lst *lst) //rewrite using insert or add second method
 	}
 }
 
-t_bd_lst	*bd_parse_from_arr(char **arr)
+t_bd_lst	*bd_parse_from_arr(char **arr) //add copy cont function
 {
 	t_bd_lst	*head;
 	t_bd_lst	*new;
@@ -287,4 +384,26 @@ t_bd_lst	*bd_parse_from_arr(char **arr)
 	}
 	else
 		return (NULL);
+}
+
+char		**bd_parse_to_arr(t_bd_lst *lst) //add copy cont function
+{
+	char	**arr;
+	int		size;
+	int		i;
+
+	i = 0;
+	arr = NULL;
+	size = bd_lstsize(lst);
+	if (size != 0)
+		arr = malloc(sizeof(char *) * size);
+	if (arr == NULL)
+		return (NULL);
+	while (i < size)
+	{
+		arr[i] = bd_strdup(lst->content);
+		lst = lst->next;
+		i++;
+	}
+	return (arr);		
 }

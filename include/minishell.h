@@ -16,7 +16,9 @@
 # include "libft.h"
 # include "shell_keys.h"
 # include "get_next_line.h"
+# include "builtin.h"
 # include "bidirectional_list.h"
+
 // 0, 255, 197
 # define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
 # define HISTORY_FILENAME ".e-bash_history"
@@ -26,11 +28,11 @@ typedef struct termios t_term;
 
 typedef struct  s_cmd
 {
-	char *cmd;			//текущая команда
-	char *options;		//опции команды
-	char *args;			//аргументы команды
-    int is_pipe;		//стоит ли после команды pipe
-    int is_redirect;	//стоит ли после команды redir
+	char *cmd;				//текущая команда
+	char *options;			//опции команды
+	char *args;				//аргументы команды
+    int is_pipe : 1;		//стоит ли после команды pipe
+    int is_redirect : 1;	//стоит ли после команды redir
 }               t_cmd;
 
 typedef struct  s_prm
@@ -67,41 +69,45 @@ int		read_history(t_prm *prm);
 int		history_add(t_bd_lst *node);
 int		history_next(t_prm *prm);
 int		history_prev(t_prm *prm);
-
 int		save_history(t_bd_lst *node);
 
 
-/* COMMANDS */
-void	cmd_pwd(void);
-void	cmd_env(t_prm *prm);
-void	cmd_unset(t_prm *prm);
-void	cmd_export(t_prm *prm);
-void	cmd_history(t_prm *prm);
-void	cmd_not_found(t_prm *prm);
+/* BUILTIN */
+void		cmd_cd(t_prm *prm);
+void		cmd_pwd(t_prm *prm);
+void		cmd_env(t_prm *prm);
+void		cmd_echo(t_prm *prm);
+void		cmd_unset(t_prm *prm);
+void		cmd_export(t_prm *prm);
+void		cmd_history(t_prm *prm);
+void		cmd_not_found(t_prm *prm);
 
-int		execute(char buff[], t_prm *prm);
+
+int			execute(char buff[], t_prm *prm);
 
 
 /* TERMINAL */
-void	change_term_settings(t_term *term);
-int		setup_terminal(t_prm	*prm);
-t_term	*create_term_struct(void);
+void		change_term_settings(t_term *term);
+int			setup_terminal(t_prm	*prm);
+t_term		*create_term_struct(void);
+
 
 /* KEYS */
-int		is_printable_sym(unsigned int input);
-int		is_printable(char *input);
-int		is_spec_key(char *input);
-void	key_up_action(t_prm *prm);
-void	key_down_action(t_prm *prm);
-void	key_left_action(t_prm *prm);
-void	key_right_action(t_prm *prm);
+int			is_printable_sym(unsigned int input);
+int			is_printable(char *input);
+int			is_spec_key(char *input);
+void		key_up_action(t_prm *prm);
+void		key_down_action(t_prm *prm);
+void		key_left_action(t_prm *prm);
+void		key_right_action(t_prm *prm);
 
-void	clear_prompt(void);
+void		clear_prompt(void);
+
 
 /* INITIALIZATION */
-t_prm	*setup_settings(int argc, char **argv, char **env);
-int		setup_env_lists(t_prm *prm);
-int		setup_parameters(t_prm **prm);
-int		setup_terminal(t_prm	*prm);
+t_prm		*setup_settings(int argc, char **argv, char **env);
+int			setup_env_lists(t_prm *prm);
+int			setup_parameters(t_prm **prm);
+int			setup_terminal(t_prm	*prm);
 
 #endif

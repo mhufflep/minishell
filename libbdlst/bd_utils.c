@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 00:13:30 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/05 00:15:39 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/10 22:41:29 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ size_t	bd_strlen(const char *s)
 	while (s && s[i] != '\0')
 		i++;
 	return (i);
+}
+
+int	bd_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2 && s1++)
+		s2++;
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
 int	bd_memcmp(const void *s1, const void *s2, size_t n)

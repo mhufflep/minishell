@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 01:32:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/08 08:46:08 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/08 21:11:00 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,11 @@ int		history_add(t_bd_lst *node)
 	
 	if (node && node->content)
 	{
-		write(fd, "\n", 1);
-		write(fd, node->content, bd_strlen((char *)node->content));
+		if (ft_strcmp(node->content, "\n"))
+		{
+			write(fd, "\n", 1);
+			write(fd, node->content, bd_strlen((char *)node->content));
+		}
 	}
 	close(fd);
 	return (0);
