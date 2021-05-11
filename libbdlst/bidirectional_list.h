@@ -31,7 +31,7 @@ void		bd_lstprint(t_bd_lst *lst);
 t_bd_lst	*bd_lstcopy(t_bd_lst *list, void *(*content_copy)(void *));
 t_bd_lst	*bd_lstmap(t_bd_lst *lst, void *(*f)(void *), void (*del)(void *));
 int			bd_lstmax_cont_len(t_bd_lst *lst);
-t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int (*comp)()); //CHECK IF WORKS CORRECTLY
+t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)()); //CHECK IF WORKS CORRECTLY
 void		bd_lstsort_merge(t_bd_lst **head, int (*comp)());
 void		bd_lstsplit(t_bd_lst *lst, t_bd_lst **first_part, t_bd_lst **second_part);
 t_bd_lst	*bd_lst_compared_merge(t_bd_lst *n1, t_bd_lst *n2, int (*comp)());
