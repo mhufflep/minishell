@@ -1,84 +1,72 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/31 21:53:29 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/04/29 00:18:58 by mhufflep         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-static int	count_parts(const char *s, char c)
+size_t	read_word(char const *s, const char *separators)
 {
-	int	i;
-	int	count;
+	size_t	i;
 
 	i = 0;
-	count = 0;
-	if (!s)
-		return (0);
+	while (!ft_strchr(separators, s[i]) && s[i] != '\0')
+		i++;
+	return (i);
+}
+
+size_t	count_words(char const *s, const char *separators)
+{
+	size_t	amount;
+	size_t	i;
+
+	amount = 0;
+	i = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-static char	**free_memory(char **s)
-{
-	int	i;
-
-	i = 0;
-	while (s && s[i])
-	{
-		free(s[i]);
-		i++;
-	}
-	if (s)
-		free(s);
-	return ((char **)0);
-}
-
-char	*split_cycle(const char *s, char c, char **result, int count)
-{
-	int	i;
-	int	j;
-	int	length;
-
-	i = 0;
-	j = 0;
-	while (count--)
-	{
-		length = 0;
-		while (s[i] == c && s[i] != '\0')
+		if (!ft_strchr(separators, s[i]))
+		{
+			i += read_word(&s[i], separators);
+			amount++;
+		}
+		else
 			i++;
-		while (s[i + length] != c && s[i + length] != '\0')
-			length++;
-		result[j++] = ft_substr(s, i, length);
-		if (!result[j++])
-			return ((char *)free_memory(result));
-		i += length;
 	}
-	return ((char *)s);
+	return (amount);
 }
 
-char	**ft_split(char const *s, char c)
+void	*free_words(char **words)
 {
-	int		count;
-	char	**result;
+	int		i;
 
-	count = count_parts(s, c);
-	result = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!result)
-		return (free_memory(result));
-	result[count] = NULL;
-	if (!split_cycle(s, c, result, count))
+	i = -1;
+	while (words && words[++i])
+		free(words[i]);
+	if (words)
+		free(words);
+	return (NULL);
+}
+
+char	**ft_split(char const *s, const char *separators)
+{
+	size_t	amount;
+	size_t	len;
+	char	**words;
+
+	if (!s)
 		return (NULL);
-	return (result);
+	words = (char **)malloc((count_words(s, separators) + 1) * sizeof(char *));
+	if (!words)
+		return (NULL);
+	len = 0;
+	amount = 0;
+	while (s[len] != '\0')
+	{
+		if (!ft_strchr(separators, s[len]))
+		{
+			words[amount] = ft_substr(s, len, read_word(&s[len], separators));
+			if (!words[amount++])
+				return (free_words(words));
+			len += read_word(&s[len], separators);
+		}
+		else
+			len++;
+	}
+	words[amount] = NULL;
+	return (words);
 }

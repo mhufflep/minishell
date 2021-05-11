@@ -10,16 +10,36 @@ int		skip_spaces(char *str)
 	return (i);
 }
 
+
+int		is_separator(char c)
+{
+	return (c != " " || c != "<" || c != ">" || c != "|" | c != ";");
+}
+
+int		go_to_separator(char *str)
+{
+	int i;
+
+	i = 0;
+	while (!is_sepatator(str[i]))
+		i++;
+	return (i);
+}
+
 void	parse_line(t_prm *prm)
 {
 	t_cmd		*command;
 	t_bd_lst	*new;
 	char		is_quote;
 	char		is_dquote;
+	char		is_option;
+	char		is_command;
 	int			i;
 
 	is_quote = 0;
 	is_dquote = 0;
+	is_option = 0;
+	is_command = 0;
 	i = 0;
 
 	command = malloc(sizeof(t_cmd));
@@ -46,12 +66,14 @@ void	parse_line(t_prm *prm)
 		{
 			while (prm->line[i] != "\'" || prm->line[i])
 			{
+				// if (!is_command)
+				// 	command->cmd = ...
 				// if (prm->line[i] == "-")
 				// 	is_option = 1;
 				// if (is_option)
 				// 	command->options = ...
 				// if (is_command)
-				// 	command->cmd = ...
+				// 	command->args = ...
 				// ...
 				i++;
 				if (prm->line[i] == "\'")
@@ -74,11 +96,36 @@ void	parse_line(t_prm *prm)
 		}
 		else
 		{
-			//
+			if (!is_command)
+			{
+				// command->cmd = malloc(go_to_separator(&(prm->line[i])));
+				// command->cmd = ft_substr(&(prm->line[i]), 0, go_to_separator(&(prm->line[i])));
+			}
+			if (is_command)
+				// command->args = 
+			if (prm->line[i] == ";")
+				break;
 			i++;
 		}
 	}
 	//
 	new->content = command;
 	// prm->cmds_ptr = bd_lstlast(prm->cmds);
+	// if (prm->line[i] == ";")
+		// parser(&(prm->line[i + 1]))
 }
+
+// Разделяем по ; и | и \0
+// Сначала делятся блоки по ; потом уже по |
+
+// если встречаю один из редиректов > >>
+//		первое слово после редиректа - файл (который нужно создать)
+//		если одинарный редирект, то open(O_CREAT, O_TRUNC), если двойной, то open(O_APPEND, O_CREAT)
+//		все остальное - это аргументы, которые нужно присоединить к аргументам текущей команды (то есть все аргументы джойнятся к друг другу)
+
+// если встретил пайп |
+//		первое слово после пайпа - команда
+//		все остальное это аргументы
+//		ставится флаг is_pipe = 1;
+//
+		

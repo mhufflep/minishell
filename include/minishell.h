@@ -27,8 +27,7 @@ typedef struct termios t_term;
 typedef struct  s_cmd
 {
 	char *cmd;			//текущая команда
-	char *options;		//опции команды
-	char *args;			//аргументы команды
+	char **args;		//аргументы и опции команды
     int is_pipe;		//стоит ли после команды pipe
     int is_redirect;	//стоит ли после команды redir
 }               t_cmd;
