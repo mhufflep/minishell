@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/08 21:26:11 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/12 00:42:20 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,25 @@ void	cmd_echo(t_prm *prm)
 void cmd_export(t_prm *prm)
 {
 	bd_lstiter(prm->sorted_env, print_export_node);
+}
+
+void	cmd_learnc(t_prm *prm)
+{
+	(void)prm;
+	// char str[139] = "Ѱ!҂҈ѹ҃ѱҏ-!҈҃ѿ!Ѷ҂Ѽѹ!ѸѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!ご!ѸѾѱѶ҉ҍ!Ѣљ-!і҂Ѽѹ!ѾѶ!ѸѾѱѶ҉ҍ-!Ѿ҄-!҆҄Ѻ!҂ѿ҂ѹ/";
+	char str[139] = "јѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!ご!ѸѾѱѶ҉ҍ!Ѣљ-!ўѶ!ѸѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!.!Ѿ҄-!҆҄Ѻ!҂ѿ҂ѹ/";
+	int i;
+
+	i = 0;
+	while (i < 138)
+	{
+		str[i] -= 1;
+		i++;
+	}
+	write(1, "\033[5;3m", 7);
+	write(1, str, 116);
+	write(1, "\033[0m", 5);
+	write(1, "\n", 1);
 }
 
 void cmd_env(t_prm *prm)

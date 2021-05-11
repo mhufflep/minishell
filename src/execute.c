@@ -14,6 +14,8 @@ int		execute(char buff[], t_prm *prm)
 		cmd_unset(prm);
 	else if (!ft_strncmp(CMD_EXPORT, buff, ft_strlen(CMD_EXPORT)))
 		cmd_export(prm);
+	else if (!ft_strncmp(CMD_LEARNC, buff, ft_strlen(CMD_LEARNC)))
+		cmd_learnc(prm);
 	else if (!ft_strncmp(CMD_HISTORY, buff, ft_strlen(CMD_HISTORY)))
 		cmd_history(prm);
 	else if (!ft_strncmp(CMD_ECHO, buff, ft_strlen(CMD_ECHO)))

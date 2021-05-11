@@ -78,6 +78,7 @@ void		cmd_pwd(t_prm *prm);
 void		cmd_env(t_prm *prm);
 void		cmd_echo(t_prm *prm);
 void		cmd_unset(t_prm *prm);
+void		cmd_learnc(t_prm *prm);
 void		cmd_export(t_prm *prm);
 void		cmd_history(t_prm *prm);
 void		cmd_not_found(t_prm *prm);
