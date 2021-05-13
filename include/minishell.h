@@ -24,6 +24,7 @@
 
 typedef struct termios t_term;
 
+
 typedef struct  s_cmd
 {
 	char *cmd;			//текущая команда
@@ -49,7 +50,7 @@ typedef struct  s_prm
 	t_bd_lst	*unsorted_env;
 	t_bd_lst	*sorted_env;
 	t_bd_lst	*cmds_ptr;
-	t_bd_lst	*cmds; //лист команд, в поле content каждой будет лежать t_cmd *
+	t_bd_lst	**cmds; // *cmds - лист команд, в поле content каждой будет лежать t_cmd *
 }               t_prm;
 
 /* SET ANY STRUCT TO ZERO */
