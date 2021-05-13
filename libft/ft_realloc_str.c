@@ -1,41 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsort.c                                       :+:      :+:    :+:   */
+/*   ft_realloc_str.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/28 22:58:07 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/13 13:14:11 by mhufflep         ###   ########.fr       */
+/*   Created: 2021/05/13 12:26:55 by mhufflep          #+#    #+#             */
+/*   Updated: 2021/05/13 12:47:17 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_iterate(t_list *lst)
+char	*ft_realloc_str(char *src, size_t size)
 {
-	int len;
-	char *str;
+	char	*dst;
 
-	while (lst && lst->next != NULL)
-	{
-		len = ft_strlen(lst->content) + 1;
-		if (ft_memcmp(lst->content, lst->next->content, len) > 0)
-		{
-			str = lst->content;
-			lst->content = lst->next->content;
-			lst->next->content = str;
-			return (0);
-		}
-		lst = lst->next;
-	}
-	return (1);
+	dst = (char *)malloc(size * sizeof(char));
+	dst = ft_memmove(dst, src, size);
+	free(src);
+	return (dst);
 }
 
-
-
-void	ft_lstsort(t_list *lst)
+char	*ft_strjoin_free(char *dst, char *src)
 {
-	while (!ft_iterate(lst))
-		;
+	char *tmp;
+
+	tmp = dst;
+	dst = ft_strjoin(dst, src);
+	free(tmp);
+	return (dst);
 }
