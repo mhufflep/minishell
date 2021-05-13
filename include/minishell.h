@@ -45,8 +45,6 @@ typedef struct  s_prm
 	int status;
 	char *line;
 
-	char *line;
-
 	t_term	*term;
 	t_term	*def_term;
 

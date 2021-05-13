@@ -17,7 +17,9 @@ char	*ft_realloc_str(char *src, size_t size)
 	char	*dst;
 
 	dst = (char *)malloc(size * sizeof(char));
-	dst = ft_memmove(dst, src, size);
+	if (!dst)
+		return (NULL);
+	dst = ft_memmove(dst, src, ft_strlen(src));
 	free(src);
 	return (dst);
 }

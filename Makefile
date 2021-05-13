@@ -34,7 +34,7 @@ SOURCES			=	main.c \
 					execute.c \
 					term_utils.c \
 					init.c \
-					parser.c
+					parser.c \
 					main_functions.c
 					
 HEADER_FILES	=	minishell.h \
