@@ -29,17 +29,18 @@ GNL_DIR		= get_next_line
 ######################### SOURCES ############################
 
 SOURCES			=	main.c \
-					set_default.c \
 					history.c \
 					commands.c \
 					execute.c \
 					term_utils.c \
 					init.c \
 					parser.c
+					main_functions.c
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \
-					shell_keys.h
+					shell_keys.h \
+					builtin.h
 
 GNL_SRC			=	get_next_line.c
 

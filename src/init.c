@@ -1,24 +1,23 @@
 #include "minishell.h"
 
-int		init_prm_struct(t_prm **prm)
+int		setup_parameters(t_prm **prm)
 {
 	*prm = (t_prm *)malloc(sizeof(t_prm));
 	if (*prm == NULL)
 		exit(-1);
-	set_default(*prm, sizeof(t_prm));
+	ft_memset(*prm, 0, sizeof(t_prm));
 	return (0);
 }
 
-int init_env_lists(t_prm *prm)
+int setup_env_lists(t_prm *prm)
 {
 	prm->unsorted_env = bd_parse_from_arr(prm->env);
-	prm->sorted_env = bd_lstcopy(prm->unsorted_env, def_node_cont_copy);
-	bd_lstsort(prm->sorted_env);
+	prm->sorted_env = bd_lstcopy(prm->unsorted_env, def_cont_copy);
+	bd_lstsort_merge(&(prm->sorted_env), ft_strcmp);
 	return (0);
 }
 
-
-int init_term_struct(t_prm	*prm)
+int setup_terminal(t_prm	*prm)
 {
 	char *term_name;
 
@@ -34,14 +33,16 @@ int init_term_struct(t_prm	*prm)
 	return (0);
 }
 
-int	init_resources(t_prm **prm, int argc, char **argv, char **env)
+t_prm	*setup_settings(int argc, char **argv, char **env)
 {
-	*prm = NULL;
-	init_prm_struct(prm);
-	(*prm)->argc = argc;
-	(*prm)->argv = argv;
-	(*prm)->env = env;
-	init_term_struct(*prm);
-	init_env_lists(*prm);
-	return(0);
+	t_prm	*prm;
+	
+	setup_parameters(&prm);
+	setup_terminal(prm);
+	prm->argc = argc;
+	prm->argv = argv;
+	prm->env = env;
+	setup_env_lists(prm);
+	read_history(prm);
+	return (prm);
 }

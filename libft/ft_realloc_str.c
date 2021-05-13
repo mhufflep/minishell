@@ -1,22 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   ft_realloc_str.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/28 19:21:57 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/08 00:55:50 by mhufflep         ###   ########.fr       */
+/*   Created: 2021/05/13 12:26:55 by mhufflep          #+#    #+#             */
+/*   Updated: 2021/05/13 12:47:17 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memset(void *dst, int c, size_t size)
+char	*ft_realloc_str(char *src, size_t size)
 {
-	while (dst && size-- != 0)
-	{
-		((unsigned char *)dst)[size] = (unsigned char)c;
-	}
+	char	*dst;
+
+	dst = (char *)malloc(size * sizeof(char));
+	dst = ft_memmove(dst, src, size);
+	free(src);
+	return (dst);
+}
+
+char	*ft_strjoin_free(char *dst, char *src)
+{
+	char *tmp;
+
+	tmp = dst;
+	dst = ft_strjoin(dst, src);
+	free(tmp);
 	return (dst);
 }
