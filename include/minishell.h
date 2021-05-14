@@ -12,6 +12,7 @@
 # include <signal.h>
 # include <sys/ioctl.h>
 # include <errno.h>
+# include <sys/wait.h>
 
 # include "libft.h"
 # include "shell_keys.h"
@@ -42,8 +43,10 @@ typedef struct  s_prm
 	int argc;
 	int cursor_pos;
 	int	line_len;
+	int	exit_code;
 	int status;
 	char *line;
+	char input[5];
 
 	t_term	*term;
 	t_term	*def_term;
@@ -101,14 +104,27 @@ void		key_up_action(t_prm *prm);
 void		key_down_action(t_prm *prm);
 void		key_left_action(t_prm *prm);
 void		key_right_action(t_prm *prm);
-
+void		key_ctrl_l_action(t_prm *prm);
+void		key_bspace_action(t_prm *prm);
+void		key_other_action(t_prm *prm);
 void		clear_prompt(void);
 
 
+
+char *remove_from(char *src, int index, void (*free_ctl)(void *));
+char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *));
+
 /* INITIALIZATION */
 t_prm		*setup_settings(int argc, char **argv, char **env);
-int			setup_env_lists(t_prm *prm);
+int			setup_env_lists(t_prm	*prm);
 int			setup_parameters(t_prm **prm);
 int			setup_terminal(t_prm	*prm);
+void		reset_settings(t_prm	*prm);
+
+t_prm		*get_parameters(t_prm *prm);
+
+/* ERROR */
+void throw_error(void); // ???
+
 
 #endif

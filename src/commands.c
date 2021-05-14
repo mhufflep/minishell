@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/12 00:42:20 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:30:50 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,12 @@ void	cmd_cd(t_prm *prm)
 
 	cmd = (t_cmd *)prm->cmds_ptr->content;
 	printf("\n%s %s\n", cmd->cmd, cmd->args);
-	printf("%d\n", chdir(cmd->args));
+	printf("chdir exit status: %d\n", chdir(cmd->args));
+	
 	//update pwd
+	//find pwd in env lstfind
+	//split pwd by first =
+	//rejoin pwd
 }
 
 void	cmd_echo(t_prm *prm)
@@ -130,5 +134,29 @@ void cmd_not_found(t_prm *prm)
 {
 	(void)prm;
 	// printf("%s: command not found\n", (char *)prm->cmds_ptr->content);
-	printf("%s\n", "command not found");
+	printf("%s: %s\n%d %d\n", (char *)prm->history_ptr->content, "command not found", prm->cursor_pos, prm->line_len);
+}
+
+
+void	cmd_usercmd(t_prm *prm)
+{
+	//Need to split PATH into bin location and try execve with each of them.
+	//If all execve calls returned 0, then command not found.
+
+	//Need to split PATH into bin location and try execve with each of them.
+	//Check if the directory has necessary binary file.
+
+	char	**upd_env;
+	t_cmd	*cmd;
+
+	cmd = (t_cmd *)prm->cmds_ptr->content;
+	pid_t pid = fork();
+	if (pid == 0)
+	{
+		upd_env = bd_parse_to_arr(prm->unsorted_env);
+		execve(cmd->cmd, &cmd->args, upd_env);
+	}
+	wait(&prm->exit_code);
+
+	printf("exit code: %d\n", prm->exit_code);
 }
