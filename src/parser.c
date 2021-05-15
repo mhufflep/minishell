@@ -65,7 +65,7 @@ int		amount_spaces(char *str)
 	int j;
 
 	j = 0;
-	while(str[j] != '\0')
+	while (str[j] != '\0')
 	{
 		if (str[j] != ' ')
 			break;
@@ -86,9 +86,14 @@ void	split_command_semicolon(char *command_lines, t_prm *prm)
 	arr_commands = ft_split(command_lines, ";");
 	while (arr_commands[i])
 	{
-		j = amount_spaces(arr_commands[i]);
-		if (!(j == (int)ft_strlen(arr_commands[i])))
-			amount_commands++;
+		j = 0;
+		while (arr_commands[i][j])
+		{
+			j = amount_spaces(arr_commands[i]);
+			if (!(j == (int)ft_strlen(arr_commands[i])))
+				amount_commands++;
+		}
+		// if (amount_spaces(s) != (int)ft_strlen(s))
 		i++;
 	}
 

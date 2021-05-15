@@ -1,13 +1,31 @@
-#include "minishell.h"
+// #include "minishell.h"
+#include "libft.h"
+# define QUOTE '\''
+# define D_QUOTE '\"'
+# define SLASH '\\'
+//
+int		amount_spaces(char *str)
+{
+	int j;
+
+	j = 0;
+	while (str[j] != '\0')
+	{
+		if (str[j] != ' ')
+			break;
+		j++;
+	}
+	return (j);
+}
+
 // В качестве закрывающей, ищет ближайшую кавычку, а не крайнюю
 // Для одинарной и для двойной кавычки нужны отдельные ф-ии для парсинга (см. примеры с $)
-
 int		is_slash(char *s, int i)
 {
 	int amount;
 
 	amount = 0;
-	while (s[i] == "\\" || i >= 0)
+	while (s[i] == SLASH || i >= 0)
 	{
 		amount++;
 		i--;
@@ -25,25 +43,31 @@ int		check_quote(char *s, char quote_mark)
 
 	i = 0;
 	is_quote = 1;
-	// Нужно, чтобы цикл прервался, если встретится кавычка, НО при этом,
-	// если кавычка не является экранированной (то есть за ней нет слэша,
-	// а также нужно проверить, чтобы условие проверки слэша не заходило за 0 индекс).
 
 	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш, при этом индекс больше нуля
-	// или пока текущий символ не равняется концу строки
+	// и пока текущий символ не равняется концу строки
 	// while ((s[i] != quote_mark || (i > 0 && (s[i] == quote_mark && (s[i - 1] == SLASH)))) || s[i])
-	while ((s[i] != quote_mark || (i > 0 && (s[i] == quote_mark && is_slash(s, i - 1)))) || s[i])
-	{
+	while ((s[i] != quote_mark || (i > 0 && (s[i] == quote_mark && is_slash(s, i - 1)))) && s[i])
 		i++;
-		if (s[i] == quote_mark && !is_slash(s, i - 1))
-			is_quote = 0;
-	}
-	if (is_quote == 1)
+	// Если текущий символ - кавычка и она не экранирована, то значит кавычки закрыты,
+	// возвращаем следующий от нее индекс строки
+	if (s[i] == quote_mark && !is_slash(s, i - 1))
+		return (++i);
+	else
 		exit(99); // Сlosing quotation mark is not found.
+}
+
+size_t	read_str(char const *s, const char *separators)
+{
+	size_t	i;
+
+	i = 0;
+	while (!ft_strchr(separators, s[i]) && s[i])
+		i++;
 	return (i);
 }
 
-size_t	count_str(char const *s, const char *separators)
+size_t	count_str(char *s, const char *separators)
 {
 	size_t	amount;
 	size_t	i;
@@ -52,16 +76,42 @@ size_t	count_str(char const *s, const char *separators)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] != SLASH && (s[i] == QUOTE && s[i - 1] != SLASH))
-			i = check_quote(s, QUOTE);
-		else if (s[i] != SLASH && (s[i] == D_QUOTE && s[i - 1] != SLASH))
-			i = check_quote(s, D_QUOTE);
+		// Если текущий символ равняется кавычке и перед ним нет слэша, при этом индекс больше нуля
+		// и если текущий символ не равняется концу строки
+		if ((s[i] == QUOTE && (i > 0 && (s[i] == QUOTE && !is_slash(s, i - 1)))) && s[i])
+		{
+			i += check_quote(s, QUOTE);
+			amount++;
+		}
+		else if ((s[i] == D_QUOTE && (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1)))) && s[i])
+		{
+			i += check_quote(s, D_QUOTE);
+			amount++;
+		}
 		else if (!ft_strchr(separators, s[i]))
+		{
+			i += read_str(&s[i], separators);
+			amount++;
+		}
+		else
+			i++;
 	}
 	return (amount);
 }
 
-char	**ft_split(char const *s, const char *separators)
+void	*free_array(char **array)
+{
+	int		i;
+
+	i = -1;
+	while (array && array[++i])
+		free(array[i]);
+	if (array)
+		free(array);
+	return (NULL);
+}
+
+char	**shell_split(char *s, const char *separators)
 {
 	char	**array;
 	size_t	len;
@@ -70,5 +120,36 @@ char	**ft_split(char const *s, const char *separators)
 	if (!s)
 		return (NULL);
 	array = (char **)malloc((count_str(s, separators) + 1) * sizeof(char *));
+	if (!array)
+		return (NULL);
+	len = 0;
+	amount = 0;
+	while (s[len] != '\0')
+	{
+		if ((s[len] == QUOTE && (len > 0 && (s[len] == QUOTE && !is_slash(s, len - 1)))) && s[len])
+		{
+			array[amount] = ft_substr(s, len, check_quote(&s[len], QUOTE));
+			if (!array[amount++])
+				return (free_array(array));
+			len += check_quote(s, QUOTE);
+		}
+		else if ((s[len] == D_QUOTE && (len > 0 && (s[len] == D_QUOTE && !is_slash(s, len - 1)))) && s[len])
+		{
+			array[amount] = ft_substr(s, len, check_quote(&s[len], D_QUOTE));
+			if (!array[amount++])
+				return (free_array(array));
+			len += check_quote(s, D_QUOTE);
+		}
+		else if (!ft_strchr(separators, s[len]))
+		{
+			array[amount] = ft_substr(s, len, read_str(&s[len], separators));
+			if (!array[amount++])
+				return (free_array(array));
+			len += read_str(&s[len], separators);
+		}
+		else
+			len++;
+	}
+	array[amount] = NULL;
 	return (array);
 }
