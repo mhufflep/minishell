@@ -23,6 +23,9 @@
 # define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
 # define HISTORY_FILENAME ".e-bash_history"
 # define HISTORY_FILEPATH "./"
+# define QUOTE "\'"
+# define D_QUOTE "\""
+# define SLASH "\\"
 
 typedef struct termios t_term;
 

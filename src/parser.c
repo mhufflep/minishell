@@ -45,17 +45,17 @@ int		skip_spaces(char *str)
 }
 
 
-int		is_separator(char c)
-{
-	return (c != " " || c != "<" || c != ">" || c != "|" | c != ";");
-}
+// int		is_separator(char c)
+// {
+// 	return (c != " " || c != "<" || c != ">" || c != "|" | c != ";" | c != "$");
+// }
 
 int		go_to_separator(char *str)
 {
 	int i;
 
 	i = 0;
-	while (!is_sepatator(str[i]))
+	while (!ft_strchr(" <>|;$", str[i]))
 		i++;
 	return (i);
 }
