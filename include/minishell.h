@@ -24,7 +24,7 @@
 # define HISTORY_FILENAME ".e-bash_history"
 # define HISTORY_FILEPATH "./"
 # define QUOTE '\''
-# define D_QUOTE '\"'
+# define D_QUOTE '"'
 # define SLASH '\\'
 
 typedef struct termios t_term;
@@ -119,6 +119,7 @@ int		setup_parameters(t_prm **prm);
 int		setup_terminal(t_prm	*prm);
 
 /* PARSER */
-void parse_line(t_prm *prm);
+void	parse_line(t_prm *prm);
+char	**shell_split(char *s, const char *separators);
 
 #endif
