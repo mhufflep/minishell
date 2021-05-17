@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/14 18:30:50 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/17 15:29:34 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	cmd_cd(t_prm *prm)
 	t_cmd *cmd;
 
 	cmd = (t_cmd *)prm->cmds_ptr->content;
-	printf("\n%s %s\n", cmd->cmd, cmd->args);
-	printf("chdir exit status: %d\n", chdir(cmd->args));
+	printf("\n%s %s\n", cmd->cmd, cmd->args[0]);
+	printf("chdir exit status: %d\n", chdir(cmd->args[0]));
 	
 	//update pwd
 	//find pwd in env lstfind
@@ -60,7 +60,7 @@ void	cmd_echo(t_prm *prm)
 	t_cmd *cmd;
 
 	cmd = (t_cmd *)prm->cmds_ptr->content;
-	printf("%s\n", cmd->args);
+	printf("%s\n", cmd->args[0]);
 }
 
 void cmd_export(t_prm *prm)
@@ -109,7 +109,7 @@ void cmd_unset(t_prm *prm)
 	{
 		// if (tmp && !ft_strncmp((char *)tmp->content, prm->cmds_ptr->args, ft_strlen(prm->cmds_ptr->args))))
 		// 	bd_lstdelone(&prm->sorted_env, tmp, free);
-		if (tmp && !ft_strncmp((char *)tmp->content, cmd->args, ft_strlen(cmd->args)))
+		if (tmp && !ft_strncmp((char *)tmp->content, cmd->args[0], ft_strlen(cmd->args[0])))
 			bd_lstdelone(&prm->sorted_env, tmp, free);
 		tmp = tmp->next;
 	}
@@ -120,10 +120,10 @@ void cmd_history(t_prm *prm)
 	t_bd_lst	*tmp;
 	int			i;
 
-	i = 0;
 	tmp = prm->history;
 	while (tmp)
 	{
+		i = 0;
 		printf("  %d  %s\n", i, (char *)tmp->content);
 		i++;
 		tmp = tmp->next;

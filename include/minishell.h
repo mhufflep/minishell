@@ -31,7 +31,7 @@ typedef struct  s_cmd
 {
 	char *cmd;				//текущая команда
 	char *options;			//опции команды
-	char *args;				//аргументы команды
+	char **args;			//аргументы команды
     int is_pipe : 1;		//стоит ли после команды pipe
     int is_redirect : 1;	//стоит ли после команды redir
 }               t_cmd;
