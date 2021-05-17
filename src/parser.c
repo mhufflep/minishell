@@ -39,7 +39,7 @@ int		skip_spaces(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] == " ")
+	while (str[i] == ' ')
 		i++;
 	return (i);
 }
@@ -47,7 +47,7 @@ int		skip_spaces(char *str)
 
 // int		is_separator(char c)
 // {
-// 	return (c != " " || c != "<" || c != ">" || c != "|" | c != ";" | c != "$");
+// 	return (c != ' ' || c != '<' || c != '>' || c != '|' | c != ';' | c != '$');
 // }
 
 int		go_to_separator(char *str)
@@ -55,7 +55,7 @@ int		go_to_separator(char *str)
 	int i;
 
 	i = 0;
-	while (!ft_strchr(" <>|;$", str[i]))
+	while (!ft_strchr(' <>|;$', str[i]))
 		i++;
 	return (i);
 }
@@ -83,7 +83,7 @@ void	split_command_semicolon(char *command_lines, t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = ft_split(command_lines, ";");
+	arr_commands = ft_split(command_lines, ';');
 	while (arr_commands[i])
 	{
 		j = 0;
@@ -110,7 +110,7 @@ void	split_command_semicolon(char *command_lines, t_prm *prm)
 		j = amount_spaces(arr_commands[i]);
 		if (!(j == (int)ft_strlen(arr_commands[i])))
 		{
-			arr_split_command_pipe = ft_split(arr_commands[i], "|"); //
+			arr_split_command_pipe = ft_split(arr_commands[i], '|'); //
 			while (arr_split_command_pipe[k])
 			{
 				command = malloc(sizeof(t_cmd));
@@ -149,12 +149,12 @@ void	parse_line(t_prm *prm)
 	bd_lstadd_back(&(prm->cmds), new);
 
 	i = skip_spaces(prm->line);
-	if (prm->line[i] == "\"")
+	if (prm->line[i] == '\'')
 	{
 		is_dquote = 1;
 		i++;
 	}
-	else if (prm->line[i] == "\'")
+	else if (prm->line[i] == '\'')
 	{
 		is_quote = 1;
 		i++;
@@ -164,11 +164,11 @@ void	parse_line(t_prm *prm)
 	{
 		if (is_quote)
 		{
-			while (prm->line[i] != "\'" || prm->line[i])
+			while (prm->line[i] != '\'' || prm->line[i])
 			{
 				// if (!is_command)
 				// 	command->cmd = ...
-				// if (prm->line[i] == "-")
+				// if (prm->line[i] == '-')
 				// 	is_option = 1;
 				// if (is_option)
 				// 	command->options = ...
@@ -176,7 +176,7 @@ void	parse_line(t_prm *prm)
 				// 	command->args = ...
 				// ...
 				i++;
-				if (prm->line[i] == "\'")
+				if (prm->line[i] == '\'')
 					is_quote = 0;
 			}
 			if (is_quote)
@@ -184,11 +184,11 @@ void	parse_line(t_prm *prm)
 		}
 		else if (is_dquote) // все то же самое только с двойной кавычкой
 		{
-			while (prm->line[i] != "\"" || prm->line[i])
+			while (prm->line[i] != '\'' || prm->line[i])
 			{
 				//
 				i++;
-				if (prm->line[i] == "\"")
+				if (prm->line[i] == '\'')
 					is_dquote = 0; 
 			}
 			if (is_quote)
@@ -203,7 +203,7 @@ void	parse_line(t_prm *prm)
 			}
 			if (is_command)
 				// command->args = 
-			if (prm->line[i] == ";")
+			if (prm->line[i] == ';')
 				break;
 			i++;
 		}
@@ -211,7 +211,7 @@ void	parse_line(t_prm *prm)
 	//
 	new->content = command;
 	// prm->cmds_ptr = bd_lstlast(prm->cmds);
-	// if (prm->line[i] == ";")
+	// if (prm->line[i] == ';')
 		// parser(&(prm->line[i + 1]))
 }
 

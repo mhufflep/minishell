@@ -62,9 +62,9 @@ size_t	read_str(char *s, const char *separators)
 	i = 0;
 	while (!ft_strchr(separators, s[i]) && s[i])
 	{
-		if (((s[i] == D_QUOTE && i == 0) || (s[i] == D_QUOTE && (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1))))) && s[i]) // fix it
-			break;
 		i++;
+		if (((s[i] == D_QUOTE && i == 0) || (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1)))) && s[i]) // fix it
+			break;
 	}
 	return (i);
 }
@@ -78,16 +78,17 @@ size_t	count_str(char *s, const char *separators)
 	i = 0;
 	while (s[i])
 	{
-		// Если текущий символ равняется кавычке и перед ним нет слэша, при этом индекс больше нуля
+		// Если текущий символ первый в строке и он равняется кавычке или если текущий символ
+		// равняется кавычке, но перед ним нет слэша, при этом индекс больше нуля
 		// и если текущий символ не равняется концу строки
 		// if (s[i] == D_QUOTE)
 		// 	exit(0);
-		if (((s[i] == QUOTE && i == 0) || (s[i] == QUOTE && (i > 0 && (s[i] == QUOTE && !is_slash(s, i - 1))))) && s[i])
+		if (((s[i] == QUOTE && i == 0) || (i > 0 && (s[i] == QUOTE && !is_slash(s, i - 1)))) && s[i])
 		{
 			i += check_quote(s, QUOTE);
 			amount++;
 		}
-		else if (((s[i] == D_QUOTE && i == 0) || (s[i] == D_QUOTE && (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1))))) && s[i])
+		else if (((s[i] == D_QUOTE && i == 0) || (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1)))) && s[i])
 		{
 			i += check_quote(s, D_QUOTE);
 			amount++;
@@ -130,14 +131,14 @@ char	**shell_split(char *s, const char *separators)
 	amount = 0;
 	while (s[len] != '\0')
 	{
-		if (((s[len] == QUOTE && len == 0) || (s[len] == QUOTE && (len > 0 && (s[len] == QUOTE && !is_slash(s, len - 1))))) && s[len])
+		if (((s[len] == QUOTE && len == 0) || (len > 0 && (s[len] == QUOTE && !is_slash(s, len - 1)))) && s[len])
 		{
 			array[amount] = ft_substr(s, len + 1, check_quote(&s[len], QUOTE) - 2);
 			if (!array[amount++])
 				return (free_array(array));
 			len += check_quote(&s[len], QUOTE);
 		}
-		else if (((s[len] == D_QUOTE && len == 0) || (s[len] == D_QUOTE && (len > 0 && (s[len] == D_QUOTE && !is_slash(s, len - 1))))) && s[len])
+		else if (((s[len] == D_QUOTE && len == 0) || (len > 0 && (s[len] == D_QUOTE && !is_slash(s, len - 1)))) && s[len])
 		{
 			array[amount] = ft_substr(s, len + 1, check_quote(&s[len], D_QUOTE) - 2);
 			if (!array[amount++])
