@@ -116,8 +116,15 @@ void	key_other_action(t_prm *prm)
 		prm->history_ptr->content = insert_into(prm->history_ptr->content, prm->cursor_pos, prm->input[0], free);
 		prm->line_len += bd_strlen(prm->input);
 		prm->cursor_pos += bd_strlen(prm->input);
+		
 	}
 	ft_putstr_fd(prm->input, 1);
+	if (prm->cursor_pos <= prm->line_len)
+	{
+		//cursor_save();
+		ft_putstr_fd(&(((char *)prm->history_ptr->content)[prm->cursor_pos]), 1);
+		//cursor_restore();
+	}
 	//cursor_save();    // Cursor save doesnt work in the order it should work
 	//tputs(tigetstr("ed"), 1, ft_putchar);
  	//clear_prompt();

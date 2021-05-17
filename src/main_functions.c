@@ -125,7 +125,7 @@ void	read_line(t_prm *prm)
 			throw_error();
 		prm->input[readed] = 0;
 
-		//recognize symbol
+		//recognize symbol(prm);
 		if (!ft_strcmp(prm->input, KEY_ARROW_UP))
 			key_up_action(prm);
 		else if (!ft_strcmp(prm->input, KEY_ARROW_DOWN))

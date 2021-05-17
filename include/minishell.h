@@ -126,5 +126,4 @@ t_prm		*get_parameters(t_prm *prm);
 /* ERROR */
 void throw_error(void); // ???
 
-
 #endif
