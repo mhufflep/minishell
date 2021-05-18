@@ -148,9 +148,12 @@ void	parse_line(t_prm *prm)
 	t_cmd		*cmd;
 	t_bd_lst	*new;
 
+	prm->cmds = NULL;
 	cmd = malloc(sizeof(t_cmd)); //protect
 	cmd->cmd = prm->history_ptr->content;
-	cmd->args = "..";
+	cmd->args = malloc(sizeof(char *) * 2);
+	cmd->args[0] = "..";
+	write(1, "1", 1);
 	new = bd_lstnew(cmd);
 	if (!new)
 	{

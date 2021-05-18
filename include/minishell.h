@@ -56,7 +56,7 @@ typedef struct  s_prm
 	t_bd_lst	*unsorted_env;
 	t_bd_lst	*sorted_env;
 	t_bd_lst	*cmds_ptr;
-	t_bd_lst	*cmds; //лист команд, в поле content каждой будет лежать t_cmd *
+	t_bd_lst	**cmds; //массив листов команд, в поле content каждой будет лежать t_cmd *
 }               t_prm;
 
 

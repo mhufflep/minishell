@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/17 15:29:34 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/18 18:24:38 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	cmd_usercmd(t_prm *prm)
 	if (pid == 0)
 	{
 		upd_env = bd_parse_to_arr(prm->unsorted_env);
-		execve(cmd->cmd, &cmd->args, upd_env);
+		execve(cmd->cmd, cmd->args, upd_env);
 	}
 	wait(&prm->exit_code);
 

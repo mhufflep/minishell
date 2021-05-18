@@ -28,6 +28,7 @@ int main(int argc, char **argv, char **env)
 		read_line(prm);
 		history_add(bd_lstlast(prm->history));
 		parse_line(prm); 
+		write(1, "1", 1);
 		execute_line(prm);
 	}
 	reset_parameters(prm);

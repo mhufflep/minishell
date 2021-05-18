@@ -16,6 +16,10 @@ int						bd_memcmp(const void *s1, const void *s2, size_t n);
 char					*bd_strdup(const char *src);
 int						bd_strcmp(const char *s1, const char *s2);
 	
+
+void		bd_lstinsert(t_bd_lst **cur, t_bd_lst *new);
+t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)());
+
 t_bd_lst	*bd_lstnew(void *content);
 t_bd_lst	*bd_lstlast(t_bd_lst *lst);
 int			bd_lstsize(t_bd_lst *lst);

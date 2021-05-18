@@ -1,60 +1,46 @@
 #include "bidirectional_list.h"
 
-void		bd_lst_insert(t_bd_lst **cur, t_bd_lst *new) 										//CHECK IF WORKS CORRECTLY
+void		bd_lstrelink(t_bd_lst *n1, t_bd_lst *n2, t_bd_lst *new)
 {
-	t_bd_lst *tmp;
-
-	if (cur != NULL)
-	{
-		tmp = *cur;
-		if (tmp == NULL)
-		{
-			bd_lstadd_front(cur, new);
-		}
-		else if (tmp->next == NULL)
-		{
-			bd_lstadd_back(cur, new);
-		}
-		else
-		{
-			new->next = tmp->next;
-			new->prev = tmp;
-			tmp->next->prev = new;
-			tmp->next = new;
-		}
-		bd_lstprint(*cur);
-	}
+	new->next = n2;
+	new->prev = n1;
+	n1->next = new;
+	n2->prev = new;	
 }
 
-void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *)) //CHECK IF WORKS CORRECTLY
+
+void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *))
 {
 	t_bd_lst *tmp;
 
-	if (lst)
+	if (lst == NULL)
+		return ;
+	if (*lst == NULL)
 	{
-		tmp = *lst;
-		while (tmp && tmp->next)
+		printf("insert\n");
+		bd_lstinsert(lst, new);
+		return ;
+	}
+	tmp = *lst;
+	while (tmp)
+	{
+		if (comp(tmp, new) > 0)
 		{
-			if (comp(tmp, new) < 0)
+			if (tmp->prev == NULL)
 			{
-				bd_lst_insert(&tmp, new);
-				return ;
+				printf("front\n");	
+				bd_lstadd_front(lst, new);
 			}
-			tmp = tmp->next;
+			else
+			{
+				printf("relink\n");	
+				bd_lstrelink(tmp->prev, tmp, new);
+			}
+			return ;
 		}
-		bd_lst_insert(&tmp, new);
+		tmp = tmp->next;
 	}
-}
-
-t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)()) 					//CHECK IF WORKS CORRECTLY
-{
-	while (lst)
-	{
-		if (comp(lst->content, data, size) == 0)
-		{
-			return (lst);
-		}
-		lst = lst->next;
-	}
-	return (NULL);
+	if (tmp == NULL)
+		printf("back\n");
+	bd_lstadd_back(lst, new);
 }
