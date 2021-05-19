@@ -21,13 +21,12 @@ SRCS	=	bd_utils.c \
 			bd_lstmerge.c \
 			bd_lstparse.c \
 			bd_lstprint.c \
-			bd_lstinsert.c \
 			bd_lst_maxlen.c \
 			bd_lstcomp_def.c \
 			bd_lstadd_back.c \
 			bd_lstadd_front.c \
+			bd_lstpush_sort.c \
 			bd_lstsort_merge.c \
-			bidirectional_list.c \
 
 HEADER = bidirectional_list.h
 

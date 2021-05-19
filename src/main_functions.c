@@ -148,7 +148,7 @@ void	parse_line(t_prm *prm)
 	t_cmd		*cmd;
 	t_bd_lst	*new;
 
-	prm->cmds = NULL;
+	prm->cmds = NULL; prm->cmds = malloc(sizeof(t_bd_lst *) * 2); // ; split
 	cmd = malloc(sizeof(t_cmd)); //protect
 	cmd->cmd = prm->history_ptr->content;
 	cmd->args = malloc(sizeof(char *) * 2);
@@ -160,21 +160,21 @@ void	parse_line(t_prm *prm)
 		//parse error
 		printf("parse error\n");
 	}
-	bd_lstadd_back(&(prm->cmds), new);
+	bd_lstadd_back(&(prm->cmds[0]), new);
 }
 
 void	execute_line(t_prm *prm)
 {
 	t_cmd *cmd;
 
-	prm->cmds_ptr = prm->cmds;
+	prm->cmds_ptr = prm->cmds[0];
 	while (prm->cmds_ptr != NULL)
 	{
-		cmd = (t_cmd *)prm->cmds->content;
+		cmd = (t_cmd *)prm->cmds[0]->content;
 		execute(cmd->cmd, prm); //not line but cmds
 		prm->cmds_ptr = prm->cmds_ptr->next;
 	}
-	bd_lstclear(&(prm->cmds), free);
+	bd_lstclear(prm->cmds, free);
 	prm->cmds_ptr = NULL;
 }
 

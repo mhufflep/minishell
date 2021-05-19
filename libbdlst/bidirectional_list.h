@@ -25,8 +25,7 @@ t_bd_lst	*bd_lstlast(t_bd_lst *lst);
 int			bd_lstsize(t_bd_lst *lst);
 void		bd_lstadd_front(t_bd_lst **lst, t_bd_lst *new);
 void		bd_lstadd_back(t_bd_lst **lst, t_bd_lst *new);
-void		bd_lst_insert(t_bd_lst **cur, t_bd_lst *new); //CHECK IF WORKS CORRECTLY
-void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *)); //CHECK IF WORKS CORRECTLY
+void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *));
 void		bd_lstdelone(t_bd_lst **head, t_bd_lst *lst, void (*del)(void*));
 void		bd_lstclear(t_bd_lst **lst, void (*del)(void*));
 void		bd_lstiter(t_bd_lst *lst, void (*f)(void *));
