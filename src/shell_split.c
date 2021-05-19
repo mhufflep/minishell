@@ -5,32 +5,38 @@ int		amount_spaces(char *str)
 	int j;
 
 	j = 0;
-	while (str[j] != '\0')
-	{
-		if (str[j] != ' ')
-			break;
+	while (str[j] && str[j] == ' ')
 		j++;
-	}
 	return (j);
 }
 
-// В качестве закрывающей, ищет ближайшую кавычку, а не крайнюю
-// Для одинарной и для двойной кавычки нужны отдельные ф-ии для парсинга (см. примеры с $)
+// Проверяет есть ли за символом ряд слэшей и считает его экранированным,
+// зависимо от четности количества слэшей подряд
 int		is_slash(char *s, int i)
 {
 	int amount;
 
 	amount = 0;
-	while (s[i] == SLASH || i >= 0)
+	while (i >= 0 && s[i] == SLASH)
 	{
 		amount++;
 		i--;
 	}
 	// Если кол-во слэшей четное, то ряд слэшей экранируют сами себя и не задевают кавычку
+	// Справедливо, если же подадут i = -1 (то есть проверка на первом символе строки)
 	if (amount % 2 == 0)
 		return (0);
 	else
 		return (1);
+}
+
+// Проверяет является текущий символ по индексу пробелом при условии, что это не последний символ и не -1
+int		is_space(char *s, int i)
+{
+	if (i >= 0 && s[i] != 0)
+		if (s[i] == ' ')
+			return (1);
+	return (0);
 }
 
 int		check_quote(char *s, char quote_mark)
@@ -43,9 +49,9 @@ int		check_quote(char *s, char quote_mark)
 	i = 1;
 	is_quote = 1;
 	
-	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш, при этом индекс больше нуля
+	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш,
 	// и пока текущий символ не равняется концу строки
-	while ((s[i] != quote_mark || (i > 0 && (s[i] == quote_mark && is_slash(s, i - 1)))) && s[i])
+	while (s[i] && (s[i] != quote_mark || (s[i] == quote_mark && is_slash(s, i - 1))))
 		i++;
 	// Если текущий символ - кавычка и она не экранирована, то значит кавычки закрыты,
 	// возвращаем следующий от нее индекс строки
@@ -62,9 +68,9 @@ size_t	read_str(char *s, const char *separators)
 	i = 0;
 	while (!ft_strchr(separators, s[i]) && s[i])
 	{
-		i++;
-		if (((s[i] == D_QUOTE && i == 0) || (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1)))) && s[i]) // fix it
+		if (s[i] && ((s[i] == QUOTE || s[i] == D_QUOTE) && !is_slash(s, i - 1))) // fix it
 			break;
+		i++;
 	}
 	return (i);
 }
@@ -83,14 +89,14 @@ size_t	count_str(char *s, const char *separators)
 		// и если текущий символ не равняется концу строки
 		// if (s[i] == D_QUOTE)
 		// 	exit(0);
-		if (((s[i] == QUOTE && i == 0) || (i > 0 && (s[i] == QUOTE && !is_slash(s, i - 1)))) && s[i])
+		if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
 		{
-			i += check_quote(s, QUOTE);
+			i += check_quote(&s[i], QUOTE);
 			amount++;
 		}
-		else if (((s[i] == D_QUOTE && i == 0) || (i > 0 && (s[i] == D_QUOTE && !is_slash(s, i - 1)))) && s[i])
+		else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
 		{
-			i += check_quote(s, D_QUOTE);
+			i += check_quote(&s[i], D_QUOTE);
 			amount++;
 		}
 		else if (!ft_strchr(separators, s[i]))
@@ -119,7 +125,7 @@ void	*free_array(char **array)
 char	**shell_split(char *s, const char *separators)
 {
 	char	**array;
-	size_t	len;
+	size_t	i;
 	size_t	amount;
 
 	if (!s)
@@ -127,33 +133,33 @@ char	**shell_split(char *s, const char *separators)
 	array = (char **)malloc((count_str(s, separators) + 1) * sizeof(char *));
 	if (!array)
 		return (NULL);
-	len = 0;
+	i = 0;
 	amount = 0;
-	while (s[len] != '\0')
+	while (s[i] != '\0')
 	{
-		if (((s[len] == QUOTE && len == 0) || (len > 0 && (s[len] == QUOTE && !is_slash(s, len - 1)))) && s[len])
+		if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
 		{
-			array[amount] = ft_substr(s, len + 1, check_quote(&s[len], QUOTE) - 2);
+			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], QUOTE) - 2);
 			if (!array[amount++])
 				return (free_array(array));
-			len += check_quote(&s[len], QUOTE);
+			i += check_quote(&s[i], QUOTE);
 		}
-		else if (((s[len] == D_QUOTE && len == 0) || (len > 0 && (s[len] == D_QUOTE && !is_slash(s, len - 1)))) && s[len])
+		else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
 		{
-			array[amount] = ft_substr(s, len + 1, check_quote(&s[len], D_QUOTE) - 2);
+			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], D_QUOTE) - 2);
 			if (!array[amount++])
 				return (free_array(array));
-			len += check_quote(&s[len], D_QUOTE);
+			i += check_quote(&s[i], D_QUOTE);
 		}
-		else if (!ft_strchr(separators, s[len]))
+		else if (!ft_strchr(separators, s[i]))
 		{
-			array[amount] = ft_substr(s, len, read_str(&s[len], separators));
+			array[amount] = ft_substr(s, i, read_str(&s[i], separators));
 			if (!array[amount++])
 				return (free_array(array));
-			len += read_str(&s[len], separators);
+			i += read_str(&s[i], separators);
 		}
 		else
-			len++;
+			i++;
 	}
 	array[amount] = NULL;
 	return (array);
