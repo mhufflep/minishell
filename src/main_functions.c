@@ -1,25 +1,6 @@
 
 #include "minishell.h"
 
-//void	buffer_shift_left(char *buf, int i, int len)
-//{
-//	while (i < len)
-//	{
-//		buf[i] = buf[i + 1];
-//		i++;
-//	}
-//}
-
-//void	buffer_shift_right(char *buf, int start, int end)
-//{
-//	// buf[end + 1] = '\0';
-//	while (start < end)
-//	{
-//		buf[end + 1] = buf[end];
-//		end--;
-//	}
-//}
-
 char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *))
 {
 	char	*dst;
@@ -96,7 +77,7 @@ t_prm *get_parameters(t_prm *prm)
 
 // Not working after moving in history and applying some command --> need to check 
 
-// New symbol does not print correctly. It is print into current cursor position.
+// Fixed: New symbol does not print correctly. It is print into current cursor position.
 // Problem could appear while writing the rest of the line after printing new symbol.
 
 // MAIN FUNCTIONS
@@ -118,6 +99,74 @@ void	parse_line(t_prm *prm)
 	}
 	bd_lstadd_back(&(prm->cmds[0]), new);
 }
+
+int		execute_cmd(t_cmd *cmd)
+{
+	if (!bd_strncmp(CMD_EXIT, cmd->cmd))
+		cmd_exit(cmd);
+	else if (!bd_strncmp(CMD_CD, cmd->cmd))
+		cmd_cd(cmd);
+	else if (!bd_strncmp(CMD_ENV, cmd->cmd))
+		cmd_env(cmd);
+	else if (!bd_strncmp(CMD_PWD, cmd->cmd))
+		cmd_pwd(cmd);
+	else if (!bd_strncmp(CMD_ECHO, cmd->cmd))
+		cmd_echo(cmd);
+	else if (!bd_strncmp(CMD_UNSET, cmd->cmd))
+		cmd_unset(cmd);
+	else if (!bd_strncmp(CMD_EXPORT, cmd->cmd))
+		cmd_export(cmd);
+	else if (!bd_strncmp(CMD_LEARNC, cmd->cmd))
+		cmd_learnc(cmd);
+	else if (!bd_strncmp(CMD_HISTORY, cmd->cmd))
+		cmd_history(cmd);
+	else
+		cmd_not_found(cmd);
+	return (1);
+}
+
+int		execline(t_bd_lst *cmdlst)
+{
+	t_cmd *cmd;
+	int code;
+
+	while (cmdlst != NULL)
+	{
+		cmd = (t_cmd *)cmdlst->content;
+		code = execute_cmd(cmd);
+		cmdlst = cmdlst->next;
+	}
+}
+
+void	free_cmd(void *cont)
+{
+	t_cmd *cmd;
+	int i;
+
+	i = 0;
+	cmd = (t_cmd *)cont;
+	if (cmd->cmd)
+		free(cmd->cmd);
+	if (cmd->options)
+		free(cmd->options);
+	while (cmd->args[i])
+		free(cmd->args[i++]);
+	free(cmd->args);
+}
+
+void	commands_iter(t_prm *prm)
+{
+	int i;
+
+	i = 0;
+	while (prm->cmds[i] != NULL)
+	{
+		prm->exit_code = execline(prm->cmds[i]);
+		bd_lstclear(&(prm->cmds[i]), free_cmd);
+		i++;
+	}
+}
+
 
 void	execute_line(t_prm *prm)
 {

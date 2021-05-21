@@ -99,7 +99,6 @@ t_term		*create_term_struct(void);
 /* KEYS */
 int			is_printable_sym(unsigned int input);
 int			is_printable(char *input);
-//int			is_spec_key(char *input);
 void		key_up_action(t_prm *prm);
 void		key_down_action(t_prm *prm);
 void		key_left_action(t_prm *prm);
@@ -109,7 +108,7 @@ void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
 void		clear_prompt(void);
 
-
+//MOVE TO SPECIFIC AREA
 void	recognize_symbol(t_prm *prm);
 char *remove_from(char *src, int index, void (*free_ctl)(void *));
 char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *));

@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/20 19:45:32 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/21 16:48:30 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	print_env_node(void *content)
 		if (ft_strchr((char *)content, '='))
 			printf("%s\n", (char *)content);
 	}
+}
+
+
+void	cmd_exit(t_cmd *cmd)
+{
+	exit(1);
 }
 
 void	cmd_cd(t_prm *prm)
