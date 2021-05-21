@@ -36,6 +36,7 @@ SOURCES			=	main.c \
 					term_utils.c \
 					init.c \
 					error.c \
+					readline.c \
 					main_functions.c
 					
 HEADER_FILES	=	minishell.h \

@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/18 18:24:38 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/20 19:45:32 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void cmd_export(t_prm *prm)
 void	cmd_learnc(t_prm *prm)
 {
 	(void)prm;
-	// char str[139] = "Ѱ!҂҈ѹ҃ѱҏ-!҈҃ѿ!Ѷ҂Ѽѹ!ѸѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!ご!ѸѾѱѶ҉ҍ!Ѣљ-!і҂Ѽѹ!ѾѶ!ѸѾѱѶ҉ҍ-!Ѿ҄-!҆҄Ѻ!҂ѿ҂ѹ/";
 	char str[139] = "јѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!ご!ѸѾѱѶ҉ҍ!Ѣљ-!ўѶ!ѸѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!.!Ѿ҄-!҆҄Ѻ!҂ѿ҂ѹ/";
 	int i;
 
@@ -107,6 +106,12 @@ void cmd_unset(t_prm *prm)
 	cmd = (t_cmd *)prm->cmds_ptr->content;
 	while (tmp && tmp->next)
 	{
+		//found = bd_lstfind(prm->sorted_env, "", bd_strlen(""), bd_strncmp);
+		//if (found != NULL)
+		//{
+		//	bd_lstremove or bd_lstrelink
+		//}
+		
 		// if (tmp && !ft_strncmp((char *)tmp->content, prm->cmds_ptr->args, ft_strlen(prm->cmds_ptr->args))))
 		// 	bd_lstdelone(&prm->sorted_env, tmp, free);
 		if (tmp && !ft_strncmp((char *)tmp->content, cmd->args[0], ft_strlen(cmd->args[0])))

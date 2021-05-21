@@ -7,7 +7,6 @@ void	history_add_node(t_prm *prm)
 	{
 		throw_error();
 	}
-	// bd_lstprint(prm->history);
 	bd_lstadd_back(&(prm->history), new);
 	prm->history_ptr = bd_lstlast(prm->history);
 
@@ -26,9 +25,9 @@ int main(int argc, char **argv, char **env)
 	{
 		history_add_node(prm);
 		read_line(prm);
+		//printf("get: %s\n", (char *)prm->history_ptr->content); //DEBUG
 		history_add(bd_lstlast(prm->history));
 		parse_line(prm); 
-		write(1, "1", 1);
 		execute_line(prm);
 	}
 	reset_parameters(prm);

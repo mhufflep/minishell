@@ -1,20 +1,5 @@
 #include "minishell.h"
 
-int is_spec_key(char *input)
-{
-	if (!ft_strcmp(input, KEY_ARROW_UP) || 
-	    !ft_strcmp(input, KEY_ARROW_DOWN) ||
-		!ft_strcmp(input, KEY_ARROW_LEFT) || 
-		!ft_strcmp(input, KEY_ARROW_RIGHT) || 
-		!ft_strcmp(input, KEY_BACKSPACE) ||
-		(*input == 12))
-		return (1);
-	else
-	{
-		return (0);
-	}
-}
-
 int is_printable(char *input)
 {
 	int i;
@@ -22,7 +7,7 @@ int is_printable(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (!ft_isprint(input[i]))//if (input[i] < 32) //
+		if (!ft_isprint(input[i]))//if (input[i] < 32) //for non ascii characters
 			return (0);
 		i++;
 	}
@@ -87,7 +72,6 @@ void	cursor_restore(void)
 	write(1, "\e[u", ft_strlen("\e[u"));
 }
 
-
 void	key_bspace_action(t_prm *prm)
 {
 	if (prm->cursor_pos > 0)
@@ -115,20 +99,13 @@ void	key_other_action(t_prm *prm)
 	{
 		prm->history_ptr->content = insert_into(prm->history_ptr->content, prm->cursor_pos, prm->input[0], free);
 		prm->line_len += bd_strlen(prm->input);
-		prm->cursor_pos += bd_strlen(prm->input);
-		
+		prm->cursor_pos += bd_strlen(prm->input);	
 	}
 	ft_putstr_fd(prm->input, 1);
 	if (prm->cursor_pos <= prm->line_len)
 	{
-		//cursor_save();
+		cursor_save();
 		ft_putstr_fd(&(((char *)prm->history_ptr->content)[prm->cursor_pos]), 1);
-		//cursor_restore();
+		cursor_restore();
 	}
-	//cursor_save();    // Cursor save doesnt work in the order it should work
-	//tputs(tigetstr("ed"), 1, ft_putchar);
- 	//clear_prompt();
-	// write(1, &(((char *)prm->history_ptr->content)[prm->cursor_pos]), prm->line_len - prm->cursor_pos);
-	//ft_putstr_fd(prm->history_ptr->content, 1);
-	//cursor_restore();
 }
