@@ -136,6 +136,7 @@ int		execline(t_bd_lst *cmdlst)
 		code = execute_cmd(cmd);
 		cmdlst = cmdlst->next;
 	}
+	return (code);
 }
 
 void	free_cmd(void *cont)

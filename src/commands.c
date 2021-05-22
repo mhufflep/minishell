@@ -6,11 +6,24 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/21 16:48:30 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/22 10:46:02 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int arr_count(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr && arr[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
+}
+
 
 void 	print_env(t_prm *prm)
 {
@@ -44,7 +57,10 @@ void	print_env_node(void *content)
 
 void	cmd_exit(t_cmd *cmd)
 {
-	exit(1);
+	//Need to rewrite atoi that will be detect an error
+	//Need to check behavior with multiple arguments
+	int parsed = ft_atoi(cmd->args[0]);
+	exit(parsed);
 }
 
 void	cmd_cd(t_prm *prm)
@@ -68,6 +84,33 @@ void	cmd_echo(t_prm *prm)
 	cmd = (t_cmd *)prm->cmds_ptr->content;
 	printf("%s\n", cmd->args[0]);
 }
+
+int export_add(t_cmd *cmd)
+{
+	//if argumtent array store more than one argument need to join them all. (need to check on example)
+	//split argument array into l-part and r-part
+	//check if r-part is exist
+	//if it is not then a new value wont be added into env list
+	//if it is then need to add value into both lists
+
+	//add:
+	//first need to check if there is a value stored in current list
+	// if it is then new value will overwrite an old value.
+	// if it is not then need to create a new node of the list
+	// then insert element using push_sort function for sorted list(export list) and
+	// addback for unsorted list (env list)
+	(void)cmd;
+	return (0);
+}
+
+//int export_cmd(t_cmd *cmd)
+//{
+//	if (arr_count(cmd->args) == 0)
+//		export_add(cmd);
+//	else
+//		export_show(cmd); //cmd_export
+//	return (0);
+//}
 
 void cmd_export(t_prm *prm)
 {
@@ -100,7 +143,7 @@ void cmd_env(t_prm *prm)
 void cmd_pwd(t_prm *prm)
 {
 	(void)prm;
-	printf("%s\n", getcwd(NULL, 0)); // need to free returned string (probably yes)
+	printf("%s\n", getcwd(NULL, 0)); // need to free returned string (probably yes) NO, because it stores in .data segment
 }
 
 void cmd_unset(t_prm *prm)
@@ -132,9 +175,9 @@ void cmd_history(t_prm *prm)
 	int			i;
 
 	tmp = prm->history;
+	i = 0;
 	while (tmp)
 	{
-		i = 0;
 		printf("  %d  %s\n", i, (char *)tmp->content);
 		i++;
 		tmp = tmp->next;
