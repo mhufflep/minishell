@@ -33,7 +33,7 @@ int		is_slash(char *s, int i)
 // Проверяет является текущий символ по индексу пробелом при условии, что это не последний символ и не -1
 int		is_space(char *s, int i)
 {
-	if (i >= 0 && s[i] != 0)
+	if ((i >= 0 && i <= (int)ft_strlen(s)) && s[i] != 0)
 		if (s[i] == ' ')
 			return (1);
 	return (0);
@@ -42,12 +42,10 @@ int		is_space(char *s, int i)
 int		check_quote(char *s, char quote_mark)
 {
 	int		i;
-	char	is_quote;
 
 	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
 	// чтобы войти в цикл и дойти до закрывающей кавычки
 	i = 1;
-	is_quote = 1;
 	
 	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш,
 	// и пока текущий символ не равняется концу строки
@@ -58,7 +56,10 @@ int		check_quote(char *s, char quote_mark)
 	if (s[i] == quote_mark && !is_slash(s, i - 1))
 		return (++i);
 	else
-		exit(99); // Сlosing quotation mark is not found.
+    {
+		exit(99);
+        printf("Сlosing quotation mark is not found.");
+    }
 }
 
 size_t	read_str(char *s, const char *separators)
@@ -68,7 +69,7 @@ size_t	read_str(char *s, const char *separators)
 	i = 0;
 	while (!ft_strchr(separators, s[i]) && s[i])
 	{
-		if (s[i] && ((s[i] == QUOTE || s[i] == D_QUOTE) && !is_slash(s, i - 1))) // fix it
+		if (s[i] && ((s[i] == QUOTE || s[i] == D_QUOTE) && !is_slash(s, i - 1)))
 			break;
 		i++;
 	}
@@ -87,8 +88,6 @@ size_t	count_str(char *s, const char *separators)
 		// Если текущий символ первый в строке и он равняется кавычке или если текущий символ
 		// равняется кавычке, но перед ним нет слэша, при этом индекс больше нуля
 		// и если текущий символ не равняется концу строки
-		// if (s[i] == D_QUOTE)
-		// 	exit(0);
 		if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
 		{
 			i += check_quote(&s[i], QUOTE);

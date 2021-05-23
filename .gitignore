@@ -7,3 +7,4 @@ test.c
 .e-bash_history
 *.a
 minishell
+/.theia
