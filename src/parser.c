@@ -16,24 +16,6 @@ void	clear_array(char **arr)
 	}
 }
 
-void	free_array(char **arr)
-{
-	int i;
-
-	i = 0;
-	if (arr)
-	{
-		while (arr[i])
-		{
-			if (arr[i])
-				free(arr[i]);
-			i++;
-		}
-		free(arr);
-		clear_array(arr);
-	}
-}
-
 int		skip_spaces(char *str)
 {
 	int	i;

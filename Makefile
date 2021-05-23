@@ -31,7 +31,6 @@ GNL_DIR		= get_next_line
 SOURCES			=	main.c \
 					shell_split.c \
 					remove_substr.c \
-					parser.c \
 					history.c \
 					commands.c \
 					execute.c \

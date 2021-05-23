@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-int		amount_spaces(char *str)
-{
-	int j;
-
-	j = 0;
-	while (str[j] && str[j] == ' ')
-		j++;
-	return (j);
-}
-
 // Проверяет есть ли за символом ряд слэшей и считает его экранированным,
 // зависимо от четности количества слэшей подряд
 int		is_slash(char *s, int i)
