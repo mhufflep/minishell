@@ -58,6 +58,22 @@ int		amount_spaces(char *str)
 
 void	parse_line(t_prm *prm)
 {
+	t_cmd		*cmd;
+	t_bd_lst	*new;
+
+	prm->cmds = NULL; prm->cmds = malloc(sizeof(t_bd_lst *) * 2); // ; split
+	cmd = malloc(sizeof(t_cmd)); //protect
+	cmd->cmd = prm->history_ptr->content;
+	cmd->args = malloc(sizeof(char *) * 2);
+	cmd->args[0] = "..";
+	new = bd_lstnew(cmd);
+	if (!new)
+	{
+		//parse error
+		printf("parse error\n");
+	}
+	bd_lstadd_back(&(prm->cmds[0]), new);
+
 	int		i;
 	int		amount_commands;
 	char	**arr_commands;
