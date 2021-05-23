@@ -14,6 +14,7 @@ SRCS	=	bd_utils.c \
 			bd_lstcopy.c \
 			bd_lstiter.c \
 			bd_lstlast.c \
+			bd_lstfind.c \
 			bd_lstsize.c \
 			bd_lstsort.c \
 			bd_lstclear.c \
@@ -24,8 +25,8 @@ SRCS	=	bd_utils.c \
 			bd_lstcomp_def.c \
 			bd_lstadd_back.c \
 			bd_lstadd_front.c \
+			bd_lstpush_sort.c \
 			bd_lstsort_merge.c \
-			bidirectional_list.c \
 
 HEADER = bidirectional_list.h
 

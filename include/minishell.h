@@ -12,6 +12,7 @@
 # include <signal.h>
 # include <sys/ioctl.h>
 # include <errno.h>
+# include <sys/wait.h>
 
 # include "libft.h"
 # include "shell_keys.h"
@@ -32,10 +33,11 @@ typedef struct termios t_term;
 
 typedef struct  s_cmd
 {
-	char *cmd;			//текущая команда
-	char **args;		//аргументы и опции команды
-    int is_pipe;		//стоит ли после команды pipe
-    int is_redirect;	//стоит ли после команды redir
+	char *cmd;				//текущая команда
+	char *options;			//опции команды
+	char **args;			//аргументы команды
+    int is_pipe : 1;		//стоит ли после команды pipe
+    int is_redirect : 1;	//стоит ли после команды redir
 }               t_cmd;
 
 typedef struct  s_prm
@@ -45,8 +47,10 @@ typedef struct  s_prm
 	int argc;
 	int cursor_pos;
 	int	line_len;
+	int	exit_code;
 	int status;
 	char *line;
+	char input[5];
 
 	t_term	*term;
 	t_term	*def_term;
@@ -56,7 +60,7 @@ typedef struct  s_prm
 	t_bd_lst	*unsorted_env;
 	t_bd_lst	*sorted_env;
 	t_bd_lst	*cmds_ptr;
-	t_bd_lst	**cmds; // *cmds - лист команд, в поле content каждой будет лежать t_cmd *
+	t_bd_lst	**cmds; //массив листов команд, в поле content каждой будет лежать t_cmd *
 }               t_prm;
 
 
@@ -99,27 +103,35 @@ t_term		*create_term_struct(void);
 /* KEYS */
 int			is_printable_sym(unsigned int input);
 int			is_printable(char *input);
-int			is_spec_key(char *input);
+//int			is_spec_key(char *input);
 void		key_up_action(t_prm *prm);
 void		key_down_action(t_prm *prm);
 void		key_left_action(t_prm *prm);
 void		key_right_action(t_prm *prm);
-
+void		key_ctrl_l_action(t_prm *prm);
+void		key_bspace_action(t_prm *prm);
+void		key_other_action(t_prm *prm);
 void		clear_prompt(void);
 
 
+void	recognize_symbol(t_prm *prm);
+char *remove_from(char *src, int index, void (*free_ctl)(void *));
+char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *));
+
 /* INITIALIZATION */
-int		init_resources(t_prm **prm, int argc, char **argv, char **env);
-int		init_env_lists(t_prm *prm);
-int		init_prm_struct(t_prm **prm);
-int		init_term_struct(t_prm	*prm);
-t_prm	*setup_settings(int argc, char **argv, char **env);
-int		setup_env_lists(t_prm *prm);
-int		setup_parameters(t_prm **prm);
-int		setup_terminal(t_prm	*prm);
+t_prm		*setup_settings(int argc, char **argv, char **env);
+int			setup_env_lists(t_prm	*prm);
+int			setup_parameters(t_prm **prm);
+int			setup_terminal(t_prm	*prm);
+void		reset_settings(t_prm	*prm);
+
+t_prm		*get_parameters(t_prm *prm);
 
 /* PARSER */
 void	parse_line(t_prm *prm);
 char	**shell_split(char *s, const char *separators);
+
+/* ERROR */
+void throw_error(void); // ???
 
 #endif

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   commands.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/06 02:52:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/17 15:35:32 by mhufflep         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void 	print_env(t_prm *prm)
@@ -47,8 +35,12 @@ void	cmd_cd(t_prm *prm)
 
 	cmd = (t_cmd *)prm->cmds_ptr->content;
 	printf("\n%s %s\n", cmd->cmd, cmd->args[0]);
-	printf("%d\n", chdir(cmd->args[0]));
+	printf("chdir exit status: %d\n", chdir(cmd->args[0]));
+	
 	//update pwd
+	//find pwd in env lstfind
+	//split pwd by first =
+	//rejoin pwd
 }
 
 void	cmd_echo(t_prm *prm)
@@ -67,7 +59,6 @@ void cmd_export(t_prm *prm)
 void	cmd_learnc(t_prm *prm)
 {
 	(void)prm;
-	// char str[139] = "Ѱ!҂҈ѹ҃ѱҏ-!҈҃ѿ!Ѷ҂Ѽѹ!ѸѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!ご!ѸѾѱѶ҉ҍ!Ѣљ-!і҂Ѽѹ!ѾѶ!ѸѾѱѶ҉ҍ-!Ѿ҄-!҆҄Ѻ!҂ѿ҂ѹ/";
 	char str[139] = "јѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!ご!ѸѾѱѶ҉ҍ!Ѣљ-!ўѶ!ѸѾѱѶ҉ҍ!҄ѻѱѸѱ҃ѶѼѹ!.!Ѿ҄-!҆҄Ѻ!҂ѿ҂ѹ/";
 	int i;
 
@@ -103,6 +94,12 @@ void cmd_unset(t_prm *prm)
 	cmd = (t_cmd *)prm->cmds_ptr->content;
 	while (tmp && tmp->next)
 	{
+		//found = bd_lstfind(prm->sorted_env, "", bd_strlen(""), bd_strncmp);
+		//if (found != NULL)
+		//{
+		//	bd_lstremove or bd_lstrelink
+		//}
+		
 		// if (tmp && !ft_strncmp((char *)tmp->content, prm->cmds_ptr->args, ft_strlen(prm->cmds_ptr->args))))
 		// 	bd_lstdelone(&prm->sorted_env, tmp, free);
 		if (tmp && !ft_strncmp((char *)tmp->content, cmd->args[0], ft_strlen(cmd->args[0])))
@@ -116,10 +113,10 @@ void cmd_history(t_prm *prm)
 	t_bd_lst	*tmp;
 	int			i;
 
-	i = 0;
 	tmp = prm->history;
 	while (tmp)
 	{
+		i = 0;
 		printf("  %d  %s\n", i, (char *)tmp->content);
 		i++;
 		tmp = tmp->next;
@@ -130,5 +127,29 @@ void cmd_not_found(t_prm *prm)
 {
 	(void)prm;
 	// printf("%s: command not found\n", (char *)prm->cmds_ptr->content);
-	printf("%s\n", "command not found");
+	printf("%s: %s\n%d %d\n", (char *)prm->history_ptr->content, "command not found", prm->cursor_pos, prm->line_len);
+}
+
+
+void	cmd_usercmd(t_prm *prm)
+{
+	//Need to split PATH into bin location and try execve with each of them.
+	//If all execve calls returned 0, then command not found.
+
+	//Need to split PATH into bin location and try execve with each of them.
+	//Check if the directory has necessary binary file.
+
+	char	**upd_env;
+	t_cmd	*cmd;
+
+	cmd = (t_cmd *)prm->cmds_ptr->content;
+	pid_t pid = fork();
+	if (pid == 0)
+	{
+		upd_env = bd_parse_to_arr(prm->unsorted_env);
+		execve(cmd->cmd, cmd->args, upd_env);
+	}
+	wait(&prm->exit_code);
+
+	printf("exit code: %d\n", prm->exit_code);
 }

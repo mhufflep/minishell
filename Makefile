@@ -31,7 +31,16 @@ GNL_DIR		= get_next_line
 SOURCES			=	main.c \
 					shell_split.c \
 					remove_substr.c \
-					parser.c
+					parser.c \
+					history.c \
+					commands.c \
+					execute.c \
+					key_actions.c \
+					term_utils.c \
+					init.c \
+					error.c \
+					readline.c \
+					main_functions.c
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \

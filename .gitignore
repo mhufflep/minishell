@@ -8,3 +8,4 @@ test.c
 *.a
 minishell
 /.theia
+test*.c
