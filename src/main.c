@@ -21,11 +21,12 @@ int main(int argc, char **argv, char **env)
 	t_prm	*prm;
 
 	prm = setup_settings(argc, argv, env);
+	get_parameters(prm);
 	while (!prm->status)
 	{
 		history_add_node(prm);
 		read_line(prm);
-		//printf("get: %s\n", (char *)prm->history_ptr->content); //DEBUG
+		// printf("get: %s\n", (char *)prm->history_ptr->content); //DEBUG
 		history_add(bd_lstlast(prm->history));
 		parse_line(prm); 
 		execute_line(prm);
