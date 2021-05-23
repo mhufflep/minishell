@@ -2,9 +2,9 @@
 
 int		update_pwd(t_prm *prm)
 {
-	t_prm *prm;
+	// t_prm *prm;
 
-	prm = get_parameters(NULL);
+	// prm = get_parameters(NULL);
 	
 	t_bd_lst *found;
 	char *oldpwd;
@@ -41,7 +41,7 @@ int		cmd_cd(t_cmd *cmd) //need prm, maybe
 	{
 		ft_putstr_fd("cd: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putstr(": ", STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd("No such file or directory", STDERR_FILENO);
 	}
 	else
