@@ -1,11 +1,31 @@
 #include "minishell.h"
 
-int		cmd_echo(t_cmd *cmd)
+int is_option(char *opt, char *valid_opt)
 {
-	// t_cmd *cmd;
+	int i;
 
-	// cmd = (t_cmd *)prm->cmds_ptr->content;
-	printf("%s\n", cmd->args[0]);
-	return (0);
+	i = 1;
+	if (opt || opt[0] != '-')
+		return (0);
+	while (opt[i] != '\0')
+	{
+		if (!ft_strchr(valid_opt, opt[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
+int		cmd_echo(t_cmd *cmd)
+{
+	if (cmd->args && is_option(cmd->args[0], "n"))
+	{
+		print_array(&cmd->args[1]);
+	}
+	else
+	{
+		print_array(cmd->args);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
+	return (0);
+}

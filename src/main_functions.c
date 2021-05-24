@@ -54,9 +54,6 @@ t_prm *get_parameters(t_prm *prm)
 
 // Fixed: New symbol does not print correctly. It is print into current cursor position.
 // Problem could appear while writing the rest of the line after printing new symbol.
-
-// MAIN FUNCTIONS
-
 t_cmd	*command_create(char *cmd, char **args)
 {
 	t_cmd *new_cmd;
@@ -77,22 +74,3 @@ void	cmds_arr_create(t_prm *prm, int size)
 	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
 }
 
-// void	command_add(t_bd_lst *cmds, void *data)
-// {
-	
-// }
-
-// void	parse_line(t_prm *prm)
-// {
-// 	t_cmd		*cmd;
-// 	t_bd_lst	*new;
-
-// 	char *args[] = {"..", NULL};
-
-// 	cmds_arr_create(prm, 2);
-// 	cmd = command_create(prm->history_ptr->content, args);
-// 	new = bd_lstnew(cmd);
-// 	if (!new)
-// 		throw_error();
-// 	bd_lstadd_back(&(prm->cmds[0]), new);
-// }

@@ -115,6 +115,7 @@ char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 int			sizeof_array(char **arr);
 void		*free_array(char **array);
 void 		print_array(char **arr);
+void		iter_array(char **arr, void (*func)(char *));
 void		recognize_symbol(t_prm *prm);
 
 /* INITIALIZATION */
