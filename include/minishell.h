@@ -101,8 +101,6 @@ int		cmd_not_found(t_cmd *cmd);
 
 
 int			execute(char buff[], t_prm *prm);
-
-
 /* TERMINAL */
 void		change_term_settings(t_term *term);
 int			setup_terminal(t_prm	*prm);
@@ -121,11 +119,11 @@ void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
 void		clear_prompt(void);
 
-//MOVE TO SPECIFIC AREA
+//MOVE TO SPECIFIC AREAs
+char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
+char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 int			arr_size(char **arr);
 void		recognize_symbol(t_prm *prm);
-char		*remove_from(char *src, int index, void (*free_ctl)(void *));
-char		*insert_into(char *src, int index, char symbol, void (*free_ctl)(void *));
 
 /* INITIALIZATION */
 t_prm		*setup_settings(int argc, char **argv, char **env);

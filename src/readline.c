@@ -47,7 +47,7 @@ void	read_line(t_prm *prm)
 		//initial params
 		prm->line_len = 0;
 		prm->cursor_pos = 0;
-		prm->history_ptr->content = insert_into("", 0, 0, NULL); //creates an empty string 
+		prm->history_ptr->content = insert_into(0, 0, 0, 0); //allocates an empty string 
 		
 		//clean buffer
 		ft_memset(prm->input, 0, 5);

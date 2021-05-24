@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-char *insert_into2(char *src, char *add, int index, void (*free_ctl)(void *))
+char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 {
 	char	*dst;
 	int		src_len;
@@ -13,43 +13,10 @@ char *insert_into2(char *src, char *add, int index, void (*free_ctl)(void *))
 	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
 	if (dst == NULL)
 		throw_error();
-
+	ft_memset(dst, 0, src_len + add_len + 1);
 	ft_strlcpy(dst, src, index + 1); //hello world 
 	ft_strlcpy(&dst[index], add, add_len + 1);
 	ft_strlcpy(&dst[index + add_len], &src[index], src_len - index + 1);
-	if (free_ctl != NULL)
-		free_ctl(src);
-	return (dst);
-}
-
-char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *))
-{
-	char	*dst;
-	int		len;
-	int		src_index;
-	int		dst_index;
-
-	src_index = 0;
-	dst_index = 0;
-	len = ft_strlen(src) + 1;
-	dst = (char *)malloc((len + 1) * sizeof(char));
-	if (dst == NULL)
-		
-		throw_error();
-	while (src_index < index)
-	{
-		dst[dst_index] = src[src_index];
-		src_index++;
-		dst_index++;
-	}
-	dst[dst_index++] = symbol;
-	while (src_index < len)
-	{
-		dst[dst_index] = src[src_index];
-		dst_index++;
-		src_index++;
-	}
-	dst[len] = '\0';
 	if (free_ctl != NULL)
 		free_ctl(src);
 	return (dst);
@@ -68,22 +35,10 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	dst = (char *)malloc((len) * sizeof(char));
 	if (dst == NULL)
 		throw_error();
-	while (src_index < index)
-	{
-		dst[dst_index] = src[src_index];
-		src_index++;
-		dst_index++;
-	}
-	src_index++;
-	while (src_index < len)
-	{
-		dst[dst_index] = src[src_index];
-		dst_index++;
-		src_index++;
-	}
+	ft_strlcpy(dst, src, index + 1); //hello world 
+	ft_strlcpy(&dst[index], &src[index + 1], len - index);
 	if (free_ctl != NULL)
 		free_ctl(src);
-	dst[len] = '\0';
 	return (dst);
 }
 
