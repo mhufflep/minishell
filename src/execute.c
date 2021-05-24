@@ -7,7 +7,7 @@ int		execute_cmd(t_cmd *cmd)
 	else if (!bd_strcmp(CMD_CD, cmd->cmd))
 		cmd_cd(cmd);
 	else if (!bd_strcmp(CMD_ENV, cmd->cmd))
-		cmd_env(cmd);
+		cmd_env(get_parameters(0), cmd);
 	else if (!bd_strcmp(CMD_PWD, cmd->cmd))
 		cmd_pwd(cmd);
 	else if (!bd_strcmp(CMD_ECHO, cmd->cmd))

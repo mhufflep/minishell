@@ -9,7 +9,7 @@ void	print_env_node(void *content)
 	}
 }
 
-int		cmd_env(t_cmd *cmd)
+int		cmd_env(t_prm *prm, t_cmd *cmd)
 {
 	int i;
 
@@ -23,9 +23,9 @@ int		cmd_env(t_cmd *cmd)
 		}
 	}
 	// Need to check arguments
-	t_prm *prm;
+	// t_prm *prm;
 	
-	prm = get_parameters(NULL);
+	// prm = get_parameters(NULL);
 	bd_lstiter(prm->unsorted_env, print_env_node);
 	return (0);
 }

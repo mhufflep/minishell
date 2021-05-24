@@ -29,31 +29,36 @@ void	read_symbol(char *input)
 }
 
 
-int		is_endline(char *input)
+int		is_endinput(char *input)
 {
-	return (!ft_strcmp(input, KEY_ENTER)  || 
+	return (!ft_strcmp(input, KEY_ENTER) || 
 			!ft_strcmp(input, KEY_CTRL_L) || 
 			!ft_strcmp(input, KEY_CTRL_D));
 }
 
 void	read_line(t_prm *prm)
 {	
-	//print prompt name and save cursor
-	ft_putstr_fd(SHELL_PROMPT, 1);
-	tputs(save_cursor, 1, ft_putchar);
-	
-	//initial params
-	prm->line_len = 0;
-	prm->cursor_pos = 0;
-	prm->history_ptr->content = insert_into("", 0, 0, NULL); //creates an empty string 
-	
-	//clean buffer
-	ft_memset(prm->input, 0, 5);
 	while (SEREGA_LEZHIT_V_BOLNITSE)
 	{
-		if (is_endline(prm->input))
-			break ; 
-		read_symbol(prm->input);
-		recognize_symbol(prm);
+		//print prompt name and save cursor
+		ft_putstr_fd(SHELL_PROMPT, 1);
+		tputs(save_cursor, 1, ft_putchar);
+
+		//initial params
+		prm->line_len = 0;
+		prm->cursor_pos = 0;
+		prm->history_ptr->content = insert_into("", 0, 0, NULL); //creates an empty string 
+		
+		//clean buffer
+		ft_memset(prm->input, 0, 5);
+		while (SEREGA_LEZHIT_V_BOLNITSE)
+		{
+			if (is_endinput(prm->input))
+				break ;
+			read_symbol(prm->input);
+			recognize_symbol(prm);
+		}
+		if (ft_strcmp(prm->history_ptr->content, ""))
+			break ;
 	}
 }

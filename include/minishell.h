@@ -78,7 +78,7 @@ int			save_history(t_bd_lst *node);
 /* BUILTIN */
 int		cmd_cd(t_cmd *cmd);
 int		cmd_pwd(t_cmd *cmd);
-int		cmd_env(t_cmd *cmd);
+int		cmd_env(t_prm *prm, t_cmd *cmd);
 int		cmd_exit(t_cmd *cmd);
 int		cmd_echo(t_cmd *cmd);
 int		cmd_unset(t_cmd *cmd);

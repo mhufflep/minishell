@@ -9,7 +9,6 @@ void	history_add_node(t_prm *prm)
 	}
 	bd_lstadd_back(&(prm->history), new);
 	prm->history_ptr = bd_lstlast(prm->history);
-
 }
 
 // if we're pressing up\down arrows we will moving in history,
@@ -28,7 +27,7 @@ int main(int argc, char **argv, char **env)
 		read_line(prm);
 		// printf("get: %s\n", (char *)prm->history_ptr->content); //DEBUG
 		history_add(bd_lstlast(prm->history));
-		parse_line(prm); 
+		parse_line(prm);
 		execute_line(prm);
 	}
 	reset_parameters(prm);
