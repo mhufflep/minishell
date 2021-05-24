@@ -65,35 +65,46 @@ typedef struct  s_prm
 
 
 /* MAIN FUNCTIONS */
-t_prm	*setup_settings(int, char **, char **);
-void	read_line(t_prm *);
-void	parse_line(t_prm *);
-void	execute_line(t_prm *);
-void	reset_parameters(t_prm *);
+t_prm		*setup_settings(int, char **, char **);
+void		read_line(t_prm *);
+void		parse_line(t_prm *);
+void		execute_line(t_prm *);
+void		reset_parameters(t_prm *);
 
 /* HISTORY */
-int		read_history(t_prm *prm);
-int		history_add(t_bd_lst *node);
-int		history_next(t_prm *prm);
-int		history_prev(t_prm *prm);
-int		save_history(t_bd_lst *node);
+int			read_history(t_prm *prm);
+int			history_add(t_bd_lst *node);
+int			history_next(t_prm *prm);
+int			history_prev(t_prm *prm);
+int			save_history(t_bd_lst *node);
 
 
 /* BUILTIN */
-void		cmd_cd(t_prm *prm);
-void		cmd_pwd(t_prm *prm);
-void		cmd_env(t_prm *prm);
-void		cmd_echo(t_prm *prm);
-void		cmd_unset(t_prm *prm);
-void		cmd_learnc(t_prm *prm);
-void		cmd_export(t_prm *prm);
-void		cmd_history(t_prm *prm);
-void		cmd_not_found(t_prm *prm);
+int		cmd_cd(t_cmd *cmd);
+int		cmd_pwd(t_cmd *cmd);
+int		cmd_env(t_prm *prm, t_cmd *cmd);
+int		cmd_exit(t_cmd *cmd);
+int		cmd_echo(t_cmd *cmd);
+int		cmd_unset(t_cmd *cmd);
+int		cmd_learnc(t_cmd *cmd);
+int		cmd_export(t_cmd *cmd);
+int		cmd_usercmd(t_cmd *cmd);
+int		cmd_history(t_cmd *cmd);
+int		cmd_not_found(t_cmd *cmd);
+
+
+// void		cmd_cd(t_prm *prm);
+// void		cmd_pwd(t_prm *prm);
+// void		cmd_env(t_prm *prm);
+// void		cmd_echo(t_prm *prm);
+// void		cmd_unset(t_prm *prm);
+// void		cmd_learnc(t_prm *prm);
+// void		cmd_export(t_prm *prm);
+// void		cmd_history(t_prm *prm);1
+// void		cmd_not_found(t_prm *prm);
 
 
 int			execute(char buff[], t_prm *prm);
-
-
 /* TERMINAL */
 void		change_term_settings(t_term *term);
 int			setup_terminal(t_prm	*prm);
@@ -103,7 +114,6 @@ t_term		*create_term_struct(void);
 /* KEYS */
 int			is_printable_sym(unsigned int input);
 int			is_printable(char *input);
-//int			is_spec_key(char *input);
 void		key_up_action(t_prm *prm);
 void		key_down_action(t_prm *prm);
 void		key_left_action(t_prm *prm);
@@ -113,10 +123,11 @@ void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
 void		clear_prompt(void);
 
-
-void	recognize_symbol(t_prm *prm);
-char *remove_from(char *src, int index, void (*free_ctl)(void *));
-char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *));
+//MOVE TO SPECIFIC AREAs
+char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
+char		*remove_from(char *src, int index, void (*free_ctl)(void *));
+int			arr_size(char **arr);
+void		recognize_symbol(t_prm *prm);
 
 /* INITIALIZATION */
 t_prm		*setup_settings(int argc, char **argv, char **env);

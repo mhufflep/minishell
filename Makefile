@@ -40,7 +40,18 @@ SOURCES			=	main.c \
 					init.c \
 					error.c \
 					readline.c \
-					main_functions.c
+					main_functions.c \
+					cmd_cd.c \
+					cmd_pwd.c \
+					cmd_env.c \
+					cmd_echo.c \
+					cmd_exit.c \
+					cmd_utils.c \
+					cmd_unset.c \
+					cmd_export.c \
+					cmd_history.c \
+					cmd_usercmd.c \
+					cmd_not_found.c \
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \

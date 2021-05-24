@@ -64,12 +64,12 @@ void	key_right_action(t_prm *prm)
 
 void	cursor_save(void)
 {
-	write(1, "\e[s", ft_strlen("\e[s"));
+	ft_putstr_fd("\e[s", STDOUT_FILENO);
 }
 
 void	cursor_restore(void)
 {
-	write(1, "\e[u", ft_strlen("\e[u"));
+	ft_putstr_fd("\e[u", STDOUT_FILENO);
 }
 
 void	key_bspace_action(t_prm *prm)
@@ -97,11 +97,12 @@ void	key_other_action(t_prm *prm)
 {
 	if (is_printable(prm->input))
 	{
-		prm->history_ptr->content = insert_into(prm->history_ptr->content, prm->cursor_pos, prm->input[0], free);
+		prm->history_ptr->content = insert_into(prm->history_ptr->content, prm->input, prm->cursor_pos, free);
+		// prm->line = prm->history_ptr->content;
 		prm->line_len += bd_strlen(prm->input);
 		prm->cursor_pos += bd_strlen(prm->input);	
 	}
-	ft_putstr_fd(prm->input, 1);
+	ft_putstr_fd(prm->input, STDOUT_FILENO);
 	if (prm->cursor_pos <= prm->line_len)
 	{
 		cursor_save();

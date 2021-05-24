@@ -1,52 +1,21 @@
 #include "minishell.h"
 
-//void	buffer_shift_left(char *buf, int i, int len)
-//{
-//	while (i < len)
-//	{
-//		buf[i] = buf[i + 1];
-//		i++;
-//	}
-//}
-
-//void	buffer_shift_right(char *buf, int start, int end)
-//{
-//	// buf[end + 1] = '\0';
-//	while (start < end)
-//	{
-//		buf[end + 1] = buf[end];
-//		end--;
-//	}
-//}
-
-char *insert_into(char *src, int index, char symbol, void (*free_ctl)(void *))
+char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 {
 	char	*dst;
-	int		len;
-	int		src_index;
-	int		dst_index;
+	int		src_len;
+	int		add_len;
 
-	src_index = 0;
-	dst_index = 0;
-	len = ft_strlen(src) + 1;
-	dst = (char *)malloc((len + 1) * sizeof(char));
+	src_len = ft_strlen(src);
+	add_len = ft_strlen(add);
+
+	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
 	if (dst == NULL)
-		
 		throw_error();
-	while (src_index < index)
-	{
-		dst[dst_index] = src[src_index];
-		src_index++;
-		dst_index++;
-	}
-	dst[dst_index++] = symbol;
-	while (src_index < len)
-	{
-		dst[dst_index] = src[src_index];
-		dst_index++;
-		src_index++;
-	}
-	dst[len] = '\0';
+	ft_memset(dst, 0, src_len + add_len + 1);
+	ft_strlcpy(dst, src, index + 1); //hello world 
+	ft_strlcpy(&dst[index], add, add_len + 1);
+	ft_strlcpy(&dst[index + add_len], &src[index], src_len - index + 1);
 	if (free_ctl != NULL)
 		free_ctl(src);
 	return (dst);
@@ -65,22 +34,10 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	dst = (char *)malloc((len) * sizeof(char));
 	if (dst == NULL)
 		throw_error();
-	while (src_index < index)
-	{
-		dst[dst_index] = src[src_index];
-		src_index++;
-		dst_index++;
-	}
-	src_index++;
-	while (src_index < len)
-	{
-		dst[dst_index] = src[src_index];
-		dst_index++;
-		src_index++;
-	}
+	ft_strlcpy(dst, src, index + 1); //hello world 
+	ft_strlcpy(&dst[index], &src[index + 1], len - index);
 	if (free_ctl != NULL)
 		free_ctl(src);
-	dst[len] = '\0';
 	return (dst);
 }
 
@@ -95,46 +52,49 @@ t_prm *get_parameters(t_prm *prm)
 
 // Not working after moving in history and applying some command --> need to check 
 
-// New symbol does not print correctly. It is print into current cursor position.
+// Fixed: New symbol does not print correctly. It is print into current cursor position.
 // Problem could appear while writing the rest of the line after printing new symbol.
 
 // MAIN FUNCTIONS
-// void	parse_line(t_prm *prm)
-// {
-// 	t_cmd		*cmd;
-// 	t_bd_lst	*new;
 
-// 	prm->cmds = NULL; prm->cmds = malloc(sizeof(t_bd_lst *) * 2); // ; split
-// 	cmd = malloc(sizeof(t_cmd)); //protect
-// 	cmd->cmd = prm->history_ptr->content;
-// 	cmd->args = malloc(sizeof(char *) * 2);
-// 	cmd->args[0] = "..";
-// 	new = bd_lstnew(cmd);
-// 	if (!new)
-// 	{
-// 		//parse error
-// 		printf("parse error\n");
-// 	}
-// 	bd_lstadd_back(&(prm->cmds[0]), new);
-// }
-
-void	execute_line(t_prm *prm)
+t_cmd	*command_create(char *cmd, char **args)
 {
-	t_cmd *cmd;
+	t_cmd *new_cmd;
 
-	prm->cmds_ptr = prm->cmds[0];
-	while (prm->cmds_ptr != NULL)
+	new_cmd = malloc(sizeof(t_cmd));
+	if (!new_cmd)
 	{
-		cmd = (t_cmd *)prm->cmds[0]->content;
-		execute(cmd->cmd, prm); //not line but cmds
-		prm->cmds_ptr = prm->cmds_ptr->next;
+		throw_error();
 	}
-	bd_lstclear(prm->cmds, free);
-	prm->cmds_ptr = NULL;
+	new_cmd->cmd = cmd;
+	new_cmd->args = args;
+	return (new_cmd);
 }
 
-void	reset_parameters(t_prm *prm)
+void	cmds_arr_create(t_prm *prm, int size)
 {
-	if (tcsetattr(0, TCSANOW, prm->def_term))
-		exit(1);
+	prm->cmds = malloc(sizeof(t_bd_lst *) * size);
+	if (!prm->cmds)
+		throw_error();
+	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
+}
+
+// void	command_add(t_bd_lst *cmds, void *data)
+// {
+	
+// }
+
+void	parse_line(t_prm *prm)
+{
+	t_cmd		*cmd;
+	t_bd_lst	*new;
+
+	char *args[] = {"..", NULL};
+
+	cmds_arr_create(prm, 2);
+	cmd = command_create(prm->history_ptr->content, args);
+	new = bd_lstnew(cmd);
+	if (!new)
+		throw_error();
+	bd_lstadd_back(&(prm->cmds[0]), new);
 }

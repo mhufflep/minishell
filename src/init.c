@@ -36,7 +36,7 @@ int setup_terminal(t_prm	*prm)
 t_prm	*setup_settings(int argc, char **argv, char **env)
 {
 	t_prm	*prm;
-	
+
 	setup_parameters(&prm);
 	setup_terminal(prm);
 	prm->argc = argc;
