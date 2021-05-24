@@ -29,7 +29,7 @@ int		cmd_cd(t_cmd *cmd) //need prm, maybe
 
 	prm = get_parameters(NULL);
 
-	if (arr_size(cmd->args) == 0)
+	if (sizeof_array(cmd->args) == 0)
 	{
 		cmd->args = malloc(sizeof(char *));
 		cmd->args[0] = ft_strdup("~");

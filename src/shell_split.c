@@ -99,18 +99,6 @@ size_t	count_str(char *s, const char *separators)
 	return (amount);
 }
 
-void	*free_array(char **array)
-{
-	int		i;
-
-	i = -1;
-	while (array && array[++i])
-		free(array[i]);
-	if (array)
-		free(array);
-	return (NULL);
-}
-
 char	**shell_split(char *s, const char *separators)
 {
 	char	**array;

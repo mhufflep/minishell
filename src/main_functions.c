@@ -11,7 +11,7 @@ char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 
 	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
 	if (dst == NULL)
-		throw_error();
+		throw_error("Bad alloc");
 	ft_memset(dst, 0, src_len + add_len + 1);
 	ft_strlcpy(dst, src, index + 1); //hello world 
 	ft_strlcpy(&dst[index], add, add_len + 1);
@@ -33,7 +33,7 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	len = ft_strlen(src);
 	dst = (char *)malloc((len) * sizeof(char));
 	if (dst == NULL)
-		throw_error();
+		throw_error("Bad alloc");
 	ft_strlcpy(dst, src, index + 1); //hello world 
 	ft_strlcpy(&dst[index], &src[index + 1], len - index);
 	if (free_ctl != NULL)
@@ -63,9 +63,7 @@ t_cmd	*command_create(char *cmd, char **args)
 
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
-	{
-		throw_error();
-	}
+		throw_error("Bad alloc");
 	new_cmd->cmd = cmd;
 	new_cmd->args = args;
 	return (new_cmd);
@@ -75,7 +73,7 @@ void	cmds_arr_create(t_prm *prm, int size)
 {
 	prm->cmds = malloc(sizeof(t_bd_lst *) * size);
 	if (!prm->cmds)
-		throw_error();
+		throw_error("Bad alloc");
 	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
 }
 
@@ -84,17 +82,17 @@ void	cmds_arr_create(t_prm *prm, int size)
 	
 // }
 
-void	parse_line(t_prm *prm)
-{
-	t_cmd		*cmd;
-	t_bd_lst	*new;
+// void	parse_line(t_prm *prm)
+// {
+// 	t_cmd		*cmd;
+// 	t_bd_lst	*new;
 
-	char *args[] = {"..", NULL};
+// 	char *args[] = {"..", NULL};
 
-	cmds_arr_create(prm, 2);
-	cmd = command_create(prm->history_ptr->content, args);
-	new = bd_lstnew(cmd);
-	if (!new)
-		throw_error();
-	bd_lstadd_back(&(prm->cmds[0]), new);
-}
+// 	cmds_arr_create(prm, 2);
+// 	cmd = command_create(prm->history_ptr->content, args);
+// 	new = bd_lstnew(cmd);
+// 	if (!new)
+// 		throw_error();
+// 	bd_lstadd_back(&(prm->cmds[0]), new);
+// }

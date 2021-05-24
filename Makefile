@@ -41,12 +41,12 @@ SOURCES			=	main.c \
 					error.c \
 					readline.c \
 					main_functions.c \
+					array_utils.c \
 					cmd_cd.c \
 					cmd_pwd.c \
 					cmd_env.c \
 					cmd_echo.c \
 					cmd_exit.c \
-					cmd_utils.c \
 					cmd_unset.c \
 					cmd_export.c \
 					cmd_history.c \

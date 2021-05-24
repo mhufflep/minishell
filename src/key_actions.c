@@ -16,8 +16,8 @@ int is_printable(char *input)
 
 void	clear_prompt(void)
 {
-	tputs(restore_cursor, 1, ft_putchar);
-	tputs(tigetstr("ed"), 1, ft_putchar);
+	tputs(tgetstr("rc", 0), 1, ft_putchar);
+	tputs(tgetstr("cd", 0), 1, ft_putchar);
 }
 
 void	key_up_action(t_prm *prm)
@@ -49,7 +49,7 @@ void	key_left_action(t_prm *prm)
 	if (prm->cursor_pos > 0)
 	{
 		prm->cursor_pos--;
-		tputs(cursor_left, 1, ft_putchar);
+		tputs(tgetstr("le", 0), 1, ft_putchar);
 	}
 }
 
@@ -58,7 +58,7 @@ void	key_right_action(t_prm *prm)
 	if (prm->cursor_pos < prm->line_len)
 	{
 		prm->cursor_pos++;
-		tputs(cursor_right, 1, ft_putchar);	
+		tputs(tgetstr("nd", 0), 1, ft_putchar);	
 	}
 }
 
@@ -76,9 +76,9 @@ void	key_bspace_action(t_prm *prm)
 {
 	if (prm->cursor_pos > 0)
 	{
-		tputs(cursor_left, 1, ft_putchar);
+		tputs(tgetstr("le", 0), 1, ft_putchar);
 		cursor_save();
-		tputs(tigetstr("ed"), 1, ft_putchar);
+		tputs(tgetstr("dc", 0), 1, ft_putchar);
 		prm->cursor_pos--;
 		prm->history_ptr->content = remove_from(prm->history_ptr->content, prm->cursor_pos, free);
 		prm->line_len--;

@@ -56,73 +56,71 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
-void	parse_line(t_prm *prm)
+int		parse_line(t_prm *prm)
 {
 	t_cmd		*cmd;
 	t_bd_lst	*new;
 
-	prm->cmds = NULL; prm->cmds = malloc(sizeof(t_bd_lst *) * 2); // ; split
-	cmd = malloc(sizeof(t_cmd)); //protect
-	cmd->cmd = prm->history_ptr->content;
-	cmd->args = malloc(sizeof(char *) * 2);
-	cmd->args[0] = "..";
-	new = bd_lstnew(cmd);
-	if (!new)
-	{
-		//parse error
-		printf("parse error\n");
-	}
-	bd_lstadd_back(&(prm->cmds[0]), new);
-
+	char *args[] = {"..", NULL};
+//--------------------------------//
 	int		i;
 	int		amount_commands;
 	char	**arr_commands;
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = shell_split(prm->line, ";");
+	arr_commands = shell_split(prm->history_ptr->content, ";");
 	while (arr_commands[i])
 	{
-        if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
+		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
         {
-            amount_commands++;
-            printf("|%s|\n", arr_commands[i]);
-        }
-        else
-        {
-            exit(99);
-            printf("syntax error near unexpected token `;'");
-        }
+			amount_commands++;
+			ft_putendl_fd(arr_commands[i], 1);
+		}
+		else
+		{
+			free_array(arr_commands);
+			print_error("syntax error near unexpected token `;'");
+			prm->exit_code = 258;
+			return (0);
+		}
 		i++;
 	}
+//--------------------------------//
+	cmds_arr_create(prm, amount_commands + 1);
+	cmd = command_create(prm->history_ptr->content, args);
+	new = bd_lstnew(cmd);
+	if (!new)
+		throw_error("Bad alloc");
+	bd_lstadd_back(&(prm->cmds[0]), new);
 
-// 	prm->cmds = malloc(amount_commands * sizeof(t_bd_lst *));
-// 	char **arr_split_command_pipe;
-// 	i = 0;
-// 	int k = 0;
-// 	t_cmd	*command;
-// 	t_bd_lst	*new;
-// 	// разделить командные строки arr_commands на строки по пайпам и начать парсить их
-// 	while (arr_commands[i])
-// 	{
-// 		j = amount_spaces(arr_commands[i]);
-// 		if (!(j == (int)ft_strlen(arr_commands[i])))
-// 		{
-// 			arr_split_command_pipe = ft_split(arr_commands[i], '|'); //
-// 			while (arr_split_command_pipe[k])
-// 			{
-// 				command = malloc(sizeof(t_cmd));
-// 				// command->cmd = ...
-// 				// command->args = ...
-// 				new = bd_lstnew(command);
-// 				bd_lstadd_back(&(prm->cmds[k]), new);
-// 				k++;
-// 			}
-// 			free_array(arr_split_command_pipe);
-// 		}
-// 		i++;
-// 	}
-    exit(0);
+	// char **arr_split_command_pipe;
+	// i = 0;
+	// int k = 0;
+	// t_cmd	*command;
+	// t_bd_lst	*new;
+	// // разделить командные строки arr_commands на строки по пайпам и начать парсить их
+	// while (arr_commands[i])
+	// {
+	// 	j = amount_spaces(arr_commands[i]);
+	// 	if (!(j == (int)ft_strlen(arr_commands[i])))
+	// 	{
+	// 		arr_split_command_pipe = ft_split(arr_commands[i], '|'); //
+	// 		while (arr_split_command_pipe[k])
+	// 		{
+	// 			command = malloc(sizeof(t_cmd));
+	// 			// command->cmd = ...
+	// 			// command->args = ...
+	// 			new = bd_lstnew(command);
+	// 			bd_lstadd_back(&(prm->cmds[k]), new);
+	// 			k++;
+	// 		}
+	// 		free_array(arr_split_command_pipe);
+	// 	}
+	// 	i++;
+	// }
+	return (1);
+    // exit(0);
 }
 
 // if (!is_command)

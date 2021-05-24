@@ -1,8 +1,13 @@
 #include "minishell.h"
 
-void	throw_error(void)
+void 	print_error(char *msg)
+{
+	ft_putendl_fd(msg, STDERR_FILENO);
+}
+
+void	throw_error(char *msg)
 {
 	tcsetattr(0, TCSANOW, get_parameters(NULL)->def_term);
-	ft_putstr_fd(strerror(errno), 2);
+	print_error(msg);
 	exit(1);
 }

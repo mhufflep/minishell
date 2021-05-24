@@ -4,7 +4,7 @@ void	history_add_node(t_prm *prm)
 {
 	t_bd_lst *new = bd_lstnew(NULL);
 	if (new == NULL)
-		throw_error();
+		throw_error("Bad alloc");
 
 	bd_lstadd_back(&(prm->history), new);
 	prm->history_ptr = bd_lstlast(prm->history);
@@ -29,8 +29,8 @@ int main(int argc, char **argv, char **env)
 		read_line(prm);
 		printf("got: %s\n", (char *)prm->history_ptr->content); //DEBUG
 		history_add(bd_lstlast(prm->history));
-		parse_line(prm);
-		execute_line(prm);
+		if (parse_line(prm))
+			execute_line(prm);
 	}
 	reset_parameters(prm);
 	return (0);

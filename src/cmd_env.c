@@ -11,17 +11,18 @@ void	print_env_node(void *content)
 
 int		cmd_env(t_prm *prm, t_cmd *cmd)
 {
-	int i;
+	(void) cmd;
+	// int i;
 
-	i = 0;
-	if (cmd->args)
-	{
-		while (cmd->args[i])
-		{
-			ft_putendl_fd(cmd->args[i], 2);
-			i++;
-		}
-	}
+	// i = 0;
+	// if (cmd->args)
+	// {
+	// 	while (cmd->args[i])
+	// 	{
+	// 		ft_putendl_fd(cmd->args[i], STDOUT_FILENO);
+	// 		i++;
+	// 	}
+	// }
 	// Need to check arguments
 	// t_prm *prm;
 	

@@ -67,7 +67,6 @@ typedef struct  s_prm
 /* MAIN FUNCTIONS */
 t_prm		*setup_settings(int, char **, char **);
 void		read_line(t_prm *);
-void		parse_line(t_prm *);
 void		execute_line(t_prm *);
 void		reset_parameters(t_prm *);
 
@@ -92,24 +91,11 @@ int		cmd_usercmd(t_cmd *cmd);
 int		cmd_history(t_cmd *cmd);
 int		cmd_not_found(t_cmd *cmd);
 
-
-// void		cmd_cd(t_prm *prm);
-// void		cmd_pwd(t_prm *prm);
-// void		cmd_env(t_prm *prm);
-// void		cmd_echo(t_prm *prm);
-// void		cmd_unset(t_prm *prm);
-// void		cmd_learnc(t_prm *prm);
-// void		cmd_export(t_prm *prm);
-// void		cmd_history(t_prm *prm);1
-// void		cmd_not_found(t_prm *prm);
-
-
 int			execute(char buff[], t_prm *prm);
 /* TERMINAL */
 void		change_term_settings(t_term *term);
 int			setup_terminal(t_prm	*prm);
 t_term		*create_term_struct(void);
-
 
 /* KEYS */
 int			is_printable_sym(unsigned int input);
@@ -126,7 +112,9 @@ void		clear_prompt(void);
 //MOVE TO SPECIFIC AREAs
 char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
 char		*remove_from(char *src, int index, void (*free_ctl)(void *));
-int			arr_size(char **arr);
+int			sizeof_array(char **arr);
+void		*free_array(char **array);
+void 		print_array(char **arr);
 void		recognize_symbol(t_prm *prm);
 
 /* INITIALIZATION */
@@ -139,10 +127,13 @@ void		reset_settings(t_prm	*prm);
 t_prm		*get_parameters(t_prm *prm);
 
 /* PARSER */
-void	parse_line(t_prm *prm);
-char	**shell_split(char *s, const char *separators);
+int			parse_line(t_prm *prm);
+char		**shell_split(char *s, const char *separators);
+void		cmds_arr_create(t_prm *prm, int size);
+t_cmd		*command_create(char *cmd, char **args);
 
 /* ERROR */
-void throw_error(void); // ???
+void	throw_error(char *msg);
+void 	print_error(char *msg);
 
 #endif
