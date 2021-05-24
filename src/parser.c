@@ -1,21 +1,5 @@
 #include "minishell.h"
 
-void	clear_array(char **arr)
-{
-	int i;
-
-	i = 0;
-	if (arr)
-	{
-		while (arr[i])
-		{
-			arr[i] = 0;
-			i++;
-		}
-		arr = 0;
-	}
-}
-
 int		skip_spaces(char *str)
 {
 	int	i;
@@ -25,7 +9,6 @@ int		skip_spaces(char *str)
 		i++;
 	return (i);
 }
-
 
 // int		is_separator(char c)
 // {
@@ -56,6 +39,31 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
+// Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
+// Если иные символы, то слэш удаляется только БЕЗ кавычек
+int		delete_escape_chars(char **str)
+{
+	int i;
+
+	i = 0;
+	while ((*str)[i])
+	{
+		if (i < (int)ft_strlen(*str) && (*str)[i] == SLASH)
+		{
+			if ((*str)[i + 1] == SLASH)
+				*str = remove_from(*str, i, free);
+			// else if ((*str)[i + 1] == QUOTE)
+			// 	*str = remove_from(*str, i, free);
+			else if ((*str)[i + 1] == D_QUOTE)
+				*str = remove_from(*str, i, free);
+		}
+		else if (i == (int)ft_strlen(*str) && (*str)[i] == SLASH)
+			throw_error(NOT_PROVIDED);
+		i++;
+	}
+	return (0);
+}
+
 int		parse_line(t_prm *prm)
 {
 	t_cmd		*cmd;
@@ -75,6 +83,7 @@ int		parse_line(t_prm *prm)
 		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
         {
 			amount_commands++;
+			delete_esc_chars(&(arr_commands[i]));
 			ft_putendl_fd(arr_commands[i], 1);
 		}
 		else
@@ -91,7 +100,7 @@ int		parse_line(t_prm *prm)
 	cmd = command_create(prm->history_ptr->content, args);
 	new = bd_lstnew(cmd);
 	if (!new)
-		throw_error("Bad alloc");
+		throw_error(BAD_ALLOC);
 	bd_lstadd_back(&(prm->cmds[0]), new);
 
 	// char **arr_split_command_pipe;
