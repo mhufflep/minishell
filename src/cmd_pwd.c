@@ -3,7 +3,10 @@
 int		cmd_pwd(t_cmd *cmd)
 {
 	(void)cmd;
-	//value stores in .data segment
-	printf("%s\n", getcwd(NULL, 0));
+	char *cwd;
+
+	cwd = getcwd(NULL, 0);
+	ft_putstr_fd(cwd, STDOUT_FILENO);
+	free(cwd);
 	return (0);
 }

@@ -51,6 +51,7 @@ SOURCES			=	main.c \
 					cmd_export.c \
 					cmd_history.c \
 					cmd_usercmd.c \
+					cmd_utils.c \
 					cmd_not_found.c \
 					
 HEADER_FILES	=	minishell.h \

@@ -10,7 +10,7 @@ void	print_export_node(void *content)
 
 int export_add(t_cmd *cmd)
 {
-	//if argumtent array store more than one argument need to join them all. (need to check on example)
+	//if argument array store more than one argument need to add them all.
 	//split argument array into l-part and r-part
 	//check if r-part is exist
 	//if it is not then a new value wont be added into env list

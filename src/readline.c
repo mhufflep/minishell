@@ -4,6 +4,8 @@ void	recognize_symbol(t_prm *prm)
 {
 	if (!ft_strcmp(prm->input, KEY_BSPACE))
 		key_bspace_action(prm);
+	else if (!ft_strcmp(prm->input, KEY_TAB))
+		key_tab_action();
 	else if (!ft_strcmp(prm->input, KEY_ARROW_U))
 		key_up_action(prm);
 	else if (!ft_strcmp(prm->input, KEY_ARROW_D))

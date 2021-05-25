@@ -5,7 +5,8 @@ int		update_pwd(t_prm *prm)
 	// t_prm *prm;
 
 	// prm = get_parameters(NULL);
-	
+	//EXPORT ADD
+	//EXPORT REPLACE
 	t_bd_lst *found;
 	char *oldpwd;
 	char *newpwd;
@@ -23,37 +24,37 @@ int		update_pwd(t_prm *prm)
 	return (0);
 }
 
+//check if first argument is exist
+//if it is then is has to be added 
+
 int		cmd_cd(t_cmd *cmd) //need prm, maybe
 {
 	t_prm *prm;
+	char *home;
 
 	prm = get_parameters(NULL);
 
-	if (sizeof_array(cmd->args) == 0)
+	if (sizeof_array(cmd->args) == 0 || !ft_strcmp(cmd->args[0], "~"))
 	{
-		cmd->args = malloc(sizeof(char *));
-		cmd->args[0] = ft_strdup("~");
-	}
-
-	printf("\n%s %s\n", cmd->cmd, cmd->args[0]);
-	prm->exit_code = chdir(cmd->args[0]);
-	if (prm->exit_code == 1)
-	{
-		ft_putstr_fd("cd: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putendl_fd("No such file or directory", STDERR_FILENO);
+		home = getenv("HOME");
+		if (!home)
+		{
+			cmd_error(cmd->cmd, NULL, "HOME not set");
+			return (-1111);
+		}
+		prm->exit_code = chdir(home);
 	}
 	else
 	{
-		update_pwd(prm);
+		prm->exit_code = chdir(cmd->args[0]);
 	}
-	//save pwd
-	//update pwd
-	//update oldpwd = saved pwd
+	
+	if (prm->exit_code == 1)
+	{
+		cmd_error(cmd->cmd, cmd->args[0], "No such file or directory");
+		return (1111);
+	}
 
-	//find pwd in env lstfind
-	//split pwd by first =
-	//rejoin pwd
+	update_pwd(prm);
 	return (0);
 }

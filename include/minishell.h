@@ -21,6 +21,7 @@
 # include "bidirectional_list.h"
 
 // 0, 255, 197
+# define SHELL_NAME "e-bash"
 # define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
 # define HISTORY_FILENAME ".e-bash_history"
 # define HISTORY_FILEPATH "./"
@@ -38,6 +39,7 @@ typedef struct  s_cmd
 	char **args;			//аргументы команды
     int is_pipe : 1;		//стоит ли после команды pipe
     int is_redirect : 1;	//стоит ли после команды redir
+	int fd;
 }               t_cmd;
 
 typedef struct  s_prm
@@ -104,6 +106,7 @@ void		key_up_action(t_prm *prm);
 void		key_down_action(t_prm *prm);
 void		key_left_action(t_prm *prm);
 void		key_right_action(t_prm *prm);
+void		key_tab_action(void);
 void		key_ctrl_l_action(t_prm *prm);
 void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
@@ -134,7 +137,8 @@ void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
 
 /* ERROR */
-void	throw_error(char *msg);
-void 	print_error(char *msg);
+void		throw_error(char *msg);
+void 		print_error(char *msg);
+void		cmd_error(char *cmd, char *arg, char *msg);
 
 #endif
