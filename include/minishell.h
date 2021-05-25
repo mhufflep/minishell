@@ -135,7 +135,7 @@ void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
 
 /* ERROR */
-void	throw_error(char *msg);
-void 	print_error(char *msg);
+void		throw_error(char *msg, int code_status);
+void 		print_error(char *msg, int code_status);
 
 #endif

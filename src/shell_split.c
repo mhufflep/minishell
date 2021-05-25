@@ -46,10 +46,8 @@ int		check_quote(char *s, char quote_mark)
 	if (s[i] == quote_mark && !is_slash(s, i - 1))
 		return (++i);
 	else
-    {
-		exit(99);
-        printf("Сlosing quotation mark is not found.");
-    }
+		throw_error(QUOTE_NOT_FOUND, 21);
+	return (0);
 }
 
 size_t	read_str(char *s, const char *separators)
@@ -99,6 +97,44 @@ size_t	count_str(char *s, const char *separators)
 	return (amount);
 }
 
+// Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
+int		escape_pair(char **str)
+{
+	int i;
+
+	i = 0;
+	while ((*str)[i])
+	{
+		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+		{
+			if ((*str)[i + 1] == SLASH)
+				*str = remove_from(*str, i, free);
+			else if ((*str)[i + 1] == D_QUOTE)
+				*str = remove_from(*str, i, free);
+		}
+		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+			throw_error(NOT_PROVIDED, 99);
+		i++;
+	}
+	return (0);
+}
+
+int		escape_all(char **str)
+{
+	int i;
+
+	i = 0;
+	while ((*str)[i])
+	{
+		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+			*str = remove_from(*str, i, free);
+		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+			throw_error(NOT_PROVIDED, 100);
+		i++;
+	}
+	return (0);
+}
+
 char	**shell_split(char *s, const char *separators)
 {
 	char	**array;
@@ -124,6 +160,8 @@ char	**shell_split(char *s, const char *separators)
 		else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
 		{
 			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], D_QUOTE) - 2);
+			if (separators[0] != '|')
+				escape_pair(&(array[amount]));
 			if (!array[amount++])
 				return (free_array(array));
 			i += check_quote(&s[i], D_QUOTE);
@@ -131,6 +169,8 @@ char	**shell_split(char *s, const char *separators)
 		else if (!ft_strchr(separators, s[i]))
 		{
 			array[amount] = ft_substr(s, i, read_str(&s[i], separators));
+			if (separators[0] != '|')
+				escape_all(&(array[amount]));
 			if (!array[amount++])
 				return (free_array(array));
 			i += read_str(&s[i], separators);

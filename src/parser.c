@@ -39,36 +39,8 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
-// Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
-// Если иные символы, то слэш удаляется только БЕЗ кавычек
-int		delete_escape_chars(char **str)
-{
-	int i;
-
-	i = 0;
-	while ((*str)[i])
-	{
-		if (i < (int)ft_strlen(*str) && (*str)[i] == SLASH)
-		{
-			if ((*str)[i + 1] == SLASH)
-				*str = remove_from(*str, i, free);
-			// else if ((*str)[i + 1] == QUOTE)
-			// 	*str = remove_from(*str, i, free);
-			else if ((*str)[i + 1] == D_QUOTE)
-				*str = remove_from(*str, i, free);
-		}
-		else if (i == (int)ft_strlen(*str) && (*str)[i] == SLASH)
-			throw_error(NOT_PROVIDED);
-		i++;
-	}
-	return (0);
-}
-
 int		parse_line(t_prm *prm)
 {
-	t_cmd		*cmd;
-	t_bd_lst	*new;
-
 	char *args[] = {"..", NULL};
 //--------------------------------//
 	int		i;
@@ -78,30 +50,54 @@ int		parse_line(t_prm *prm)
 	i = 0;
 	amount_commands = 0;
 	arr_commands = shell_split(prm->history_ptr->content, ";");
+	if (!arr_commands)
+		throw_error(BAD_ALLOC, 5);
 	while (arr_commands[i])
 	{
 		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
         {
 			amount_commands++;
-			delete_esc_chars(&(arr_commands[i]));
-			ft_putendl_fd(arr_commands[i], 1);
+			ft_putendl_fd(arr_commands[i], 1); // debug
 		}
 		else
 		{
 			free_array(arr_commands);
-			print_error("syntax error near unexpected token `;'");
 			prm->exit_code = 258;
+			print_error("syntax error near unexpected token `;'", prm->exit_code);
 			return (0);
 		}
 		i++;
 	}
 //--------------------------------//
+	int k = 0;
+	char **arr_cmd;
+	t_cmd		*cmd;
+	t_bd_lst	*new;
 	cmds_arr_create(prm, amount_commands + 1);
-	cmd = command_create(prm->history_ptr->content, args);
-	new = bd_lstnew(cmd);
-	if (!new)
-		throw_error(BAD_ALLOC);
-	bd_lstadd_back(&(prm->cmds[0]), new);
+	while (arr_commands[k])
+	{
+		int p = 0;
+		arr_cmd = shell_split(arr_commands[k], "|");
+		if (!arr_cmd)
+			throw_error(BAD_ALLOC, 6);
+		while (arr_cmd[p])
+		{
+			// --- //
+			cmd = command_create(prm->history_ptr->content, args); // cmd, args
+			new = bd_lstnew(cmd);
+			if (!new)
+				throw_error(BAD_ALLOC, 7);
+			bd_lstadd_back(&(prm->cmds[k]), new);
+			p++;
+		}
+		free_array(arr_cmd);
+		k++;
+	}
+	free_array(arr_commands);
+
+	// ; -> блок команд, каждый блок - отдельный список 
+	// cmd1 arg1 | cmd2 arg2 
+
 
 	// char **arr_split_command_pipe;
 	// i = 0;
@@ -165,3 +161,6 @@ int		parse_line(t_prm *prm)
 //		все остальное это аргументы
 //		ставится флаг is_pipe = 1;
 //
+
+
+// ~ -> ft_strdup(getenv("HOME"));

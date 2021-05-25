@@ -4,7 +4,7 @@ void	history_add_node(t_prm *prm)
 {
 	t_bd_lst *new = bd_lstnew(NULL);
 	if (new == NULL)
-		throw_error(BAD_ALLOC);
+		throw_error(BAD_ALLOC, 4);
 
 	bd_lstadd_back(&(prm->history), new);
 	prm->history_ptr = bd_lstlast(prm->history);
