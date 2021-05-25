@@ -15,7 +15,7 @@ int		cmd_usercmd(t_cmd *cmd)
 	// pid_t pid = fork();
 	// if (pid == 0)
 	// {
-	// 	upd_env = bd_parse_to_arr(prm->unsorted_env);
+	// 	upd_env = bd_parse_to_arr(prm->env_list);
 	// 	execve(cmd->cmd, cmd->args, upd_env);
 	// }
 	// wait(&prm->exit_code);

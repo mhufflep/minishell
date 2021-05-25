@@ -59,8 +59,7 @@ typedef struct  s_prm
 
 	t_bd_lst	*history;
 	t_bd_lst	*history_ptr;
-	t_bd_lst	*unsorted_env;
-	t_bd_lst	*sorted_env;
+	t_bd_lst	*env_list;
 	t_bd_lst	*cmds_ptr;
 	t_bd_lst	**cmds; //массив листов команд, в поле content каждой будет лежать t_cmd *
 }               t_prm;
@@ -128,7 +127,10 @@ int			setup_parameters(t_prm **prm);
 int			setup_terminal(t_prm	*prm);
 void		reset_settings(t_prm	*prm);
 
+/* GETTERS */
 t_prm		*get_parameters(t_prm *prm);
+t_bd_lst	*get_local_env(void);
+
 
 /* PARSER */
 int			parse_line(t_prm *prm);

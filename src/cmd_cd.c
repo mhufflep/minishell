@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+//first check internal environment then trying to get external
+
 int		update_pwd(t_prm *prm)
 {
 	// t_prm *prm;
@@ -12,7 +14,7 @@ int		update_pwd(t_prm *prm)
 	char *newpwd;
 
 	oldpwd = getcwd(NULL, 0);
-	found = bd_lstfind(prm->sorted_env, "PWD", 3, ft_strncmp);
+	found = bd_lstfind(prm->env_list, "PWD", 3, ft_strncmp);
 	if (found != NULL)
 	{
 		if (found->content)

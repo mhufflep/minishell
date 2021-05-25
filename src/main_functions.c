@@ -13,7 +13,7 @@ char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 	if (dst == NULL)
 		throw_error("Bad alloc");
 	ft_memset(dst, 0, src_len + add_len + 1);
-	ft_strlcpy(dst, src, index + 1); //hello world 
+	ft_strlcpy(dst, src, index + 1);
 	ft_strlcpy(&dst[index], add, add_len + 1);
 	ft_strlcpy(&dst[index + add_len], &src[index], src_len - index + 1);
 	if (free_ctl != NULL)
@@ -34,11 +34,19 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	dst = (char *)malloc((len) * sizeof(char));
 	if (dst == NULL)
 		throw_error("Bad alloc");
-	ft_strlcpy(dst, src, index + 1); //hello world 
+	ft_strlcpy(dst, src, index + 1);
 	ft_strlcpy(&dst[index], &src[index + 1], len - index);
 	if (free_ctl != NULL)
 		free_ctl(src);
 	return (dst);
+}
+
+t_bd_lst *get_local_env(void)
+{
+	t_prm *prm;
+
+	prm = get_parameters(0);
+	return (prm->env_list);
 }
 
 t_prm *get_parameters(t_prm *prm)
