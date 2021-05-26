@@ -11,11 +11,11 @@ int		setup_parameters(t_prm **prm)
 
 int setup_env_lists(t_prm *prm)
 {
-	prm->env_list = bd_parse_from_arr(prm->env);
+	prm->env_list = bd_parse_from_arr(prm->env, env_parse);
 	return (0);
 }
 
-int setup_terminal(t_prm	*prm)
+int setup_terminal(t_prm *prm)
 {
 	char *term_name;
 

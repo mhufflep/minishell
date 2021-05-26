@@ -1,0 +1,5 @@
+// Asterisk:
+	// If I get asterisk:
+	// Read dir to get all files and directories of current catalogue.
+	// Use match-N-match to find an occurencies for each filename of the previous command result
+	// If occurency was founded then I need to add a new value to the list of arguments of a current command.

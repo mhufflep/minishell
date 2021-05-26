@@ -7,7 +7,7 @@ void 	print_error(char *msg)
 
 void	throw_error(char *msg)
 {
-	tcsetattr(0, TCSANOW, get_parameters(NULL)->def_term);
+	tcsetattr(0, TCSANOW, get_prm(NULL)->def_term);
 	print_error(msg);
 	exit(1);
 }

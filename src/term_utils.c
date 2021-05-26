@@ -24,3 +24,8 @@ t_term *create_term_struct(void)
 	return (term);
 }
 
+void	reset_parameters(t_prm *prm)
+{
+	if (tcsetattr(0, TCSANOW, prm->def_term))
+		exit(1);
+}

@@ -61,7 +61,14 @@ int		parse_line(t_prm *prm)
 	t_cmd		*cmd;
 	t_bd_lst	*new;
 
-	char *args[] = {"..", NULL};
+	// char **args = malloc(sizeof(char *) * 1);
+	
+	// args[0] = NULL;
+
+	char **args = malloc(sizeof(char *) * 2);
+	args[0] = bd_strdup("123");
+	args[1] = NULL;
+
 //--------------------------------//
 	int		i;
 	int		amount_commands;

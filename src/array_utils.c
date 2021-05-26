@@ -40,7 +40,7 @@ void	print_array(char **arr)
 
 void	*free_array(char **array)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (array && array[++i])

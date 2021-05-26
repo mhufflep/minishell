@@ -17,8 +17,13 @@ char					*bd_strdup(const char *src);
 int						bd_strcmp(const char *s1, const char *s2);
 	
 
-void		bd_lstinsert(t_bd_lst **cur, t_bd_lst *new);
+void		bd_lstinsert(t_bd_lst **cur, t_bd_lst *new); //I still have this one?
 t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)());
+
+void		bd_lstdelone(t_bd_lst *lst, void (*del)(void*));
+void		bd_lstclear(t_bd_lst **lst, void (*del)(void *));
+void		bd_lstremove(t_bd_lst **head, t_bd_lst *cur, void (*del)(void *));
+void		bd_lstrelink(t_bd_lst *n1, t_bd_lst *n2, t_bd_lst *new);
 
 t_bd_lst	*bd_lstnew(void *content);
 t_bd_lst	*bd_lstlast(t_bd_lst *lst);
@@ -26,11 +31,11 @@ int			bd_lstsize(t_bd_lst *lst);
 void		bd_lstadd_front(t_bd_lst **lst, t_bd_lst *new);
 void		bd_lstadd_back(t_bd_lst **lst, t_bd_lst *new);
 void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *));
-void		bd_lstdelone(t_bd_lst **head, t_bd_lst *lst, void (*del)(void*));
-void		bd_lstclear(t_bd_lst **lst, void (*del)(void*));
+// void		bd_lstdelone(t_bd_lst **head, t_bd_lst *lst, void (*del)(void*));
+// void		bd_lstclear(t_bd_lst **lst, void (*del)(void*));
 void		bd_lstiter(t_bd_lst *lst, void (*f)(void *));
 void		*def_cont_copy(void *content);
-void		bd_lstprint(t_bd_lst *lst);
+void		bd_lstprint(t_bd_lst *lst, void (*print)(void *));
 t_bd_lst	*bd_lstcopy(t_bd_lst *list, void *(*content_copy)(void *));
 t_bd_lst	*bd_lstmap(t_bd_lst *lst, void *(*f)(void *), void (*del)(void *));
 int			bd_lstmax_cont_len(t_bd_lst *lst);
@@ -39,8 +44,9 @@ void		bd_lstsort_merge(t_bd_lst **head, int (*comp)());
 void		bd_lstsplit(t_bd_lst *lst, t_bd_lst **first_part, t_bd_lst **second_part);
 t_bd_lst	*bd_lst_compared_merge(t_bd_lst *n1, t_bd_lst *n2, int (*comp)());
 t_bd_lst	*bd_lst_merge(t_bd_lst **n1, t_bd_lst **n2);
-t_bd_lst	*bd_parse_from_arr(char **arr); //add copy cont function
-char		**bd_parse_to_arr(t_bd_lst *lst); //add copy cont function
+
+t_bd_lst	*bd_parse_from_arr(char **arr, void *(*copy)(void *));
+char		**bd_parse_to_arr(t_bd_lst *lst, void *(*copy)(void *));
 
 
 #endif

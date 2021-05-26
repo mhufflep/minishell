@@ -1,32 +1,24 @@
 #include "minishell.h"
 
-void	print_env_node(void *str)
+void	print_env_node(void *node)
 {
-	if (str != NULL)
+	t_env *env;
+
+	env = (t_env *)node;
+
+	if (env && env->val)
 	{
-		if (ft_strchr((char *)str, '='))
-			printf("%s\n", (char *)str);
+		ft_putstr_fd(env->key, STDOUT_FILENO);
+		ft_putstr_fd(env->sep, STDOUT_FILENO);
+		ft_putstr_fd(env->val, STDOUT_FILENO);
 	}
 }
 
 int		cmd_env(t_prm *prm, t_cmd *cmd)
 {
-	(void) cmd;
-	// int i;
-
-	// i = 0;
-	// if (cmd->args)
-	// {
-	// 	while (cmd->args[i])
-	// 	{
-	// 		ft_putendl_fd(cmd->args[i], STDOUT_FILENO);
-	// 		i++;
-	// 	}
-	// }
-	// Need to check arguments
-	// t_prm *prm;
-	
-	// prm = get_parameters(NULL);
-	bd_lstiter(prm->env_list, print_env_node);
+	if (sizeof_array(cmd->args) == 0)
+		bd_lstiter(prm->env_list, print_env_node);
+	else
+		cmd_error(cmd->cmd, cmd->args[0], "Does not supported");
 	return (0);
 }

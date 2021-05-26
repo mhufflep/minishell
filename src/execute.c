@@ -1,81 +1,69 @@
 #include "minishell.h"
 
-int		execute_cmd(t_cmd *cmd)
+int		execute_cmd(t_prm *prm, t_cmd *cmd)
 {
 	if (!bd_strcmp(CMD_EXIT, cmd->cmd))
-		cmd_exit(cmd);
+		return (cmd_exit(cmd));
 	else if (!bd_strcmp(CMD_CD, cmd->cmd))
-		cmd_cd(cmd);
+		return (cmd_cd(prm, cmd));
 	else if (!bd_strcmp(CMD_ENV, cmd->cmd))
-		cmd_env(get_parameters(0), cmd);
+		return (cmd_env(prm, cmd));
 	else if (!bd_strcmp(CMD_PWD, cmd->cmd))
-		cmd_pwd(cmd);
+		return (cmd_pwd(cmd));
 	else if (!bd_strcmp(CMD_ECHO, cmd->cmd))
-		cmd_echo(cmd);
+		return (cmd_echo(cmd));
 	else if (!bd_strcmp(CMD_UNSET, cmd->cmd))
-		cmd_unset(cmd);
+		return (cmd_unset(prm, cmd));
 	else if (!bd_strcmp(CMD_EXPORT, cmd->cmd))
-		cmd_export(cmd);
+		return (cmd_export(prm, cmd));
 	else if (!bd_strcmp(CMD_LEARNC, cmd->cmd))
-		cmd_learnc(cmd);
+		return (cmd_learnc(cmd));
 	else if (!bd_strcmp(CMD_HISTORY, cmd->cmd))
-		cmd_history(cmd);
+		return (cmd_history(prm, cmd));
 	else
-		cmd_usercmd(cmd);
-	return (1);
+		return (cmd_usercmd(cmd));
 }
 
+void	free_cmd(void *content)
+{
+	t_cmd	*cmd;
+	int		i;
 
-int		execute_block(t_bd_lst *cmdlst)
+	i = 0;
+	cmd = (t_cmd *)content;
+	if (cmd->cmd)
+		free(cmd->cmd);
+	while (cmd->args && cmd->args[i])
+		free(cmd->args[i++]);
+	if (cmd->args)
+		free(cmd->args);
+}
+
+int		execute_block(t_prm *prm, t_bd_lst *lst)
 {
 	t_cmd *cmd;
 	int code;
 
-	while (cmdlst != NULL)
+	while (lst != NULL)
 	{
-		cmd = (t_cmd *)cmdlst->content;
-		code = execute_cmd(cmd);
-		cmdlst = cmdlst->next;
+		cmd = (t_cmd *)lst->content;
+		code = execute_cmd(prm, cmd);
+		lst = lst->next;
 	}
 	return (code);
 }
 
-void	free_cmd(void *cont)
-{
-	t_cmd *cmd;
-	int i;
-
-	i = 0;
-	cmd = (t_cmd *)cont;
-	if (cmd->cmd)
-		free(cmd->cmd);
-	if (cmd->options)
-		free(cmd->options);
-	while (cmd->args[i])
-		free(cmd->args[i++]);
-	free(cmd->args);
-}
-
-void	commands_iter(t_prm *prm)
+void	execute_line(t_prm *prm)
 {
 	int i;
 
 	i = 0;
 	while (prm->cmds[i] != NULL)
 	{
-		prm->exit_code = execute_block(prm->cmds[i]);
+		prm->exit_code = execute_block(prm, prm->cmds[i]);
 		bd_lstclear(&(prm->cmds[i]), free_cmd);
 		i++;
 	}
-}
-
-void	execute_line(t_prm *prm)
-{
-	commands_iter(prm);
-}
-
-void	reset_parameters(t_prm *prm)
-{
-	if (tcsetattr(0, TCSANOW, prm->def_term))
-		exit(1);
+	free(prm->cmds); //MAY CAUSE AN ERROR
+	prm->cmds = NULL;
 }

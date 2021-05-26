@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 00:13:30 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/10 22:41:29 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/26 17:17:58 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ char	*bd_strdup(const char *src)
 	char	*copy;
 
 	i = 0;
+	if (src == NULL)
+		return (NULL);
 	length = bd_strlen(src);
 	copy = (char *)malloc((length + 1));
 	if (copy)

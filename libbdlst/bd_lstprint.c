@@ -8,7 +8,7 @@ void	node_print(void *content)
 	}
 }
 
-void		bd_lstprint(t_bd_lst *lst)
+void		bd_lstprint(t_bd_lst *lst, void (*print)(void *))
 {
-	bd_lstiter(lst, node_print);
+	bd_lstiter(lst, print);
 }

@@ -29,12 +29,9 @@ int		update_pwd(t_prm *prm)
 //check if first argument is exist
 //if it is then is has to be added 
 
-int		cmd_cd(t_cmd *cmd) //need prm, maybe
+int		cmd_cd(t_prm *prm, t_cmd *cmd)
 {
-	t_prm *prm;
 	char *home;
-
-	prm = get_parameters(NULL);
 
 	if (sizeof_array(cmd->args) == 0 || !ft_strcmp(cmd->args[0], "~"))
 	{

@@ -41,15 +41,15 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	return (dst);
 }
 
-t_bd_lst *get_local_env(void)
+t_bd_lst *env_llist(void)
 {
 	t_prm *prm;
 
-	prm = get_parameters(0);
+	prm = get_prm(0);
 	return (prm->env_list);
 }
 
-t_prm *get_parameters(t_prm *prm)
+t_prm *get_prm(t_prm *prm)
 {
 	static t_prm *struct_ptr;
 
@@ -81,4 +81,3 @@ void	cmds_arr_create(t_prm *prm, int size)
 		throw_error("Bad alloc");
 	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
 }
-

@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/28 19:11:54 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/04/28 22:26:47 by mhufflep         ###   ########.fr       */
+/*   Created: 2020/02/12 21:36:06 by mhufflep          #+#    #+#             */
+/*   Updated: 2021/05/26 16:00:44 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
+#include "libft.h"
+
+char	*ft_strdup(const char *src)
 {
-	int	i;
+	int		length;
+	int		i;
+	char	*copy;
 
 	i = 0;
-	while (s[i] != '\0')
+	if (src == NULL)
+		return (NULL);
+	length = ft_strlen(src);
+	copy = (char *)malloc((length + 1));
+	if (copy)
 	{
-		if (s[i] == c)
-			return ((char *)&s[i]);
-		i++;
+		while (src[i] != '\0')
+		{
+			copy[i] = src[i];
+			i++;
+		}
+		copy[i] = '\0';
 	}
-	if (s[i] == c)
-		return ((char *)&s[i]);
-	return (0);
+	return (copy);
 }

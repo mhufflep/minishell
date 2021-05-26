@@ -42,6 +42,7 @@ SOURCES			=	main.c \
 					readline.c \
 					main_functions.c \
 					array_utils.c \
+					env_utils.c \
 					cmd_cd.c \
 					cmd_pwd.c \
 					cmd_env.c \

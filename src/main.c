@@ -17,12 +17,9 @@ void	history_add_node(t_prm *prm)
 int main(int argc, char **argv, char **env)
 {
 	t_prm	*prm;
-	(void)argc;
-	(void)argv;
-	(void)env;
 
 	prm = setup_settings(argc, argv, env);
-	get_parameters(prm);
+	get_prm(prm);
 	while (!prm->status)
 	{
 		history_add_node(prm);
