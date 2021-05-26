@@ -41,7 +41,6 @@ int		amount_spaces(char *str)
 
 int		parse_line(t_prm *prm)
 {
-	char *args[] = {"..", NULL};
 //--------------------------------//
 	int		i;
 	int		amount_commands;
@@ -49,7 +48,7 @@ int		parse_line(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = shell_split(prm->history_ptr->content, ";");
+	arr_commands = shell_split(prm->history_ptr->content, ';');
 	if (!arr_commands)
 		throw_error(BAD_ALLOC, 5);
 	while (arr_commands[i])
@@ -68,6 +67,7 @@ int		parse_line(t_prm *prm)
 		}
 		i++;
 	}
+	// exit(0);
 //--------------------------------//
 	int k = 0;
 	char **arr_cmd;
@@ -77,12 +77,16 @@ int		parse_line(t_prm *prm)
 	while (arr_commands[k])
 	{
 		int p = 0;
-		arr_cmd = shell_split(arr_commands[k], "|");
+		arr_cmd = shell_split(arr_commands[k], '|');
 		if (!arr_cmd)
 			throw_error(BAD_ALLOC, 6);
+		ft_putendl_fd("-------------", 1);
 		while (arr_cmd[p])
 		{
+			if (amount_spaces(arr_cmd[p]) != (int)ft_strlen(arr_cmd[p]))
+				ft_putendl_fd(arr_cmd[p], 1); // debug
 			// --- //
+			char *args[] = {"..", NULL};
 			cmd = command_create(prm->history_ptr->content, args); // cmd, args
 			new = bd_lstnew(cmd);
 			if (!new)
@@ -94,7 +98,7 @@ int		parse_line(t_prm *prm)
 		k++;
 	}
 	free_array(arr_commands);
-
+//--------------------------------//
 	// ; -> блок команд, каждый блок - отдельный список 
 	// cmd1 arg1 | cmd2 arg2 
 
