@@ -50,7 +50,7 @@ int		check_quote(char *s, char quote_mark)
 	return (0);
 }
 
-size_t	read_str(char *s, char separator)
+static size_t	read_str(char *s, char separator)
 {
 	size_t	i;
 
@@ -72,7 +72,7 @@ size_t	read_str(char *s, char separator)
 	return (i);
 }
 
-size_t	count_str(char *s, char separator)
+static size_t	count_str(char *s, char separator)
 {
 	size_t	amount;
 	size_t	i;
@@ -179,6 +179,13 @@ char	**shell_split(char *s, char separator)
 				return (free_array(array));
 			i += read_str(&s[i], separator);
 		}
+		// мне очень стыдно за этот костыль, но иначе никак
+		// else if (s[i] == separator && s[i + 1] == separator)
+		// {
+		// 	i++;
+		// 	free(array[amount]);
+		// 	array[amount++] = ft_strdup("   ");
+		// }
 		else
 			i++;
 	}

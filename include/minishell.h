@@ -37,8 +37,8 @@ typedef struct  s_cmd
 	char *cmd;				//текущая команда
 	char *options;			//опции команды
 	char **args;			//аргументы команды
-    int is_pipe : 1;		//стоит ли после команды pipe
-    int is_redirect : 1;	//стоит ли после команды redir
+    int is_pipe;		//стоит ли после команды pipe
+    int is_redirect;	//стоит ли после команды redir
 }               t_cmd;
 
 typedef struct  s_prm
@@ -129,7 +129,13 @@ t_prm		*get_parameters(t_prm *prm);
 
 /* PARSER */
 int			parse_line(t_prm *prm);
+int			is_slash(char *s, int i);
+int			check_quote(char *s, char quote_mark);
+int			escape_pair(char **str);
+int			escape_all(char **str);
+int			lexer(char *str);
 char		**shell_split(char *s, char separator);
+char		**cmd_split(char *s, char separator);
 int			delete_escape_chars(char **str);
 void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
