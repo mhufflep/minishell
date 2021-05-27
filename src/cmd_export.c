@@ -57,7 +57,7 @@ int		export_try_add(t_prm *prm, t_cmd *cmd)
 				export_add(prm, env);
 		}
 		else
-			cmd_error(cmd->cmd, cmd->args[i], "not a valid identifier");
+			cmd_error(cmd->cmd, cmd->args[i], CMD_NOT_VALID_ID);
 		env_del(env);
 		i++;
 	}

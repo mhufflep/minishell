@@ -39,6 +39,22 @@ void	free_cmd(void *content)
 		free(cmd->args);
 }
 
+void	print_cmd(t_cmd *cmd)
+{
+	int i;
+
+	i = 0;
+	ft_putstr_fd("line: ", STDOUT_FILENO);
+	ft_putstr_fd(cmd->cmd, STDOUT_FILENO);
+	while (cmd->args[i])
+	{
+		ft_putstr_fd(" ", STDOUT_FILENO);
+		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
+		i++;
+	}
+	ft_putendl_fd("", STDOUT_FILENO);
+}
+
 int		execute_block(t_prm *prm, t_bd_lst *lst)
 {
 	t_cmd *cmd;
@@ -47,6 +63,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 	while (lst != NULL)
 	{
 		cmd = (t_cmd *)lst->content;
+		print_cmd(cmd);
 		code = execute_cmd(prm, cmd);
 		lst = lst->next;
 	}

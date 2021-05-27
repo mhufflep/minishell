@@ -19,7 +19,7 @@ int		cmd_unset(t_prm *prm, t_cmd *cmd)
 			}
 		}
 		else
-			cmd_error(cmd->cmd, cmd->args[i], "not a valid identifier");
+			cmd_error(cmd->cmd, cmd->args[i], CMD_NOT_VALID_ID);
 		env_del(env);
 		i++;
 	}

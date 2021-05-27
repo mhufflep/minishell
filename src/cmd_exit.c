@@ -1,52 +1,55 @@
 #include "minishell.h"
 
-int		numeric_arg(t_cmd *cmd)
+int		is_in_range(char *arg)
 {
-	int i;
+	int res;
 
-	i = 0;
-	if (cmd->args[0][i] == '+' ||  cmd->args[0][i] == '-')
-		i++;
-	while (cmd->args[0][i] != '\0')
+	res = ft_atoi(arg);
+	if ((res == 0 && ft_strcmp(arg, "0")) || 
+		(res == -1 && ft_strcmp(arg, "-1")))
 	{
-		if (!(ft_isdigit(cmd->args[0][i])))
-		{
-			cmd_error(cmd->cmd, cmd->args[0], "numeric argument required");
-			return (-1);
-		}
-		i++;
+		return (0);
 	}
-	return (0);
+	return (1);
+}
+
+int		is_numeric(char *arg)
+{
+	if (*arg == '+' || *arg == '-')
+		arg++;
+	while (*arg)
+	{
+		if (!ft_isdigit(*arg))
+			return (0);
+		arg++;
+	}
+	return (is_in_range(arg));
 }
 
 int		cmd_exit(t_prm *prm, t_cmd *cmd)
 {
-	int res;
 	int size;
 
 	ft_putendl_fd(cmd->cmd, STDERR_FILENO);
-
 	size = sizeof_array(cmd->args);
-	if (size == 0 && !(cmd->is_pipe || cmd->is_redirect))
-	{
+	if (!cmd->is_pipe)
 		prm->enable = 0;
-	}
-	else if (size >= 1)
+	if (size >= 1)
 	{
-		if (numeric_arg(cmd) == -1)
+		if (!is_numeric(cmd->args[0]))
 		{
+			cmd_error(cmd->cmd, cmd->args[0], CMD_NOT_NUMERIC);
 			prm->exit_code = (unsigned char)-1;
-			prm->enable = 0;
 		}
 		else if (size > 1)
 		{
-			cmd_error(cmd->cmd, NULL, "too many arguments");
+			cmd_error(cmd->cmd, NULL, CMD_MANY_ARGS);
 			prm->exit_code = 1;
+			prm->enable = 1;
 		}
 		else
 		{
-			res = ft_atoi(cmd->args[0]);
-			prm->exit_code = (unsigned char)res;
+			prm->exit_code = (unsigned char)ft_atoi(cmd->args[0]);
 		}
 	}
 	return (prm->exit_code);

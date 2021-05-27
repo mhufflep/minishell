@@ -38,8 +38,8 @@ int		cmd_cd(t_prm *prm, t_cmd *cmd)
 		home = getenv("HOME");
 		if (!home)
 		{
-			cmd_error(cmd->cmd, NULL, "HOME not set");
-			return (-1111);
+			cmd_error(cmd->cmd, NULL, CMD_HOME_NOT_SET);
+			return (-1111); //CHANGE
 		}
 		prm->exit_code = chdir(home);
 	}
@@ -50,8 +50,8 @@ int		cmd_cd(t_prm *prm, t_cmd *cmd)
 	
 	if (prm->exit_code == 1)
 	{
-		cmd_error(cmd->cmd, cmd->args[0], "No such file or directory");
-		return (1111);
+		cmd_error(cmd->cmd, cmd->args[0], CMD_NO_FILE_OR_DIR);
+		return (1111); //CHANGE
 	}
 
 	update_pwd(prm);

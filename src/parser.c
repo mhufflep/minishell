@@ -56,7 +56,7 @@ int		parse_line(t_prm *prm)
 		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
         {
 			amount_commands++;
-			ft_putendl_fd(arr_commands[i], 1); // debug
+			// ft_putendl_fd(arr_commands[i], 1); // debug
 		}
 		else
 		{
@@ -83,12 +83,13 @@ int		parse_line(t_prm *prm)
 		ft_putendl_fd("-------------", 1);
 		while (arr_cmd[p])
 		{
-			if (amount_spaces(arr_cmd[p]) != (int)ft_strlen(arr_cmd[p]))
-				ft_putendl_fd(arr_cmd[p], 1); // debug
+			// if (amount_spaces(arr_cmd[p]) != (int)ft_strlen(arr_cmd[p]))
+			// 	ft_putendl_fd(arr_cmd[p], 1); // debug
 			// --- //
-			char **args = malloc(sizeof(char *) * 1);
-			args[0] = NULL;
-			// args[1] = NULL;
+			char **args = malloc(sizeof(char *) * 2);
+			args[0] = ft_strdup("-9223372036854775809");
+			args[1] = NULL; //ft_strdup("qwe");
+			// args[2] = NULL;
 			cmd = command_create(prm->history_ptr->content, args); // cmd, args
 			new = bd_lstnew(cmd);
 			if (!new)

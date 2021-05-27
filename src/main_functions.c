@@ -69,6 +69,8 @@ t_cmd	*command_create(char *cmd, char **args)
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		throw_error(BAD_ALLOC, 2);
+	new_cmd->is_pipe = 0;
+	new_cmd->is_redirect = 0;
 	new_cmd->cmd = cmd;
 	new_cmd->args = args;
 	return (new_cmd);
