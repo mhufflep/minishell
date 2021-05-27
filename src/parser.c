@@ -1,21 +1,5 @@
 #include "minishell.h"
 
-void	clear_array(char **arr)
-{
-	int i;
-
-	i = 0;
-	if (arr)
-	{
-		while (arr[i])
-		{
-			arr[i] = 0;
-			i++;
-		}
-		arr = 0;
-	}
-}
-
 int		skip_spaces(char *str)
 {
 	int	i;
@@ -25,7 +9,6 @@ int		skip_spaces(char *str)
 		i++;
 	return (i);
 }
-
 
 // int		is_separator(char c)
 // {
@@ -58,17 +41,6 @@ int		amount_spaces(char *str)
 
 int		parse_line(t_prm *prm)
 {
-	t_cmd		*cmd;
-	t_bd_lst	*new;
-
-	// char **args = malloc(sizeof(char *) * 1);
-	
-	// args[0] = NULL;
-
-	char **args = malloc(sizeof(char *) * 2);
-	args[0] = bd_strdup("123");
-	args[1] = NULL;
-
 //--------------------------------//
 	int		i;
 	int		amount_commands;
@@ -76,30 +48,62 @@ int		parse_line(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = shell_split(prm->history_ptr->content, ";");
+	arr_commands = shell_split(prm->history_ptr->content, ';');
+	if (!arr_commands)
+		throw_error(BAD_ALLOC, 5);
 	while (arr_commands[i])
 	{
 		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
         {
 			amount_commands++;
-			ft_putendl_fd(arr_commands[i], 1);
+			ft_putendl_fd(arr_commands[i], 1); // debug
 		}
 		else
 		{
 			free_array(arr_commands);
-			print_error("syntax error near unexpected token `;'");
 			prm->exit_code = 258;
+			print_error("syntax error near unexpected token `;'", prm->exit_code);
 			return (0);
 		}
 		i++;
 	}
+	// exit(0);
 //--------------------------------//
+	int k = 0;
+	char **arr_cmd;
+	t_cmd		*cmd;
+	t_bd_lst	*new;
 	cmds_arr_create(prm, amount_commands + 1);
-	cmd = command_create(prm->history_ptr->content, args);
-	new = bd_lstnew(cmd);
-	if (!new)
-		throw_error("Bad alloc");
-	bd_lstadd_back(&(prm->cmds[0]), new);
+	while (arr_commands[k])
+	{
+		int p = 0;
+		arr_cmd = shell_split(arr_commands[k], '|');
+		if (!arr_cmd)
+			throw_error(BAD_ALLOC, 6);
+		ft_putendl_fd("-------------", 1);
+		while (arr_cmd[p])
+		{
+			if (amount_spaces(arr_cmd[p]) != (int)ft_strlen(arr_cmd[p]))
+				ft_putendl_fd(arr_cmd[p], 1); // debug
+			// --- //
+			char **args = malloc(sizeof(char *) * 1);
+			args[0] = NULL;
+			// args[1] = NULL;
+			cmd = command_create(prm->history_ptr->content, args); // cmd, args
+			new = bd_lstnew(cmd);
+			if (!new)
+				throw_error(BAD_ALLOC, 7);
+			bd_lstadd_back(&(prm->cmds[k]), new);
+			p++;
+		}
+		free_array(arr_cmd);
+		k++;
+	}
+	free_array(arr_commands);
+//--------------------------------//
+	// ; -> блок команд, каждый блок - отдельный список 
+	// cmd1 arg1 | cmd2 arg2 
+
 
 	// char **arr_split_command_pipe;
 	// i = 0;
@@ -163,3 +167,6 @@ int		parse_line(t_prm *prm)
 //		все остальное это аргументы
 //		ставится флаг is_pipe = 1;
 //
+
+
+// ~ -> ft_strdup(getenv("HOME"));

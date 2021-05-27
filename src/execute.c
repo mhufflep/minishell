@@ -3,7 +3,7 @@
 int		execute_cmd(t_prm *prm, t_cmd *cmd)
 {
 	if (!bd_strcmp(CMD_EXIT, cmd->cmd))
-		return (cmd_exit(cmd));
+		return (cmd_exit(prm, cmd));
 	else if (!bd_strcmp(CMD_CD, cmd->cmd))
 		return (cmd_cd(prm, cmd));
 	else if (!bd_strcmp(CMD_ENV, cmd->cmd))
@@ -61,9 +61,9 @@ void	execute_line(t_prm *prm)
 	while (prm->cmds[i] != NULL)
 	{
 		prm->exit_code = execute_block(prm, prm->cmds[i]);
-		bd_lstclear(&(prm->cmds[i]), free_cmd);
+		// bd_lstclear(&(prm->cmds[i]), free_cmd);
 		i++;
 	}
-	free(prm->cmds); //MAY CAUSE AN ERROR
+	// free(prm->cmds); //MAY CAUSE AN ERROR
 	prm->cmds = NULL;
 }

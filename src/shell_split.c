@@ -46,27 +46,33 @@ int		check_quote(char *s, char quote_mark)
 	if (s[i] == quote_mark && !is_slash(s, i - 1))
 		return (++i);
 	else
-    {
-		exit(99);
-        printf("Сlosing quotation mark is not found.");
-    }
+		throw_error(QUOTE_NOT_FOUND, 21);
+	return (0);
 }
 
-size_t	read_str(char *s, const char *separators)
+size_t	read_str(char *s, char separator)
 {
 	size_t	i;
 
 	i = 0;
-	while (!ft_strchr(separators, s[i]) && s[i])
+	while (s[i] && (s[i] != separator || (s[i] == separator && is_slash(s, i - 1))))
 	{
-		if (s[i] && ((s[i] == QUOTE || s[i] == D_QUOTE) && !is_slash(s, i - 1)))
-			break;
+		if ((s[i] == QUOTE && !is_slash(s, i - 1)))
+		{
+			i += check_quote(&s[i], QUOTE);
+			// amount++;
+		}
+		else if ((s[i] == D_QUOTE && !is_slash(s, i - 1)))
+		{
+			i += check_quote(&s[i], D_QUOTE);
+			// amount++;
+		}
 		i++;
 	}
 	return (i);
 }
 
-size_t	count_str(char *s, const char *separators)
+size_t	count_str(char *s, char separator)
 {
 	size_t	amount;
 	size_t	i;
@@ -75,22 +81,20 @@ size_t	count_str(char *s, const char *separators)
 	i = 0;
 	while (s[i])
 	{
-		// Если текущий символ первый в строке и он равняется кавычке или если текущий символ
-		// равняется кавычке, но перед ним нет слэша, при этом индекс больше нуля
-		// и если текущий символ не равняется концу строки
-		if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
+		// Если текущий символ равняется кавычке и он не экранирован
+		if ((s[i] == QUOTE && !is_slash(s, i - 1)))
 		{
 			i += check_quote(&s[i], QUOTE);
-			amount++;
+			// amount++;
 		}
-		else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
+		else if ((s[i] == D_QUOTE && !is_slash(s, i - 1)))
 		{
 			i += check_quote(&s[i], D_QUOTE);
-			amount++;
+			// amount++;
 		}
-		else if (!ft_strchr(separators, s[i]))
+		else if (s[i] != separator || (s[i] == separator && is_slash(s, i - 1)))
 		{
-			i += read_str(&s[i], separators);
+			i += read_str(&s[i], separator);
 			amount++;
 		}
 		else
@@ -99,7 +103,45 @@ size_t	count_str(char *s, const char *separators)
 	return (amount);
 }
 
-char	**shell_split(char *s, const char *separators)
+// Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
+int		escape_pair(char **str)
+{
+	int i;
+
+	i = 0;
+	while ((*str)[i])
+	{
+		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+		{
+			if ((*str)[i + 1] == SLASH)
+				*str = remove_from(*str, i, free);
+			else if ((*str)[i + 1] == D_QUOTE)
+				*str = remove_from(*str, i, free);
+		}
+		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+			throw_error(NOT_PROVIDED, 99);
+		i++;
+	}
+	return (0);
+}
+
+int		escape_all(char **str)
+{
+	int i;
+
+	i = 0;
+	while ((*str)[i])
+	{
+		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+			*str = remove_from(*str, i, free);
+		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+			throw_error(NOT_PROVIDED, 100);
+		i++;
+	}		
+	return (0);
+}
+
+char	**shell_split(char *s, char separator)
 {
 	char	**array;
 	size_t	i;
@@ -107,33 +149,35 @@ char	**shell_split(char *s, const char *separators)
 
 	if (!s)
 		return (NULL);
-	array = (char **)malloc((count_str(s, separators) + 1) * sizeof(char *));
+	array = (char **)malloc((count_str(s, separator) + 1) * sizeof(char *));
 	if (!array)
 		return (NULL);
 	i = 0;
 	amount = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
+		// if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
+		// {
+		// 	array[amount] = ft_substr(s, i + 1, check_quote(&s[i], QUOTE) - 2);
+		// 	if (!array[amount++])
+		// 		return (free_array(array));
+		// 	i += check_quote(&s[i], QUOTE);
+		// }
+		// else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
+		// {
+		// 	array[amount] = ft_substr(s, i + 1, check_quote(&s[i], D_QUOTE) - 2);
+		// 		escape_pair(&(array[amount]));
+		// 	if (!array[amount++])
+		// 		return (free_array(array));
+		// 	i += check_quote(&s[i], D_QUOTE);
+		// }
+		if (s[i] != separator || (s[i] == separator && is_slash(s, i - 1)))
 		{
-			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], QUOTE) - 2);
+			array[amount] = ft_substr(s, i, read_str(&s[i], separator));
+			// escape_all(&(array[amount]));
 			if (!array[amount++])
 				return (free_array(array));
-			i += check_quote(&s[i], QUOTE);
-		}
-		else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
-		{
-			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], D_QUOTE) - 2);
-			if (!array[amount++])
-				return (free_array(array));
-			i += check_quote(&s[i], D_QUOTE);
-		}
-		else if (!ft_strchr(separators, s[i]))
-		{
-			array[amount] = ft_substr(s, i, read_str(&s[i], separators));
-			if (!array[amount++])
-				return (free_array(array));
-			i += read_str(&s[i], separators);
+			i += read_str(&s[i], separator);
 		}
 		else
 			i++;

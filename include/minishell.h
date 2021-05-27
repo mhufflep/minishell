@@ -19,6 +19,7 @@
 # include "get_next_line.h"
 # include "builtin.h"
 # include "bidirectional_list.h"
+# include "error_messages.h"
 
 // 0, 255, 197
 # define SHELL_NAME "e-bash"
@@ -58,9 +59,23 @@ typedef struct  s_prm
 	int cursor_pos;
 	int	line_len;
 	int	exit_code;
-	int status;
+	int enable;
 	char *line;
 	char input[5];
+
+
+	char *rc;
+	char *cd;
+	char *le;
+	char *dc;
+	char *nd;
+	char *sc;
+
+	char *im;
+	char *dm;
+	char *ei;
+	char *ed;
+	char *am;
 
 	t_term	*term;
 	t_term	*def_term;
@@ -79,8 +94,7 @@ void		read_line(t_prm *);
 void		execute_line(t_prm *);
 void		reset_parameters(t_prm *);
 
-/* HISTORY */
-int			read_history(t_prm *prm);
+/* HISTORY */int			read_history(t_prm *prm);
 int			history_add(t_bd_lst *node);
 int			history_next(t_prm *prm);
 int			history_prev(t_prm *prm);
@@ -91,7 +105,7 @@ int			save_history(t_bd_lst *node);
 int			cmd_cd(t_prm *prm, t_cmd *cmd);
 int			cmd_pwd(t_cmd *cmd);
 int			cmd_env(t_prm *prm, t_cmd *cmd);
-int			cmd_exit(t_cmd *cmd);
+int			cmd_exit(t_prm *prm, t_cmd *cmd);
 int			cmd_echo(t_cmd *cmd);
 int			cmd_unset(t_prm *prm, t_cmd *cmd);
 int			cmd_learnc(t_cmd *cmd);
@@ -116,7 +130,7 @@ void		key_tab_action(void);
 void		key_ctrl_l_action(t_prm *prm);
 void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
-void		clear_prompt(void);
+void		clear_prompt(t_prm *prm);
 
 //MOVE TO SPECIFIC AREAs
 char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
@@ -126,7 +140,7 @@ void		*free_array(char **array);
 void 		print_array(char **arr);
 void		iter_array(char **arr, void (*func)(char *));
 void		recognize_symbol(t_prm *prm);
-void	print_export_node(void *content);
+void		print_export_node(void *content);
 
 
 /* INITIALIZATION */
@@ -144,13 +158,15 @@ t_bd_lst	*env_llist(void);
 
 /* PARSER */
 int			parse_line(t_prm *prm);
-char		**shell_split(char *s, const char *separators);
+char		**shell_split(char *s, char separator);
+int			delete_escape_chars(char **str);
 void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
 
 /* ERROR */
-void		throw_error(char *msg);
-void 		print_error(char *msg);
+
+void		throw_error(char *msg, int code_status);
+void 		print_error(char *msg, int code_status);
 void		cmd_error(char *cmd, char *arg, char *msg);
 
 /* ENV_UTILS */

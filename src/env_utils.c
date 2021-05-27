@@ -45,7 +45,7 @@ t_env	*env_create(char *key, char *sep, char *val)
 
 	env = malloc(sizeof(t_env));
 	if (env == NULL)
-		throw_error("Bad alloc");
+		throw_error(BAD_ALLOC, 9);
 	env->key = bd_strdup(key);
 	env->sep = bd_strdup(sep);
 	env->val = bd_strdup(val);
@@ -100,7 +100,7 @@ char	**key_val_split(char *str, char *sep)
 	i = 0;
 	arr = malloc(sizeof(char *) * 2);
 	if (!arr)
-		throw_error("Bad alloc");
+		throw_error(BAD_ALLOC, 10);
 	ft_memset(arr, 0, sizeof(char *) * 2);
 	arr[0] = str;
 	while (str && str[i] != '\0')

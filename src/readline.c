@@ -26,7 +26,7 @@ void	read_symbol(char *input)
 
 	readed = read(0, input, 5);
 	if (readed == -1)
-		throw_error("Read error");
+		throw_error(READ_ERR, -1);
 	input[readed] = 0;
 }
 
@@ -44,7 +44,10 @@ void	read_line(t_prm *prm)
 	{
 		//print prompt name and save cursor
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
+		
+		// tputs(save_cursor, 1, ft_putchar);
 		tputs(tgetstr("sc", 0), 1, ft_putchar);
+	
 
 		//initial params
 		prm->line_len = 0;

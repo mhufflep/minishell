@@ -9,7 +9,7 @@ LIBBDLST_NAME	= libbdlst.a
 ######################### CC && FLAGS ########################
 
 CC		= gcc
-DEBUG	= -g
+DEBUG	=
 CFLAGS	= -Wall -Wextra -Werror 
 
 TERMCAP 		= -ltermcap
