@@ -1,24 +1,24 @@
 #include "minishell.h"
 
-char	*get_history_filename(void)
-{
-	char *path;
+// char	*get_history_filename(void)
+// {
+// 	char *path;
 
-	path = ft_strjoin(HISTORY_FILEPATH, HISTORY_FILENAME); //memory leak, fuck
-	return (path);
-}
+// 	path = ft_strjoin(HISTORY_FILEPATH, ); //memory leak, fuck
+// 	return (path);
+// }
 
 int		read_history(t_prm *prm)
 {
 	t_bd_lst *new;
-	char *path;
+	// char *path;
 	char *line;
 	int fd;
 	int res;
 
 	line = NULL;
-	path = get_history_filename();
-	fd = open(path, O_CREAT | O_RDONLY, 777);
+	// path = get_history_filename();
+	fd = open(HISTORY_FILENAME, O_CREAT | O_RDONLY, 777);
 	if (fd < 0)
 		return (-2);
 	res = 1;
@@ -39,18 +39,19 @@ int		read_history(t_prm *prm)
 		bd_lstclear(&(prm->history), free);
 	}
 	close(fd);
+	// free(path);
 	return (res);
 }
 
 int		history_add(t_bd_lst *node)
 {
-	char *path;
+	// char *path;
 	int fd;
 
-	path = get_history_filename();
-	if (!path)
-		return (-1);
-	fd = open(path, O_APPEND | O_WRONLY);
+	// path = get_history_filename();
+	// if (!path)
+		// return (-1);
+	fd = open(HISTORY_FILENAME, O_APPEND | O_WRONLY);
 	if (fd < 0)
 		return (-2);
 	

@@ -9,7 +9,7 @@ LIBBDLST_NAME	= libbdlst.a
 ######################### CC && FLAGS ########################
 
 CC		= gcc
-DEBUG	=
+DEBUG	= -g
 CFLAGS	= -Wall -Wextra -Werror 
 
 TERMCAP 		= -ltermcap
@@ -30,8 +30,10 @@ GNL_DIR		= get_next_line
 
 SOURCES			=	main.c \
 					shell_split.c \
+					cmd_split.c \
 					parser.c \
 					asterisk.c \
+					lexer.c \
 					remove_substr.c \
 					history.c \
 					commands.c \

@@ -23,7 +23,7 @@ int		is_numeric(char *arg)
 			return (0);
 		arg++;
 	}
-	return (is_in_range(arg));
+	return (1);
 }
 
 int		cmd_exit(t_prm *prm, t_cmd *cmd)
@@ -36,7 +36,7 @@ int		cmd_exit(t_prm *prm, t_cmd *cmd)
 		prm->enable = 0;
 	if (size >= 1)
 	{
-		if (!is_numeric(cmd->args[0]))
+		if (!is_numeric(cmd->args[0]) || !is_in_range(cmd->args[0]))
 		{
 			cmd_error(cmd->cmd, cmd->args[0], CMD_NOT_NUMERIC);
 			prm->exit_code = (unsigned char)-1;

@@ -108,11 +108,12 @@ char	**key_val_split(char *str, char *sep)
 	int i;
 
 	i = 0;
-	arr = malloc(sizeof(char *) * 2);
+	arr = malloc(sizeof(char *) * 3);
 	if (arr == NULL)
 		throw_error(BAD_ALLOC, 10);
-	ft_memset(arr, 0, sizeof(char *) * 2);
+	ft_memset(arr, 0, sizeof(char *) * 3);
 	arr[0] = str;
+	arr[2] = NULL;
 	while (str && str[i] != '\0')
 	{
 		if (ft_strchr(sep, str[i]))

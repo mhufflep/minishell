@@ -27,7 +27,6 @@
 # define SHELL_NAME "e-bash"
 # define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
 # define HISTORY_FILENAME ".e-bash_history"
-# define HISTORY_FILEPATH "./"
 # define QUOTE '\''
 # define D_QUOTE '"'
 # define SLASH '\\'
@@ -64,9 +63,9 @@ typedef struct  s_cmd
 	char *cmd;				//текущая команда
 	char *options;			//опции команды
 	char **args;			//аргументы команды
-    int is_pipe : 1;		//стоит ли после команды pipe
-    int is_redirect : 1;	//стоит ли после команды redir
-	int fd;
+	char *filename;
+    int is_pipe;			//стоит ли после команды pipe
+    int is_redirect;		//стоит ли после команды redir
 }               t_cmd;
 
 typedef struct  s_prm
@@ -182,7 +181,13 @@ t_bd_lst	*env_llist(void);
 
 /* PARSER */
 int			parse_line(t_prm *prm);
+int			is_slash(char *s, int i);
+int			check_quote(char *s, char quote_mark);
+int			escape_pair(char **str);
+int			escape_all(char **str);
+int			lexer(char *str);
 char		**shell_split(char *s, char separator);
+char		**cmd_split(char *s, char separator);
 int			delete_escape_chars(char **str);
 void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);

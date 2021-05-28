@@ -11,6 +11,7 @@ void	print_env_node(void *node)
 		ft_putstr_fd(env->key, STDOUT_FILENO);
 		ft_putstr_fd(env->sep, STDOUT_FILENO);
 		ft_putstr_fd(env->val, STDOUT_FILENO);
+		ft_putendl_fd("", STDOUT_FILENO);
 	}
 }
 

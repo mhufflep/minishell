@@ -42,11 +42,12 @@ void	*free_array(char **array)
 {
 	int	i;
 
-	i = -1;
-	while (array && array[++i])
+	i = 0;
+	while (array && array[i])
 	{
-		array[i] = 0;
 		free(array[i]);
+		array[i] = 0;
+		i++;
 	}
 	if (array)
 		free(array);

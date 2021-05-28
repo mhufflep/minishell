@@ -33,10 +33,11 @@ void	free_cmd(void *content)
 	cmd = (t_cmd *)content;
 	if (cmd->cmd)
 		free(cmd->cmd);
-	while (cmd->args && cmd->args[i])
+	while (cmd->args[i])
 		free(cmd->args[i++]);
 	if (cmd->args)
 		free(cmd->args);
+	free(cmd);
 }
 
 void	print_cmd(t_cmd *cmd)
@@ -78,9 +79,9 @@ void	execute_line(t_prm *prm)
 	while (prm->cmds[i] != NULL)
 	{
 		prm->exit_code = execute_block(prm, prm->cmds[i]);
-		// bd_lstclear(&(prm->cmds[i]), free_cmd);
+		bd_lstclear(&(prm->cmds[i]), free_cmd);
 		i++;
 	}
-	// free(prm->cmds); //MAY CAUSE AN ERROR
+	free(prm->cmds); //MAY CAUSE AN ERROR
 	prm->cmds = NULL;
 }

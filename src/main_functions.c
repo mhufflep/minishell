@@ -85,6 +85,27 @@ t_prm *get_prm(t_prm *prm)
 
 // Fixed: New symbol does not print correctly. It is print into current cursor position.
 // Problem could appear while writing the rest of the line after printing new symbol.
+
+// MAIN FUNCTIONS
+
+char **array_copy(char **proto, char *(*copy_func)(const char *))
+{
+	char **copy;
+	int i;
+	int size;
+
+	i = 0;
+	size = sizeof_array(proto);
+	copy = malloc(sizeof(char *) * (size + 1));
+	while (proto[i])
+	{
+		copy[i] = copy_func(proto[i]);
+		i++;
+	}
+	copy[i] = NULL;
+	return (copy);
+}
+
 t_cmd	*command_create(char *cmd, char **args)
 {
 	t_cmd *new_cmd;
@@ -93,9 +114,8 @@ t_cmd	*command_create(char *cmd, char **args)
 	if (!new_cmd)
 		throw_error(BAD_ALLOC, 2);
 	new_cmd->is_pipe = 0;
-	new_cmd->is_redirect = 0;
-	new_cmd->cmd = cmd;
-	new_cmd->args = args;
+	new_cmd->cmd = ft_strdup(cmd);
+	new_cmd->args = array_copy(args, ft_strdup);
 	return (new_cmd);
 }
 

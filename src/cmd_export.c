@@ -75,7 +75,7 @@ int		cmd_export(t_prm *prm, t_cmd *cmd)
 		lst_copy = bd_lstcopy(prm->env_list, env_dup);
 		bd_lstsort_merge(&(lst_copy), env_cmp);
 		bd_lstiter(lst_copy, print_export_node);
-		bd_lstclear(&lst_copy, free);
+		bd_lstclear(&lst_copy, env_del);
 	}
 	else
 	{

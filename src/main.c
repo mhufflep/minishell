@@ -24,8 +24,8 @@ int main(int argc, char **argv, char **env)
 		printf("got: %s\n", (char *)prm->history_ptr->content);
 		history_add(bd_lstlast(prm->history));
 		if (parse_line(prm))
-			expander(prm);
-		execute_line(prm);
+			execute_line(prm);
+		// expander(prm);
 	}
 	reset_parameters(prm);
 	return (prm->exit_code);

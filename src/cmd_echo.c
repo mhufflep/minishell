@@ -5,7 +5,7 @@ int is_option(char *opt, char *valid_opt)
 	int i;
 
 	i = 1;
-	if (opt || opt[0] != '-')
+	if (!opt || opt[0] != '-')
 		return (0);
 	while (opt[i] != '\0')
 	{
@@ -18,7 +18,7 @@ int is_option(char *opt, char *valid_opt)
 
 int		cmd_echo(t_cmd *cmd)
 {
-	if (cmd->args && is_option(cmd->args[0], "n"))
+	if (is_option(cmd->args[0], "n"))
 	{
 		print_array(&cmd->args[1]);
 	}

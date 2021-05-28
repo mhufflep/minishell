@@ -26,8 +26,9 @@ void		increase_lvl(void)
 	}
 }
 
-int setup_env_lists(t_prm *prm)
+int	setup_env_lists(t_prm *prm)
 {
+	// (void)prm;
 	prm->env_list = bd_parse_from_arr(prm->env, copy_to_env);
 	return (0);
 }
@@ -78,7 +79,7 @@ t_prm	*setup_settings(int argc, char **argv, char **env)
 	setup_caps(prm);
 	setup_env_lists(prm);
 	read_history(prm);
-	increase_lvl();
+	// increase_lvl();
 	prm->enable = 1;
 	return (prm);
 }

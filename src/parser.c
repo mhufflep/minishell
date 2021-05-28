@@ -39,9 +39,61 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
-int		parse_line(t_prm *prm)
+int split_on_pipe(t_prm *prm, char **arr_commands)
 {
-//--------------------------------//
+	int i = 0;
+	char **arr_pipe;
+	t_cmd		*cmd;
+	t_bd_lst	*new;
+	while (arr_commands[i])
+	{
+		int p = 0;
+		arr_pipe = shell_split(arr_commands[i], '|');
+		if (!arr_pipe)
+			throw_error(BAD_ALLOC, 6);
+		// ---- //
+		printf("-------------\n");
+		// ---- //
+		while (arr_pipe[p])
+		{
+			if (amount_spaces(arr_pipe[p]) != (int)ft_strlen(arr_pipe[p]))
+				printf("|%s|\n", arr_pipe[p]); // debug
+			else
+			{
+				free_array(arr_pipe);
+				free_array(arr_commands);
+				prm->exit_code = 258;
+				print_error(SYNTAX_ERROR_PIPE, -42);
+				return (0);
+			}
+			char **arr_args = cmd_split(arr_pipe[p], ' ');
+			if (!arr_args)
+				throw_error(BAD_ALLOC, 7);
+			// ---- //
+			printf("===================\n");
+			for (int z = 0; arr_args[z]; z++) // deubg
+				printf("|%s|\n", arr_args[z]);
+			// --- //
+			cmd = command_create(arr_args[0], &arr_args[1]); // cmd, args
+			// command_add()
+			cmd->is_pipe = 0;
+			new = bd_lstnew(cmd);
+			if (!new)
+				throw_error(BAD_ALLOC, 7);
+			bd_lstadd_back(&(prm->cmds[i]), new);
+			
+			free_array(arr_args);
+			p++;
+		}
+		free_array(arr_pipe);
+		i++;
+	}
+	free_array(arr_commands);
+	return (1);
+}
+
+int split_on_semicolon(t_prm *prm)
+{
 	int		i;
 	int		amount_commands;
 	char	**arr_commands;
@@ -54,54 +106,34 @@ int		parse_line(t_prm *prm)
 	while (arr_commands[i])
 	{
 		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
-        {
 			amount_commands++;
-			// ft_putendl_fd(arr_commands[i], 1); // debug
-		}
 		else
 		{
 			free_array(arr_commands);
 			prm->exit_code = 258;
-			print_error("syntax error near unexpected token `;'", prm->exit_code);
+			print_error(SYNTAX_ERROR_SEMICOLON, -42);
 			return (0);
 		}
 		i++;
 	}
+	cmds_arr_create(prm, amount_commands + 1);
+	if (!split_on_pipe(prm, arr_commands))
+		return (0);
+	else
+		return (1);
+}
+
+int		parse_line(t_prm *prm)
+{
+//--------------------------------//
+
+	if (!lexer(prm->history_ptr->content))
+		return (0);
+	if (!split_on_semicolon(prm))
+		return (0);
+
 	// exit(0);
 //--------------------------------//
-	int k = 0;
-	char **arr_cmd;
-	t_cmd		*cmd;
-	t_bd_lst	*new;
-	cmds_arr_create(prm, amount_commands + 1);
-	while (arr_commands[k])
-	{
-		int p = 0;
-		arr_cmd = shell_split(arr_commands[k], '|');
-		if (!arr_cmd)
-			throw_error(BAD_ALLOC, 6);
-		ft_putendl_fd("-------------", 1);
-		while (arr_cmd[p])
-		{
-			// if (amount_spaces(arr_cmd[p]) != (int)ft_strlen(arr_cmd[p]))
-			// 	ft_putendl_fd(arr_cmd[p], 1); // debug
-			// --- //
-			char **args = malloc(sizeof(char *) * 1);
-
-			// args[0] = ft_strdup("-9223372036854775809");
-			args[0] = NULL; //ft_strdup("qwe");
-			// args[2] = NULL;
-			cmd = command_create(prm->history_ptr->content, args); // cmd, args
-			new = bd_lstnew(cmd);
-			if (!new)
-				throw_error(BAD_ALLOC, 7);
-			bd_lstadd_back(&(prm->cmds[k]), new);
-			p++;
-		}
-		free_array(arr_cmd);
-		k++;
-	}
-	free_array(arr_commands);
 //--------------------------------//
 	// ; -> блок команд, каждый блок - отдельный список 
 	// cmd1 arg1 | cmd2 arg2 
