@@ -31,8 +31,8 @@ void	*free_array(char **array)
 	i = -1;
 	while (array && array[++i])
 	{
-		array[i] = 0;
 		free(array[i]);
+		array[i] = 0;
 	}
 	if (array)
 		free(array);
