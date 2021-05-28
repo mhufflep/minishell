@@ -75,7 +75,6 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			else
 			{
 				free_array(arr_pipe);
-				free_array(arr_commands);
 				prm->exit_code = 258;
 				print_error(SYNTAX_ERROR_PIPE, -42);
 				return (0);
