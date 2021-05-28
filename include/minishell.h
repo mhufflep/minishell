@@ -158,12 +158,14 @@ void		*free_array(char **array);
 void 		print_array(char **arr);
 void		iter_array(char **arr, void (*func)(char *));
 
-//MOVE TO SPECIFIC AREAs
+//MOVE TO SPECIFIC AREAS
+char		*insert_into2(char **src, char *add, int index, void (*free_ctl)(void *));
 char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
 char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
 void		print_export_node(void *content);
-
+char 		*asterisk(char *pattern);
+int			expander(t_prm *prm);
 
 /* INIT */
 t_prm		*setup_settings(int argc, char **argv, char **env);

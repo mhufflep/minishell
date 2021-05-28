@@ -10,6 +10,8 @@ void	history_add_node(t_prm *prm)
 	prm->history_ptr = bd_lstlast(prm->history);
 }
 
+//reader -> lexer -> parser -> expander -> executor
+
 int main(int argc, char **argv, char **env)
 {
 	t_prm	*prm;
@@ -22,7 +24,8 @@ int main(int argc, char **argv, char **env)
 		printf("got: %s\n", (char *)prm->history_ptr->content);
 		history_add(bd_lstlast(prm->history));
 		if (parse_line(prm))
-			execute_line(prm);
+			expander(prm);
+		execute_line(prm);
 	}
 	reset_parameters(prm);
 	return (prm->exit_code);

@@ -33,7 +33,7 @@ int		cmd_cd(t_cmd *cmd)
 		}
 		dir = env->val;
 	}
-	else if (!ft_strcmp(cmd->args[0], "~"))
+	else if (!ft_strcmp(cmd->args[0], "~")) //THIS SHOULD BE IN EXPANDER !!!!!!!!
 		dir = env_get_val("HOME");
 	else
 		dir = cmd->args[0];

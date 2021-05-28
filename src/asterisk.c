@@ -28,6 +28,7 @@ int		starts_with_dot(char *path)
 {
 	return (path && path[0] == '.');
 }
+
 // int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
 // {
 
@@ -87,7 +88,7 @@ char *asterisk(char *pattern)
 
 	current = getcwd(NULL, 0);
 
-    dir = opendir("../");
+    dir = opendir(current);
     if (!dir) {
         perror("diropen");
         exit(1);
@@ -107,18 +108,17 @@ char *asterisk(char *pattern)
 			else
 				sep = "";
 		
-			res = strjoin_sep(res, sep, entry->d_name);
+			res = ft_strjoin_sep(res, sep, entry->d_name);
 			free(tmp);
 		}
     };
-	printf("%s\n", res);
-
     closedir(dir);
+	return (res);
 };
 
-int main(void)
-{
-	char *pattern = "*";
-	asterisk(pattern);
-	return (0);
-}
+// int main(void)
+// {
+// 	char *pattern = "*";
+// 	asterisk(pattern);
+// 	return (0);
+// }
