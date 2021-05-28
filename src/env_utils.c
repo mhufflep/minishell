@@ -17,7 +17,7 @@ void	env_del(void *node)
 	}
 }
 
-void	*env_copy(void *node)
+void	*env_dup(void *node)
 {
 	t_env *env;
 
@@ -28,7 +28,17 @@ void	*env_copy(void *node)
 		return (NULL);
 }
 
-void	*env_parse(void *str)
+void	*copy_from_env(void *node)
+{
+	t_env *env;
+
+	env = (t_env *)node;
+	if (env == NULL)
+		return (NULL);
+	return (ft_strjoin_sep(env->key, env->sep, env->val));
+}
+
+void	*copy_to_env(void *str)
 {
 	char **arr;
 	t_env *env;
@@ -61,7 +71,7 @@ int		env_cmp(void *data1, void *data2, size_t n)
 	env2 = (t_env *)data2;
 	if (env1 && env2)
 		return (ft_strncmp(env1->key, env2->key, n));
-	else return (9999);
+	else return (9999); //CHANGE
 }
 
 t_env	*env_get_local(char *key)
@@ -99,7 +109,7 @@ char	**key_val_split(char *str, char *sep)
 
 	i = 0;
 	arr = malloc(sizeof(char *) * 2);
-	if (!arr)
+	if (arr == NULL)
 		throw_error(BAD_ALLOC, 10);
 	ft_memset(arr, 0, sizeof(char *) * 2);
 	arr[0] = str;

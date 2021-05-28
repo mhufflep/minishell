@@ -5,9 +5,9 @@ int		execute_cmd(t_prm *prm, t_cmd *cmd)
 	if (!bd_strcmp(CMD_EXIT, cmd->cmd))
 		return (cmd_exit(prm, cmd));
 	else if (!bd_strcmp(CMD_CD, cmd->cmd))
-		return (cmd_cd(prm, cmd));
+		return (cmd_cd(cmd));
 	else if (!bd_strcmp(CMD_ENV, cmd->cmd))
-		return (cmd_env(prm, cmd));
+		return (cmd_env(cmd));
 	else if (!bd_strcmp(CMD_PWD, cmd->cmd))
 		return (cmd_pwd(cmd));
 	else if (!bd_strcmp(CMD_ECHO, cmd->cmd))

@@ -15,7 +15,6 @@ int main(int argc, char **argv, char **env)
 	t_prm	*prm;
 
 	prm = setup_settings(argc, argv, env);
-	get_prm(prm);
 	while (prm->enable)
 	{
 		history_add_node(prm);

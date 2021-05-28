@@ -20,7 +20,7 @@ SRCS	=	ft_atoi.c		ft_bzero.c		ft_isalnum.c \
 			ft_putchar_fd.c	ft_itoa.c 		ft_substr.c \
 			ft_putstr_fd.c	ft_putendl_fd.c	ft_putnbr_fd.c \
 			ft_strjoin.c	ft_strtrim.c 	ft_strmapi.c \
-			ft_realloc_str.c ft_split.c 
+			ft_realloc_str.c ft_split.c		ft_strjoin_sep.c \
 
 SRCS_B	= 	ft_lstmap.c \
 			ft_lstnew.c \

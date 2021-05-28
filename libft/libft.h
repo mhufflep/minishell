@@ -6,7 +6,7 @@
 /*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 19:38:51 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/13 13:08:50 by mhufflep         ###   ########.fr       */
+/*   Updated: 2021/05/28 11:01:52 by mhufflep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int					ft_strcmp(const char *str1, const char *str2);
 int					ft_putchar(int c);
 char				*ft_realloc_str(char *src, size_t size);
 char				*ft_strjoin_free(char *dst, char *src);
+char				*ft_strjoin_sep(char *s1, char *sep, char *s2);
 /*
 **PART 2 FUNCTIONS
 */

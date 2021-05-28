@@ -1,25 +1,27 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <unistd.h>
 # include <fcntl.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
 
 # include <term.h>
-# include <termios.h>
-# include <signal.h>
-# include <sys/ioctl.h>
 # include <errno.h>
+# include <signal.h>
+# include <termios.h>
+
+# include <sys/stat.h>
 # include <sys/wait.h>
+# include <sys/ioctl.h>
 
 # include "libft.h"
+# include "builtin.h"
 # include "shell_keys.h"
 # include "get_next_line.h"
-# include "builtin.h"
-# include "bidirectional_list.h"
 # include "error_messages.h"
+# include "bidirectional_list.h"
 
 // 0, 255, 197
 # define SHELL_NAME "e-bash"
@@ -33,6 +35,22 @@
 # define ENV_SEP "="
 
 typedef struct termios t_term;
+
+typedef struct	s_caps
+{
+	char *rc;
+	char *cd;
+	char *le;
+	char *dc;
+	char *nd;
+	char *sc;
+
+	char *im;
+	char *dm;
+	char *ei;
+	char *ed;
+	char *am;
+}				t_caps;
 
 typedef struct	s_env
 {
@@ -77,6 +95,8 @@ typedef struct  s_prm
 	char *ed;
 	char *am;
 
+	t_caps	caps; //remove?
+
 	t_term	*term;
 	t_term	*def_term;
 
@@ -102,9 +122,9 @@ int			save_history(t_bd_lst *node);
 
 
 /* BUILTIN */
-int			cmd_cd(t_prm *prm, t_cmd *cmd);
+int			cmd_cd(t_cmd *cmd);
 int			cmd_pwd(t_cmd *cmd);
-int			cmd_env(t_prm *prm, t_cmd *cmd);
+int			cmd_env(t_cmd *cmd);
 int			cmd_exit(t_prm *prm, t_cmd *cmd);
 int			cmd_echo(t_cmd *cmd);
 int			cmd_unset(t_prm *prm, t_cmd *cmd);
@@ -116,7 +136,7 @@ int			cmd_not_found(t_cmd *cmd);
 
 /* TERMINAL */
 void		change_term_settings(t_term *term);
-int			setup_terminal(t_prm	*prm);
+int			setup_terminal(t_prm *prm);
 t_term		*create_term_struct(void);
 
 /* KEYS */
@@ -132,18 +152,20 @@ void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
 void		clear_prompt(t_prm *prm);
 
-//MOVE TO SPECIFIC AREAs
-char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
-char		*remove_from(char *src, int index, void (*free_ctl)(void *));
+/* ARRAY */
 int			sizeof_array(char **arr);
 void		*free_array(char **array);
 void 		print_array(char **arr);
 void		iter_array(char **arr, void (*func)(char *));
+
+//MOVE TO SPECIFIC AREAs
+char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
+char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
 void		print_export_node(void *content);
 
 
-/* INITIALIZATION */
+/* INIT */
 t_prm		*setup_settings(int argc, char **argv, char **env);
 int			setup_env_lists(t_prm	*prm);
 int			setup_parameters(t_prm **prm);
@@ -164,19 +186,20 @@ void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
 
 /* ERROR */
-
 void		throw_error(char *msg, int code_status);
 void 		print_error(char *msg, int code_status);
 void		cmd_error(char *cmd, char *arg, char *msg);
 
 /* ENV_UTILS */
 void		env_del(void *node);
-void		*env_copy(void *node);
-void		*env_parse(void *str);
+void		*env_dup(void *node);
+char		*env_get_val(char *key);
+t_env		*env_get_local(char *key);
 t_env		*env_create(char *key, char *sep, char *val);
 int			env_cmp(void *data1, void *data2, size_t n);
-t_env		*env_get_local(char *key);
-char		*env_get_val(char *key);
 int			env_valid(t_env *env);
+
+void		*copy_to_env(void *str);
+void		*copy_from_env(void *node);
 
 #endif

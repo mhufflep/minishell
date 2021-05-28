@@ -7,9 +7,9 @@ int		cmd_unset(t_prm *prm, t_cmd *cmd)
 	int i;
 
 	i = 0;
-	while (cmd && cmd->args && cmd->args[i])
+	while (cmd->args[i])
 	{
-		env = env_parse(cmd->args[i]);
+		env = copy_to_env(cmd->args[i]);
 		if (env_valid(env))
 		{
 			found = bd_lstfind(prm->env_list, env, bd_strlen(env->key), env_cmp);
@@ -19,7 +19,9 @@ int		cmd_unset(t_prm *prm, t_cmd *cmd)
 			}
 		}
 		else
+		{
 			cmd_error(cmd->cmd, cmd->args[i], CMD_NOT_VALID_ID);
+		}
 		env_del(env);
 		i++;
 	}
