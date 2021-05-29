@@ -71,7 +71,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 	return (code);
 }
 
-void	execute_line(t_prm *prm)
+void	executor(t_prm *prm)
 {
 	int i;
 

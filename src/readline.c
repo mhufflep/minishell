@@ -38,7 +38,7 @@ int		is_endinput(char *input)
 			!ft_strcmp(input, KEY_CTRL_D));
 }
 
-void	read_line(t_prm *prm)
+void	reader(t_prm *prm)
 {	
 	while (SEREGA_LEZHIT_V_BOLNITSE)
 	{

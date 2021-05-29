@@ -131,7 +131,7 @@ int split_on_semicolon(t_prm *prm)
 	return (1);
 }
 
-int		parse_line(t_prm *prm)
+int		parser(t_prm *prm)
 {
 	if (!lexer(prm->history_ptr->content))
 		return (0);

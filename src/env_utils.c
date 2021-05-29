@@ -97,7 +97,7 @@ char	*env_get_val(char *key)
 	
 	env = env_get_local(key);
 	if (env != NULL)
-		return (env->key);
+		return (env->val);
 	else
 		return (getenv(key));
 }
