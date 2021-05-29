@@ -34,7 +34,7 @@ int		lexer(char *str)
 		return (0);
 	while (str[i])
 	{
-		if (str[i] == ';' && (!str[i + 1] || str[i + 1] == ';'))
+		if (str[i] == ';' && str[i + 1] == ';')
 		{
 			print_error(SYNTAX_ERROR_SEMICOLON, 0);
 			return (0);

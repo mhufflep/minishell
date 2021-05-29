@@ -34,7 +34,6 @@ SOURCES			=	main.c \
 					parser.c \
 					asterisk.c \
 					lexer.c \
-					remove_substr.c \
 					history.c \
 					commands.c \
 					execute.c \

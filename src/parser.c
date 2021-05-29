@@ -5,7 +5,7 @@
 void	skip_spaces(char *str, int *i)
 {
 	while (str[*i] == ' ')
-		*i++;
+		(*i)++;
 }
 
 // int		is_separator(char c)
@@ -40,7 +40,7 @@ int		amount_spaces(char *str)
 t_bd_lst	*parse_redirect(char **str)
 {
 	int	i;
-	int index;
+	// int index;
 	int	is_quote;
 	int	is_redirect;
 	t_bd_lst	*head;
@@ -51,26 +51,27 @@ t_bd_lst	*parse_redirect(char **str)
 	i = 0;
 	is_quote = 0;
 	is_redirect = 0;
-	while (*str[i])
+	while ((*str)[i])
 	{
 		skip_spaces(*str, &i);
-		if (*str[i] == '>')
+		if ((*str)[i] == '>')
 		{
 			is_redirect = TRUNC;
 			*str = remove_from(*str, i, free);
-			if (*str[i] == '>')
+			if ((*str)[i] == '>')
 			{
 				is_redirect = APPEND;
 				*str = remove_from(*str, i, free);
 			}
 			skip_spaces(*str, &i);
 			// index = i;
-			filename = ft_substr(*str, i, go_to_end_word(*str));
+			filename = ft_substr(*str, i, go_to_end_word(&(*str)[i]));
+			printf("!%s!\n", filename);
 			new = bd_lstnew(filename);
 			if (!new)
 				throw_error(BAD_ALLOC, 10);
 			bd_lstadd_back(&head, new);
-			replace_by(str, "", i, go_to_end_word(*str), free);
+			replace_by(str, i, go_to_end_word(&(*str)[i]), "", free);
 		}
 		i++;
 	}
@@ -126,7 +127,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 
 			t_cmd *cmd = cmd_create();
 			if (amount_spaces(arr_pipe[j]) != (int)ft_strlen(arr_pipe[j]))
-				printf("|%s|\n", arr_pipe[j]); // debug
+				printf("\n|%s|\n", arr_pipe[j]); // debug
 			else
 			{
 				free_array(arr_pipe);
@@ -135,6 +136,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 				return (0);
 			}
 			t_bd_lst *fns = parse_redirect(&(arr_pipe[j]));
+			printf("|%s|\n", arr_pipe[j]);
 			arr_args = cmd_split(arr_pipe[j], ' ');
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);

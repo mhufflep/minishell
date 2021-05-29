@@ -61,14 +61,16 @@ char	**cmd_split(char *s, char separator)
 	amount = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] && (s[i] == QUOTE && !is_slash(s, i - 1)))
+		if (s[i] == QUOTE && !is_slash(s, i - 1))
 		{
+			// if (i != 0 && s[i - 1] != ' ')
+			// 	s = insert_into(s, "\\", i - 1, free);
 			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], QUOTE) - 2);
 			if (!array[amount++])
 				return (free_array(array));
 			i += check_quote(&s[i], QUOTE);
 		}
-		else if (s[i] && (s[i] == D_QUOTE && !is_slash(s, i - 1)))
+		else if (s[i] == D_QUOTE && !is_slash(s, i - 1))
 		{
 			array[amount] = ft_substr(s, i + 1, check_quote(&s[i], D_QUOTE) - 2);
 			escape_pair(&(array[amount]));

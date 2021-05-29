@@ -162,6 +162,7 @@ void		clear_prompt(t_prm *prm);
 
 /* ARRAY */
 int			sizeof_array(char **arr);
+char		**array_copy(char **proto, char *(*copy_func)(const char *));
 void		*free_array(char **array);
 void 		print_array(char **arr);
 void		iter_array(char **arr, void (*func)(char *));
