@@ -53,6 +53,7 @@ SOURCES			=	main.c \
 					cmd_echo.c \
 					cmd_exit.c \
 					cmd_unset.c \
+					cmd_clear.c \
 					cmd_export.c \
 					cmd_history.c \
 					cmd_usercmd.c \

@@ -46,7 +46,7 @@ void	reader(t_prm *prm)
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
 		
 		// tputs(save_cursor, 1, ft_putchar);
-		tputs(tgetstr("sc", 0), 1, ft_putchar);
+		tputs(prm->caps.sc, 1, ft_putchar);
 	
 
 		//initial params

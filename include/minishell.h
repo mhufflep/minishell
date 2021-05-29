@@ -131,6 +131,7 @@ int			cmd_pwd(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd);
 int			cmd_exit(t_prm *prm, t_cmd *cmd);
 int			cmd_echo(t_cmd *cmd);
+int			cmd_clear(t_cmd *cmd);
 int			cmd_unset(t_prm *prm, t_cmd *cmd);
 int			cmd_learnc(t_cmd *cmd);
 int			cmd_export(t_prm *prm, t_cmd *cmd);
@@ -169,6 +170,8 @@ char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
 void		print_export_node(void *content);
 char 		*asterisk(char *pattern);
+int is_option(char *opt, char *valid_opt);
+void 	clrscr(void);
 
 /* INIT */
 t_prm		*setup_settings(int argc, char **argv, char **env);

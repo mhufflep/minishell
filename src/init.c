@@ -52,18 +52,17 @@ int setup_terminal(t_prm *prm)
 
 void	setup_caps(t_prm *prm)
 {
-	prm->rc = tgetstr("rc", 0);		//restore cursor
-	prm->sc = tgetstr("sc", 0);		//save cursor
-	prm->cd = tgetstr("cd", 0);		//
-	prm->dc = tgetstr("dc", 0);		//delete one character
-	prm->le = tgetstr("le", 0);		//move cursor left
-	prm->nd = tgetstr("nd", 0);		//move cursor right
-
-	prm->im = tgetstr("im", 0);		//enter insert mode
-	prm->dm = tgetstr("dm", 0);		//enter delete mode
-	prm->ei = tgetstr("ei", 0);		//exit insert mode
-	prm->ed = tgetstr("ed", 0);		//exit delete mode
-	prm->am = tgetstr("am", 0);		//auto-margin (auto-moving carriage)
+	prm->caps.rc = tgetstr("rc", 0);		//restore cursor
+	prm->caps.sc = tgetstr("sc", 0);		//save cursor
+	prm->caps.cd = tgetstr("cd", 0);		//
+	prm->caps.dc = tgetstr("dc", 0);		//delete one character
+	prm->caps.le = tgetstr("le", 0);		//move cursor left
+	prm->caps.nd = tgetstr("nd", 0);		//move cursor right
+	prm->caps.im = tgetstr("im", 0);		//enter insert mode
+	prm->caps.dm = tgetstr("dm", 0);		//enter delete mode
+	prm->caps.ei = tgetstr("ei", 0);		//exit insert mode
+	prm->caps.ed = tgetstr("ed", 0);		//exit delete mode
+	prm->caps.am = tgetstr("am", 0);		//auto-margin (auto-moving carriage)
 }
 
 t_prm	*setup_settings(int argc, char **argv, char **env)
