@@ -33,6 +33,9 @@
 
 # define ENV_SEP "="
 
+# define TRUNC 1
+# define APPEND 2
+
 typedef struct termios t_term;
 
 typedef struct	s_caps
@@ -60,12 +63,12 @@ typedef struct	s_env
 
 typedef struct  s_cmd
 {
-	char *cmd;				//текущая команда
-	char *options;			//опции команды
-	char **args;			//аргументы команды
-	char *filename;
-    int is_pipe;			//стоит ли после команды pipe
-    int is_redirect;		//стоит ли после команды redir
+	char		*cmd;				//текущая команда
+	char		*options;			//опции команды
+	char		**args;				//аргументы команды
+    int			is_pipe;			//стоит ли после команды pipe
+    int			is_redirect;		//стоит ли после команды redir, если значение 2 - значит двойной
+	t_bd_lst	*filenames;
 }               t_cmd;
 
 typedef struct  s_prm
