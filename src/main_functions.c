@@ -22,6 +22,28 @@ char *insert_into2(char **src, char *add, int index, void (*free_ctl)(void *))
 	return (dst);
 }
 
+char *replace_by(char **src, int index, int len, char *add, void (*free_ctl)(void *))
+{
+	char	*dst;
+	int		src_len;
+	int		add_len;
+
+	src_len = ft_strlen(*src);
+	add_len = ft_strlen(add);
+
+	dst = (char *)malloc((src_len - len + add_len) * sizeof(char));
+	if (dst == NULL)
+		throw_error(BAD_ALLOC, 0);
+	ft_memset(dst, 0, src_len - len + add_len);
+	ft_strlcpy(dst, *src, index + 1);
+	ft_strlcpy(&dst[index], add, add_len + 1);
+	ft_strlcpy(&dst[index + add_len], &(*src)[index + len], src_len - index - len + 1);
+	if (free_ctl != NULL)
+		free_ctl(*src);
+	*src = dst;
+	return (dst);
+}
+
 
 char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 {
@@ -57,7 +79,7 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	dst = (char *)malloc((len) * sizeof(char));
 	if (dst == NULL)
 		throw_error(BAD_ALLOC, 6);
-	ft_strlcpy(dst, src, index + 1); //hello world 
+	ft_strlcpy(dst, src, index + 1);
 	ft_strlcpy(&dst[index], &src[index + 1], len - index);
 	if (free_ctl != NULL)
 		free_ctl(src);

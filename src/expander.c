@@ -78,10 +78,7 @@ int expander(t_prm *prm)
 	while (prm->cmds[i] != NULL)
 	{
 		exp_execute_block(prm->cmds[i]);
-		// bd_lstclear(&(prm->cmds[i]), free_cmd);
 		i++;
 	}
-	// free(prm->cmds); //MAY CAUSE AN ERROR
-	// prm->cmds = NULL;
 	return (0);
 }

@@ -22,8 +22,8 @@ void	clear_prompt(t_prm *prm)
 	// 	printf("rc!!!\n");
 	// if (!cd)
 	// 	printf("cd!!!\n");
-	tputs(prm->rc, 1, ft_putchar);
-	tputs(prm->cd, 1, ft_putchar);
+	tputs(prm->caps.rc, 1, ft_putchar);
+	tputs(prm->caps.cd, 1, ft_putchar);
 	// tputs(restore_cursor, 1, ft_putchar);
 	// tputs(clr_eos, 1, ft_putchar);
 }
@@ -58,7 +58,7 @@ void	key_left_action(t_prm *prm)
 	{
 		prm->cursor_pos--;
 		// tputs(cursor_left, 1, ft_putchar);
-		tputs(prm->le, 1, ft_putchar);
+		tputs(prm->caps.le, 1, ft_putchar);
 	}
 }
 
@@ -68,7 +68,7 @@ void	key_right_action(t_prm *prm)
 	{
 		prm->cursor_pos++;
 		// tputs(cursor_right, 1, ft_putchar);
-		tputs(prm->nd, 1, ft_putchar);	
+		tputs(prm->caps.nd, 1, ft_putchar);	
 	}
 }
 
@@ -98,15 +98,15 @@ void	key_bspace_action(t_prm *prm)
 		// tputs(enter_delete_mode, 1, ft_putchar);
 
 		// tputs(cursor_left, 1, ft_putchar);
-		tputs(prm->dm, 1, ft_putchar);
+		// tputs(prm->caps.dm, 1, ft_putchar);
 
-		tputs(prm->le, 1, ft_putchar);
+		tputs(prm->caps.le, 1, ft_putchar);
 
 		cursor_save();
 
-		tputs(prm->dc, 1, ft_putchar);
+		tputs(prm->caps.dc, 1, ft_putchar);
 
-		tputs(prm->ed, 1, ft_putchar);
+		// tputs(prm->caps.ed, 1, ft_putchar);
 		
 		// tputs(delete_character, 1, ft_putchar);
 		
@@ -122,10 +122,15 @@ void	key_bspace_action(t_prm *prm)
 	}
 }
 
+void 	clrscr(void)
+{
+	ft_putstr_fd("\e[1;1H\e[2J\n", STDOUT_FILENO);
+}
+
 void	key_ctrl_l_action(t_prm *prm)
 {
 	(void)prm;
-	printf("\e[1;1H\e[2J\n");
+	clrscr();
 }
 
 void	key_other_action(t_prm *prm)
@@ -137,7 +142,7 @@ void	key_other_action(t_prm *prm)
 		prm->line_len += bd_strlen(prm->input);
 		prm->cursor_pos += bd_strlen(prm->input);	
 	}
-	tputs(prm->am, 1, ft_putchar);
+	tputs(prm->caps.am, 1, ft_putchar);
 
 	tputs(enter_insert_mode, 1, ft_putchar);
 	

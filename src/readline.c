@@ -38,7 +38,7 @@ int		is_endinput(char *input)
 			!ft_strcmp(input, KEY_CTRL_D));
 }
 
-void	read_line(t_prm *prm)
+void	reader(t_prm *prm)
 {	
 	while (SEREGA_LEZHIT_V_BOLNITSE)
 	{
@@ -46,7 +46,7 @@ void	read_line(t_prm *prm)
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
 		
 		// tputs(save_cursor, 1, ft_putchar);
-		tputs(tgetstr("sc", 0), 1, ft_putchar);
+		tputs(prm->caps.sc, 1, ft_putchar);
 	
 
 		//initial params
