@@ -7,6 +7,7 @@ CFLAGS	= -Wall -Wextra -Werror
 INCLUDE = -I./
 	
 OBJ_DIR = obj
+SRC_DIR = src
 
 SRCS	=	bd_utils.c \
 			bd_lstmap.c \
@@ -35,7 +36,7 @@ OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 all: create_dir $(NAME)
 
-$(OBJ_DIR)/%.o: %.c $(HEADER)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
 	@$(CC) $(CFLAGS) -c $< $(INCLUDE) -o $@
 
 $(NAME): $(OBJS) $(HEADER)

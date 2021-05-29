@@ -79,9 +79,7 @@ int		cmd_export(t_prm *prm, t_cmd *cmd)
 	}
 	else
 	{
-		printf("export add start\n");
 		prm->exit_code = export_try_add(prm, cmd);
-		printf("export add end\n");
 	}
 	return (0);
 }

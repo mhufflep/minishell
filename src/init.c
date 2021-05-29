@@ -9,7 +9,7 @@ int		setup_parameters(t_prm **prm)
 	return (0);
 }
 
-void		increase_lvl(void)
+void		increase_lvl(t_prm *prm)
 {
 	t_env *shlvl;
 	int res;
@@ -24,11 +24,16 @@ void		increase_lvl(void)
 			shlvl->val = ft_itoa(res + 1);
 		}
 	}
+	else
+	{
+		shlvl = env_create("SHLVL", ENV_SEP, "1");
+		export_add(prm, shlvl);
+		env_del(shlvl);
+	}
 }
 
 int	setup_env_lists(t_prm *prm)
 {
-	// (void)prm;
 	prm->env_list = bd_parse_from_arr(prm->env, copy_to_env);
 	return (0);
 }
@@ -39,14 +44,14 @@ int setup_terminal(t_prm *prm)
 
 	term_name = getenv("TERM");
 	if (tgetent(0, term_name) < 1)
-		exit(12); //CHANGE
+		exit(1);
 	prm->term = create_term_struct();
 	prm->def_term = create_term_struct();
 	if (prm->term == NULL || prm->def_term == NULL)
-		exit(-1);	//CHANGE
+		exit(1);
 	change_term_settings(prm->term);
 	if (tcsetattr(0, TCSANOW, prm->term) == -1)
-		exit(-1); //CHANGE
+		exit(1);
 	return (0);
 }
 
@@ -78,7 +83,7 @@ t_prm	*setup_settings(int argc, char **argv, char **env)
 	setup_caps(prm);
 	setup_env_lists(prm);
 	read_history(prm);
-	// increase_lvl();
+	increase_lvl(prm);
 	prm->enable = 1;
 	return (prm);
 }

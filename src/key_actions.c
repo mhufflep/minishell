@@ -96,7 +96,6 @@ void	key_bspace_action(t_prm *prm)
 	{
 		// tputs(tgetstr("dm", 0), 1, ft_putchar);
 		// tputs(enter_delete_mode, 1, ft_putchar);
-
 		// tputs(cursor_left, 1, ft_putchar);
 		// tputs(prm->caps.dm, 1, ft_putchar);
 
@@ -107,11 +106,8 @@ void	key_bspace_action(t_prm *prm)
 		tputs(prm->caps.dc, 1, ft_putchar);
 
 		// tputs(prm->caps.ed, 1, ft_putchar);
-		
 		// tputs(delete_character, 1, ft_putchar);
-		
 		// tputs(exit_delete_mode, 1, ft_putchar);
-
 		// tputs(tgetstr("ed", 0), 1, ft_putchar);
 		
 		prm->cursor_pos--;

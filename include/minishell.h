@@ -216,4 +216,7 @@ int			env_valid(t_env *env);
 void		*copy_to_env(void *str);
 void		*copy_from_env(void *node);
 
+int		export_update(t_env *found, t_env *replacer);
+int		export_add(t_prm *prm, t_env *env);
+
 #endif

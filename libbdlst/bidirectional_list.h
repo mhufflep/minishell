@@ -17,7 +17,7 @@ char					*bd_strdup(const char *src);
 int						bd_strcmp(const char *s1, const char *s2);
 	
 
-void		bd_lstinsert(t_bd_lst **cur, t_bd_lst *new); //I still have this one?
+void		bd_lstinsert(t_bd_lst **cur, t_bd_lst *new);
 t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)());
 
 void		bd_lstdelone(t_bd_lst *lst, void (*del)(void*));
@@ -31,8 +31,7 @@ int			bd_lstsize(t_bd_lst *lst);
 void		bd_lstadd_front(t_bd_lst **lst, t_bd_lst *new);
 void		bd_lstadd_back(t_bd_lst **lst, t_bd_lst *new);
 void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *));
-// void		bd_lstdelone(t_bd_lst **head, t_bd_lst *lst, void (*del)(void*));
-// void		bd_lstclear(t_bd_lst **lst, void (*del)(void*));
+
 void		bd_lstiter(t_bd_lst *lst, void (*f)(void *));
 void		*def_cont_copy(void *content);
 void		bd_lstprint(t_bd_lst *lst, void (*print)(void *));
