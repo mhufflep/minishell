@@ -106,14 +106,19 @@ typedef struct  s_prm
 	t_bd_lst	**cmds; //массив листов команд, в поле content каждой будет лежать t_cmd *
 }               t_prm;
 
+void		reader(t_prm *);
+int			lexer(char *str);
+int			parser(t_prm *);
+void		executor(t_prm *);
+int			expander(t_prm *);
+
 
 /* MAIN FUNCTIONS */
 t_prm		*setup_settings(int, char **, char **);
-void		read_line(t_prm *);
-void		execute_line(t_prm *);
 void		reset_parameters(t_prm *);
 
-/* HISTORY */int			read_history(t_prm *prm);
+/* HISTORY */
+int			read_history(t_prm *prm);
 int			history_add(t_bd_lst *node);
 int			history_next(t_prm *prm);
 int			history_prev(t_prm *prm);
@@ -164,7 +169,6 @@ char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
 void		print_export_node(void *content);
 char 		*asterisk(char *pattern);
-int			expander(t_prm *prm);
 
 /* INIT */
 t_prm		*setup_settings(int argc, char **argv, char **env);
@@ -180,12 +184,12 @@ t_bd_lst	*env_llist(void);
 
 
 /* PARSER */
-int			parse_line(t_prm *prm);
+
 int			is_slash(char *s, int i);
 int			check_quote(char *s, char quote_mark);
 int			escape_pair(char **str);
 int			escape_all(char **str);
-int			lexer(char *str);
+
 char		**shell_split(char *s, char separator);
 char		**cmd_split(char *s, char separator);
 int			delete_escape_chars(char **str);

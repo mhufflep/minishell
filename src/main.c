@@ -20,12 +20,12 @@ int main(int argc, char **argv, char **env)
 	while (prm->enable)
 	{
 		history_add_node(prm);
-		read_line(prm);
+		reader(prm);
 		printf("got: %s\n", (char *)prm->history_ptr->content);
 		history_add(bd_lstlast(prm->history));
-		if (parse_line(prm))
-			execute_line(prm);
-		// expander(prm);
+		if (parser(prm))
+			expander(prm);
+		executor(prm);
 	}
 	reset_parameters(prm);
 	return (prm->exit_code);
