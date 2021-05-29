@@ -5,9 +5,9 @@ static size_t	read_str(char *s, char separator)
 	size_t	i;
 
 	i = 0;
-	while (s[i] != separator && s[i])
+	while (s[i] && s[i] != separator)
 	{
-		if (s[i] && ((s[i] == QUOTE || s[i] == D_QUOTE) && !is_slash(s, i - 1)))
+		if ((s[i] == QUOTE || s[i] == D_QUOTE) && !is_slash(s, i - 1))
 			break;
 		i++;
 	}
@@ -34,7 +34,7 @@ static size_t	count_str(char *s, char separator)
 			i += check_quote(&s[i], D_QUOTE);
 			amount++;
 		}
-		else if (s[i] != separator || (s[i] == separator && is_slash(s, i - 1)))
+		else if (s[i] != separator)
 		{
 			i += read_str(&s[i], separator);
 			amount++;
@@ -76,7 +76,7 @@ char	**cmd_split(char *s, char separator)
 				return (free_array(array));
 			i += check_quote(&s[i], D_QUOTE);
 		}
-		else if (s[i] != separator || (s[i] == separator && is_slash(s, i - 1)))
+		else if (s[i] != separator && !(s[i] == SLASH  && s[i + 1] == ' '))
 		{
 			array[amount] = ft_substr(s, i, read_str(&s[i], separator));
 			escape_all(&(array[amount]));
