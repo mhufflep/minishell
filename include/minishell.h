@@ -158,7 +158,11 @@ void		key_tab_action(void);
 void		key_ctrl_l_action(t_prm *prm);
 void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
+void		key_home_action(t_prm *prm);
+void		key_end_action(t_prm *prm);
 void		clear_prompt(t_prm *prm);
+
+
 
 /* ARRAY */
 int			sizeof_array(char **arr);
@@ -166,6 +170,7 @@ char		**array_copy(char **proto, char *(*copy_func)(const char *));
 void		*free_array(char **array);
 void 		print_array(char **arr);
 void		iter_array(char **arr, void (*func)(char *));
+
 
 //MOVE TO SPECIFIC AREAS
 char		*insert_into2(char **src, char *add, int index, void (*free_ctl)(void *));
@@ -221,5 +226,7 @@ void		*copy_from_env(void *node);
 
 int		export_update(t_env *found, t_env *replacer);
 int		export_add(t_prm *prm, t_env *env);
+
+
 
 #endif

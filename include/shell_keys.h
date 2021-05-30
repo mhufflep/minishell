@@ -10,6 +10,8 @@
 # define KEY_ENTER			"\n"
 # define KEY_CTRL_D			"\4"
 # define KEY_CTRL_L			"\f"
+# define KEY_HOME			"\e[H"
+# define KEY_END			"\e[F"
 # define DELETE_CURS_BORD "\x1b[0J"
 
 # define SEREGA_LEZHIT_V_BOLNITSE 1

@@ -28,6 +28,7 @@ char				*ft_strrchr(const char *s, int c);
 char				*ft_strnstr(const char *hstack, const char *ndl, size_t n);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_atoi(const char *s);
+int					ft_isspace(int c);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 int					ft_isalnum(int c);
@@ -38,6 +39,7 @@ int					ft_tolower(int c);
 void				*ft_calloc(size_t count, size_t type_size);
 char				*ft_strdup(const char *src);
 
+char				*ft_strjoin_sepf(char *s1, char *sep, char *s2);
 int					ft_strcmp(const char *str1, const char *str2);
 int					ft_putchar(int c);
 char				*ft_realloc_str(char *src, size_t size);

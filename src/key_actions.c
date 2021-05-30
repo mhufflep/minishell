@@ -62,6 +62,21 @@ void	key_left_action(t_prm *prm)
 	}
 }
 
+void	key_home_action(t_prm *prm)
+{
+	prm->cursor_pos = 0;
+	tputs(prm->caps.rc, 1, ft_putchar);
+}
+
+void	key_end_action(t_prm *prm)
+{
+	while (prm->cursor_pos != prm->line_len)
+	{
+		prm->cursor_pos++;
+		tputs(prm->caps.nd, 1, ft_putchar);	
+	}
+}
+
 void	key_right_action(t_prm *prm)
 {
 	if (prm->cursor_pos < prm->line_len)

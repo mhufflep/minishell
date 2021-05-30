@@ -1,6 +1,6 @@
 #include "libft.h"
 
-char *ft_strjoin_sep(char *s1, char *sep, char *s2)
+char	*ft_strjoin_sep(char *s1, char *sep, char *s2)
 {
 	int		len_first;
 	int		len_second;
@@ -20,4 +20,14 @@ char *ft_strjoin_sep(char *s1, char *sep, char *s2)
 	ft_memmove(&res[len_first + len_sep], s2, len_second);
 	res[len_first + len_second + len_sep] = '\0';
 	return (res);
+}
+
+char	*ft_strjoin_sepf(char *s1, char *sep, char *s2)
+{
+	char *tmp;
+
+	tmp = s1;
+	s1 = ft_strjoin_sep(s1, sep, s2);
+	free(tmp);
+	return (s1);
 }

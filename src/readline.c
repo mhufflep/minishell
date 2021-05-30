@@ -14,6 +14,10 @@ void	recognize_symbol(t_prm *prm)
 		key_left_action(prm);
 	else if (!ft_strcmp(prm->input, KEY_ARROW_R))
 		key_right_action(prm);
+	else if (!ft_strcmp(prm->input, KEY_HOME))
+		key_home_action(prm);
+	else if (!ft_strcmp(prm->input, KEY_END))
+		key_end_action(prm);
 	else if (!ft_strcmp(prm->input, KEY_CTRL_L))
 		key_ctrl_l_action(prm);
 	else
