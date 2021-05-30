@@ -33,6 +33,9 @@
 
 # define ENV_SEP "="
 
+# define TRUNC 1
+# define APPEND 2
+
 typedef struct termios t_term;
 
 typedef struct	s_caps
@@ -60,12 +63,12 @@ typedef struct	s_env
 
 typedef struct  s_cmd
 {
-	char *cmd;				//текущая команда
-	char *options;			//опции команды
-	char **args;			//аргументы команды
-	char *filename;
-    int is_pipe;			//стоит ли после команды pipe
-    int is_redirect;		//стоит ли после команды redir
+	char		*cmd;				//текущая команда
+	char		*options;			//опции команды
+	char		**args;				//аргументы команды
+    int			is_pipe;			//стоит ли после команды pipe
+    int			is_redirect;		//стоит ли после команды redir, если значение 2 - значит двойной
+	t_bd_lst	*filenames;
 }               t_cmd;
 
 typedef struct  s_prm
@@ -159,6 +162,7 @@ void		clear_prompt(t_prm *prm);
 
 /* ARRAY */
 int			sizeof_array(char **arr);
+char		**array_copy(char **proto, char *(*copy_func)(const char *));
 void		*free_array(char **array);
 void 		print_array(char **arr);
 void		iter_array(char **arr, void (*func)(char *));
@@ -167,6 +171,7 @@ void		iter_array(char **arr, void (*func)(char *));
 char		*insert_into2(char **src, char *add, int index, void (*free_ctl)(void *));
 char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
 char		*remove_from(char *src, int index, void (*free_ctl)(void *));
+char		*replace_by(char **src, int index, int len, char *add, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
 void		print_export_node(void *content);
 char 		*asterisk(char *pattern);
@@ -189,13 +194,11 @@ t_bd_lst	*env_llist(void);
 /* PARSER */
 
 int			is_slash(char *s, int i);
-int			check_quote(char *s, char quote_mark);
 int			escape_pair(char **str);
 int			escape_all(char **str);
-
-char		**shell_split(char *s, char separator);
+// char		**shell_split(char *s, char separator);
 char		**cmd_split(char *s, char separator);
-int			delete_escape_chars(char **str);
+int			check_quote(char *s, char quote_mark, char separator);
 void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
 

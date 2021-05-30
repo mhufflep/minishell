@@ -78,7 +78,7 @@ void	executor(t_prm *prm)
 	int i;
 
 	i = 0;
-	while (prm->cmds[i] != NULL)
+	while (prm->cmds && prm->cmds[i] != NULL)
 	{
 		prm->exit_code = execute_block(prm, prm->cmds[i]);
 		bd_lstclear(&(prm->cmds[i]), free_cmd);

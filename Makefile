@@ -29,12 +29,11 @@ GNL_DIR		= get_next_line
 ######################### SOURCES ############################
 
 SOURCES			=	main.c \
-					shell_split.c \
+					split_utils.c \
 					cmd_split.c \
 					parser.c \
 					asterisk.c \
 					lexer.c \
-					remove_substr.c \
 					history.c \
 					commands.c \
 					execute.c \

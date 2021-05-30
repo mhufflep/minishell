@@ -1,13 +1,11 @@
 #include "minishell.h"
 
-int		skip_spaces(char *str)
-{
-	int	i;
+// char *replace_by(char **src, char *add, int index, int len, void (*free_ctl)(void *));
 
-	i = 0;
-	while (str[i] == ' ')
-		i++;
-	return (i);
+void	skip_spaces(char *str, int *i)
+{
+	while (str[*i] == ' ')
+		(*i)++;
 }
 
 // int		is_separator(char c)
@@ -15,12 +13,12 @@ int		skip_spaces(char *str)
 // 	return (c != ' ' || c != '<' || c != '>' || c != '|' | c != ';' | c != '$');
 // }
 
-int		go_to_separator(char *str)
+int		go_to_end_word(char *str)
 {
 	int i;
 
 	i = 0;
-	while (!ft_strchr(" <>|;$", str[i]))
+	while (!ft_strchr(" >", str[i]))
 		i++;
 	return (i);
 }
@@ -39,6 +37,65 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
+t_bd_lst	*parse_redirect(char **str)
+{
+	int	i;
+	// int index;
+	int	is_quote;
+	int	is_redirect;
+	t_bd_lst	*head;
+	t_bd_lst	*new;
+	char		*filename;
+
+	head = NULL;
+	i = 0;
+	is_quote = 0;
+	is_redirect = 0;
+	while ((*str)[i])
+	{
+		skip_spaces(*str, &i);
+		if ((*str)[i] == '>')
+		{
+			is_redirect = TRUNC;
+			*str = remove_from(*str, i, free);
+			if ((*str)[i] == '>')
+			{
+				is_redirect = APPEND;
+				*str = remove_from(*str, i, free);
+			}
+			skip_spaces(*str, &i);
+			// index = i;
+			filename = ft_substr(*str, i, go_to_end_word(&(*str)[i]));
+			printf("!%s!\n", filename);
+			new = bd_lstnew(filename);
+			if (!new)
+				throw_error(BAD_ALLOC, 10);
+			bd_lstadd_back(&head, new);
+			replace_by(str, i, go_to_end_word(&(*str)[i]), "", free);
+		}
+		i++;
+	}
+	return (head);
+}
+
+t_cmd *cmd_create(void)
+{
+	t_cmd *cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		throw_error(BAD_ALLOC, 7);
+	ft_memset(cmd, 0, sizeof(t_cmd));
+	return (cmd);
+}
+
+void	cmd_fill(t_cmd *node, char *cmd, char **args, t_bd_lst *fns)
+{
+	node->cmd = ft_strdup(cmd);
+	node->args = array_copy(args, ft_strdup);
+	node->filenames = fns;
+}
+
 int	add_cmd_node(t_prm *prm, char **arr_args, int i)
 {
 	t_cmd		*cmd;
@@ -48,7 +105,7 @@ int	add_cmd_node(t_prm *prm, char **arr_args, int i)
 	cmd->is_pipe = 1;
 	new = bd_lstnew(cmd);
 	if (!new)
-		throw_error(BAD_ALLOC, 7);
+		throw_error(BAD_ALLOC, 11);
 	bd_lstadd_back(&(prm->cmds[i]), new);
 	return (1);
 }
@@ -62,32 +119,33 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 	while (arr_commands[i])
 	{
 		j = 0;
-		arr_pipe = shell_split(arr_commands[i], '|');
+		arr_pipe = cmd_split(arr_commands[i], '|');
 		if (!arr_pipe)
-			throw_error(BAD_ALLOC, 6);
-		// ---- //
-		printf("-------------\n");
-		// ---- //
+			throw_error(BAD_ALLOC, 12);
 		while (arr_pipe[j])
 		{
+
+			t_cmd *cmd = cmd_create();
 			if (amount_spaces(arr_pipe[j]) != (int)ft_strlen(arr_pipe[j]))
-				printf("|%s|\n", arr_pipe[j]); // debug
+				printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
 			else
 			{
 				free_array(arr_pipe);
 				prm->exit_code = 258;
-				print_error(SYNTAX_ERROR_PIPE, -42);
+				print_error(SYNTAX_ERROR_PIPE, 0);
 				return (0);
 			}
+			t_bd_lst *fns = parse_redirect(&(arr_pipe[j]));
+			printf("|%s|\n", arr_pipe[j]);
 			arr_args = cmd_split(arr_pipe[j], ' ');
 			if (!arr_args)
-				throw_error(BAD_ALLOC, 7);
+				throw_error(BAD_ALLOC, 13);
 			// ---- //
-			printf("===================\n");
 			for (int z = 0; arr_args[z]; z++) // deubg
-				printf("|%s|\n", arr_args[z]);
+				printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
 			// --- //
-			add_cmd_node(prm, arr_args, i);
+			cmd_fill(cmd, arr_args[0], &arr_args[1], fns);
+			// add_cmd_node(prm, arr_args, i);
 			free_array(arr_args);
 			j++;
 		}
@@ -106,9 +164,9 @@ int split_on_semicolon(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = shell_split(prm->history_ptr->content, ';');
+	arr_commands = cmd_split(prm->history_ptr->content, ';');
 	if (!arr_commands)
-		throw_error(BAD_ALLOC, 5);
+		throw_error(BAD_ALLOC, 14);
 	while (arr_commands[i])
 	{
 		if (amount_spaces(arr_commands[i]) != (int)ft_strlen(arr_commands[i]))
@@ -117,7 +175,7 @@ int split_on_semicolon(t_prm *prm)
 		{
 			free_array(arr_commands);
 			prm->exit_code = 258;
-			print_error(SYNTAX_ERROR_SEMICOLON, -42);
+			print_error(SYNTAX_ERROR_SEMICOLON, 0);
 			return (0);
 		}
 		i++;

@@ -3,7 +3,7 @@
 void 	print_error(char *msg, int code_status)
 {
 	ft_putendl_fd(msg, STDERR_FILENO);
-	if (code_status != -42)
+	if (code_status != 0)
 	{
 		ft_putstr_fd("CODE STATUS: ", STDOUT_FILENO);
 		ft_putendl_fd(ft_itoa(code_status), STDOUT_FILENO);

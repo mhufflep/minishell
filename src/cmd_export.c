@@ -33,7 +33,7 @@ int		export_add(t_prm *prm, t_env *env)
 
 	new = bd_lstnew(env_dup(env));
 	if (new == NULL)
-		throw_error(BAD_ALLOC, 8);
+		throw_error(BAD_ALLOC, 1);
 	bd_lstadd_back(&prm->env_list, new);
 	return (0);
 }

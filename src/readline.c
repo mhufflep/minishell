@@ -26,7 +26,7 @@ void	read_symbol(char *input)
 
 	readed = read(0, input, 5);
 	if (readed == -1)
-		throw_error(READ_ERR, -1);
+		throw_error(READ_ERR, 0);
 	input[readed] = 0;
 }
 

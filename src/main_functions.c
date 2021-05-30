@@ -11,7 +11,7 @@ char *insert_into2(char **src, char *add, int index, void (*free_ctl)(void *))
 
 	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
 	if (dst == NULL)
-		throw_error(BAD_ALLOC, 0);
+		throw_error(BAD_ALLOC, 4);
 	ft_memset(dst, 0, src_len + add_len + 1);
 	ft_strlcpy(dst, *src, index + 1);
 	ft_strlcpy(&dst[index], add, add_len + 1);
@@ -56,7 +56,7 @@ char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 
 	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
 	if (dst == NULL)
-		throw_error(BAD_ALLOC, 0);
+		throw_error(BAD_ALLOC, 5);
 	ft_memset(dst, 0, src_len + add_len + 1);
 	ft_strlcpy(dst, src, index + 1);
 	ft_strlcpy(&dst[index], add, add_len + 1);
@@ -78,7 +78,7 @@ char *remove_from(char *src, int index, void (*free_ctl)(void *))
 	len = ft_strlen(src);
 	dst = (char *)malloc((len) * sizeof(char));
 	if (dst == NULL)
-		throw_error(BAD_ALLOC, 1);
+		throw_error(BAD_ALLOC, 6);
 	ft_strlcpy(dst, src, index + 1);
 	ft_strlcpy(&dst[index], &src[index + 1], len - index);
 	if (free_ctl != NULL)
@@ -134,7 +134,7 @@ t_cmd	*command_create(char *cmd, char **args)
 
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
-		throw_error(BAD_ALLOC, 2);
+		throw_error(BAD_ALLOC, 7);
 	new_cmd->is_pipe = 0;
 	new_cmd->cmd = ft_strdup(cmd);
 	new_cmd->args = array_copy(args, ft_strdup);
@@ -145,6 +145,6 @@ void	cmds_arr_create(t_prm *prm, int size)
 {
 	prm->cmds = malloc(sizeof(t_bd_lst *) * size);
 	if (!prm->cmds)
-		throw_error(BAD_ALLOC, 3);
+		throw_error(BAD_ALLOC, 8);
 	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
 }

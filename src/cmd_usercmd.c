@@ -8,13 +8,13 @@ int		cmd_usercmd(t_cmd *cmd)
 
 	int code;
 	// char **env = bd_parse_to_arr(env_llist(), copy_from_env);
-	t_env *path = env_get_local("PATH");
-	char **bin = ft_split(path->val, ":");
+	// t_env *path = env_get_local("PATH");
+	// char **bin = ft_split(path->val, ":");
 
-	for (int i = 0; bin[i]; i++)
-	{
-		printf("bin[%d]:|%s|\n", i, bin[i]);
-	}
+	// for (int i = 0; bin[i]; i++)
+	// {
+	// 	printf("bin[%d]:|%s|\n", i, bin[i]);
+	// }
 	
 	code = cmd_not_found(cmd);
 
