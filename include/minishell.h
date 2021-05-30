@@ -194,13 +194,11 @@ t_bd_lst	*env_llist(void);
 /* PARSER */
 
 int			is_slash(char *s, int i);
-int			check_quote(char *s, char quote_mark);
 int			escape_pair(char **str);
 int			escape_all(char **str);
-
-char		**shell_split(char *s, char separator);
+// char		**shell_split(char *s, char separator);
 char		**cmd_split(char *s, char separator);
-int			delete_escape_chars(char **str);
+int			check_quote(char *s, char quote_mark, char separator);
 void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char *cmd, char **args);
 

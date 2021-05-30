@@ -119,7 +119,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 	while (arr_commands[i])
 	{
 		j = 0;
-		arr_pipe = shell_split(arr_commands[i], '|');
+		arr_pipe = cmd_split(arr_commands[i], '|');
 		if (!arr_pipe)
 			throw_error(BAD_ALLOC, 12);
 		while (arr_pipe[j])
@@ -127,7 +127,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 
 			t_cmd *cmd = cmd_create();
 			if (amount_spaces(arr_pipe[j]) != (int)ft_strlen(arr_pipe[j]))
-				printf("\n|%s|\n", arr_pipe[j]); // debug
+				printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
 			else
 			{
 				free_array(arr_pipe);
@@ -142,7 +142,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 				throw_error(BAD_ALLOC, 13);
 			// ---- //
 			for (int z = 0; arr_args[z]; z++) // deubg
-				printf("-|%s|-\n", arr_args[z]);
+				printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
 			// --- //
 			cmd_fill(cmd, arr_args[0], &arr_args[1], fns);
 			// add_cmd_node(prm, arr_args, i);
@@ -164,7 +164,7 @@ int split_on_semicolon(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = shell_split(prm->history_ptr->content, ';');
+	arr_commands = cmd_split(prm->history_ptr->content, ';');
 	if (!arr_commands)
 		throw_error(BAD_ALLOC, 14);
 	while (arr_commands[i])
