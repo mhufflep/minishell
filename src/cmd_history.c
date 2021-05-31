@@ -9,7 +9,7 @@ int	cmd_history(t_prm *prm, t_cmd *cmd)
 	tmp = prm->history;
 	if (sizeof_array(cmd->args) != 0)
 	{
-		cmd_error(cmd->cmd, cmd->args[0], CMD_NOT_SUPPORTED);
+		cmd_error(cmd->args[0], cmd->args[1], CMD_NOT_SUPPORTED);
 		return (-1);
 	}
 	while (tmp)

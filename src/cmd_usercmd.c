@@ -6,7 +6,7 @@ int		cmd_usercmd(t_cmd *cmd)
 	//If all execve calls returned 0, (-1) then command not found.
 	//Check if the directory has necessary binary file.
 
-	int code;
+	int code = 0;
 	char **env = bd_parse_to_arr(env_llist(), copy_from_env);
 	// t_env *path = env_get_local("PATH");
 	// char **bin = ft_split(path->val, ":");
@@ -22,7 +22,9 @@ int		cmd_usercmd(t_cmd *cmd)
 
 	///////////////////////////////////////////////
 
-	pid_t pid = fork();
+	pid_t pid;
+
+	pid = fork();
 	if ( pid == -1 )
 	{
 		ft_putstr_fd("fork failed", STDERR_FILENO);
@@ -30,20 +32,20 @@ int		cmd_usercmd(t_cmd *cmd)
 	}
 	else if ( pid == 0 )
 	{
-		code = execve(cmd->cmd, cmd->args, env);
+		code = execve(cmd->args[0], cmd->args, env);
 		if (code == -1)
 		{
-			cmd_error(cmd->cmd, cmd->args[0], strerror(errno)); //need to test error following to other
+			cmd_error(cmd->args[0], cmd->args[0], strerror(errno)); //need to test error following to other
 			exit(127);
  		}
-		return EXIT_FAILURE;
+		// return EXIT_FAILURE;
 	}
 
 	int status;
 	if ( waitpid(pid, &status, 0) == -1 )
 	{
 		ft_putstr_fd("waitpid failed", STDERR_FILENO);
-		return EXIT_FAILURE;
+		// return EXIT_FAILURE;
 	}
 
 	if ( WIFEXITED(status) )
@@ -52,12 +54,9 @@ int		cmd_usercmd(t_cmd *cmd)
 		printf("exit status was %d\n", es);
 	}
 
-	return EXIT_SUCCESS;
-
-	////////////////////////////////////////////////
-
+	code = cmd_not_found(cmd);
 	printf("exit code: %d\n", code);
-
 	free_array(env);
+
 	return (code);
 }

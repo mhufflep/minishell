@@ -128,7 +128,7 @@ char **array_copy(char **proto, char *(*copy_func)(const char *))
 	return (copy);
 }
 
-t_cmd	*command_create(char *cmd, char **args)
+t_cmd	*command_create(char **args)
 {
 	t_cmd *new_cmd;
 
@@ -136,7 +136,7 @@ t_cmd	*command_create(char *cmd, char **args)
 	if (!new_cmd)
 		throw_error(BAD_ALLOC, 7);
 	new_cmd->is_pipe = 0;
-	new_cmd->cmd = ft_strdup(cmd);
+	// new_cmd->args[0] = ft_strdup(cmd);
 	new_cmd->args = array_copy(args, ft_strdup);
 	return (new_cmd);
 }

@@ -46,8 +46,8 @@ int replace(t_cmd *cmd)
 	int i;
 
 	i = 0;
-	replace_tilda(&cmd->cmd);
-	replace_asterisk(&cmd->cmd);
+	replace_tilda(&cmd->args[0]);
+	replace_asterisk(&cmd->args[0]);
 	while (cmd->args[i] != NULL)
 	{
 		replace_tilda(&cmd->args[i]);

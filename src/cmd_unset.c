@@ -6,7 +6,7 @@ int		cmd_unset(t_prm *prm, t_cmd *cmd)
 	t_env		*env;
 	int i;
 
-	i = 0;
+	i = 1;
 	while (cmd->args[i])
 	{
 		env = copy_to_env(cmd->args[i]);
@@ -20,7 +20,7 @@ int		cmd_unset(t_prm *prm, t_cmd *cmd)
 		}
 		else
 		{
-			cmd_error(cmd->cmd, cmd->args[i], CMD_NOT_VALID_ID);
+			cmd_error(cmd->args[0], cmd->args[i], CMD_NOT_VALID_ID);
 		}
 		env_del(env);
 		i++;

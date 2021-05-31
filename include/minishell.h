@@ -64,7 +64,6 @@ typedef struct	s_env
 
 typedef struct  s_cmd
 {
-	char		*cmd;				//текущая команда
 	char		*options;			//опции команды
 	char		**args;				//аргументы команды
     int			is_pipe;			//стоит ли после команды pipe
@@ -204,7 +203,7 @@ int			escape_all(char **str);
 char		**cmd_split(char *s, char separator);
 int			check_quote(char *s, char quote_mark, char separator);
 void		cmds_arr_create(t_prm *prm, int size);
-t_cmd		*command_create(char *cmd, char **args);
+t_cmd		*command_create(char **args);
 
 /* ERROR */
 void		throw_error(char *msg, int code_status);
