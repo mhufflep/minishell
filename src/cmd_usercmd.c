@@ -54,8 +54,6 @@ int		cmd_usercmd(t_cmd *cmd)
 	char **env = bd_parse_to_arr(env_llist(), copy_from_env);
 	t_env *path = env_get_local("PATH");
 	char **bin;
-	
-	
 
 	//Check if cmd is a directory
 
