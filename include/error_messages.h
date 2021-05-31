@@ -17,4 +17,5 @@
 # define CMD_MANY_ARGS		"too many arguments"
 # define CMD_NOT_VALID_ID	"not a valid identifier"
 # define CMD_NOT_FOUND		"command not found"
+# define CMD_IS_DIR			"is a directory"
 #endif

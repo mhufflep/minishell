@@ -40,7 +40,7 @@ void	print_cmd(t_cmd *cmd)
 	int i;
 
 	i = 1;
-	ft_putstr_fd("line: ", STDOUT_FILENO);
+	ft_putstr_fd("CURRENT COMMAND: ", STDOUT_FILENO);
 	ft_putstr_fd(cmd->args[0], STDOUT_FILENO);
 	while (cmd->args[i])
 	{
