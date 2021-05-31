@@ -2,43 +2,36 @@
 
 int		execute_cmd(t_prm *prm, t_cmd *cmd)
 {
-	if (!bd_strcmp(CMD_EXIT, cmd->cmd))
+	if (!bd_strcmp(CMD_EXIT, cmd->args[0]))
 		return (cmd_exit(prm, cmd));
-	else if (!bd_strcmp(CMD_CD, cmd->cmd))
+	else if (!bd_strcmp(CMD_CD, cmd->args[0]))
 		return (cmd_cd(cmd));
-	else if (!bd_strcmp(CMD_ENV, cmd->cmd))
+	else if (!bd_strcmp(CMD_ENV, cmd->args[0]))
 		return (cmd_env(cmd));
-	else if (!bd_strcmp(CMD_PWD, cmd->cmd))
+	else if (!bd_strcmp(CMD_PWD, cmd->args[0]))
 		return (cmd_pwd(cmd));
-	else if (!bd_strcmp(CMD_ECHO, cmd->cmd))
+	else if (!bd_strcmp(CMD_ECHO, cmd->args[0]))
 		return (cmd_echo(cmd));
-	else if (!bd_strcmp(CMD_UNSET, cmd->cmd))
+	else if (!bd_strcmp(CMD_UNSET, cmd->args[0]))
 		return (cmd_unset(prm, cmd));
-	else if (!bd_strcmp(CMD_CLEAR, cmd->cmd))
-		return (cmd_clear(cmd));
-	else if (!bd_strcmp(CMD_EXPORT, cmd->cmd))
+	else if (!bd_strcmp(CMD_CLEAR, cmd->args[0]))
+		return (cmd_clear(prm, cmd));
+	else if (!bd_strcmp(CMD_EXPORT, cmd->args[0]))
 		return (cmd_export(prm, cmd));
-	else if (!bd_strcmp(CMD_LEARNC, cmd->cmd))
+	else if (!bd_strcmp(CMD_LEARNC, cmd->args[0]))
 		return (cmd_learnc(cmd));
-	else if (!bd_strcmp(CMD_HISTORY, cmd->cmd))
+	else if (!bd_strcmp(CMD_HISTORY, cmd->args[0]))
 		return (cmd_history(prm, cmd));
 	else
 		return (cmd_usercmd(cmd));
 }
 
-void	free_cmd(void *content)
+void	free_cmd(void *data)
 {
 	t_cmd	*cmd;
-	int		i;
 
-	i = 0;
-	cmd = (t_cmd *)content;
-	if (cmd->cmd)
-		free(cmd->cmd);
-	while (cmd->args[i])
-		free(cmd->args[i++]);
-	if (cmd->args)
-		free(cmd->args);
+	cmd = (t_cmd *)data;
+	free_array(cmd->args);
 	free(cmd);
 }
 
@@ -46,9 +39,9 @@ void	print_cmd(t_cmd *cmd)
 {
 	int i;
 
-	i = 0;
-	ft_putstr_fd("line: ", STDOUT_FILENO);
-	ft_putstr_fd(cmd->cmd, STDOUT_FILENO);
+	i = 1;
+	ft_putstr_fd("CURRENT COMMAND: ", STDOUT_FILENO);
+	ft_putstr_fd(cmd->args[0], STDOUT_FILENO);
 	while (cmd->args[i])
 	{
 		ft_putstr_fd(" ", STDOUT_FILENO);
@@ -65,7 +58,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 
 	while (lst != NULL)
 	{
-		cmd = (t_cmd *)lst->content;
+		cmd = (t_cmd *)lst->data;
 		print_cmd(cmd); //PRINT CMD!!!!!!
 		code = execute_cmd(prm, cmd);
 		lst = lst->next;

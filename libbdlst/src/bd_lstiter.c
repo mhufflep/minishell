@@ -6,7 +6,7 @@ void		bd_lstiter(t_bd_lst *lst, void (*f)(void *))
 	{
 		while (lst)
 		{
-			f(lst->content);
+			f(lst->data);
 			lst = lst->next;
 		}
 	}

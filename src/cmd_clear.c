@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int		cmd_clear(t_cmd *cmd)
+int		cmd_clear(t_prm *prm, t_cmd *cmd)
 {
 	(void)cmd;
-	clrscr();
+	clrscr(prm);
 	return (0);
 }

@@ -23,23 +23,23 @@ int		cmd_cd(t_cmd *cmd)
 	t_env	*env;
 	char	*dir;
 
-	if (sizeof_array(cmd->args) == 0)
+	if (sizeof_array(&cmd->args[1]) == 0)
 	{
 		env = env_get_local("HOME");
 		if (env == NULL)
 		{
-			cmd_error(cmd->cmd, NULL, CMD_HOME_NOT_SET);
+			cmd_error(cmd->args[0], NULL, CMD_HOME_NOT_SET);
 			return (1);
 		}
 		dir = env->val;
 	}
-	else if (!ft_strcmp(cmd->args[0], "~")) //THIS SHOULD BE IN EXPANDER !!!!!!!!
+	else if (!ft_strcmp(cmd->args[1], "~")) //THIS SHOULD BE IN EXPANDER !!!!!!!!
 		dir = env_get_val("HOME");
 	else
-		dir = cmd->args[0];
+		dir = cmd->args[1];
 	if (chdir(dir) == -1)
 	{
-		cmd_error(cmd->cmd, cmd->args[0], strerror(errno));
+		cmd_error(cmd->args[0], cmd->args[1], strerror(errno));
 		return (1);
 	}
 	update_pwd();

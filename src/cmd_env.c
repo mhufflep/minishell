@@ -17,9 +17,9 @@ void	print_env_node(void *node)
 
 int		cmd_env(t_cmd *cmd)
 {
-	if (sizeof_array(cmd->args) == 0)
+	if (sizeof_array(&cmd->args[1]) == 0)
 		bd_lstiter(env_llist(), print_env_node);
 	else
-		cmd_error(cmd->cmd, cmd->args[0], CMD_NOT_SUPPORTED);
+		cmd_error(cmd->args[0], cmd->args[1], CMD_NOT_SUPPORTED);
 	return (0);
 }

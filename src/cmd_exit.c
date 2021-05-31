@@ -30,26 +30,26 @@ int		cmd_exit(t_prm *prm, t_cmd *cmd)
 {
 	int size;
 
-	ft_putendl_fd(cmd->cmd, STDERR_FILENO);
-	size = sizeof_array(cmd->args);
+	ft_putendl_fd(cmd->args[0], STDERR_FILENO);
+	size = sizeof_array(&cmd->args[1]);
 	if (!cmd->is_pipe)
-		prm->enable = 0;
+		prm->enable = 0; //Maybe another way
 	if (size >= 1)
 	{
-		if (!is_numeric(cmd->args[0]) || !is_in_range(cmd->args[0]))
+		if (!is_numeric(cmd->args[1]) || !is_in_range(cmd->args[1]))
 		{
-			cmd_error(cmd->cmd, cmd->args[0], CMD_NOT_NUMERIC);
+			cmd_error(cmd->args[0], cmd->args[1], CMD_NOT_NUMERIC);
 			prm->exit_code = (unsigned char)-1;
 		}
 		else if (size > 1)
 		{
-			cmd_error(cmd->cmd, NULL, CMD_MANY_ARGS);
+			cmd_error(cmd->args[0], NULL, CMD_MANY_ARGS);
 			prm->exit_code = 1;
 			prm->enable = 1;
 		}
 		else
 		{
-			prm->exit_code = (unsigned char)ft_atoi(cmd->args[0]);
+			prm->exit_code = (unsigned char)ft_atoi(cmd->args[1]);
 		}
 	}
 	return (prm->exit_code);

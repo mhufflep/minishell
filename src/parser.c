@@ -89,20 +89,19 @@ t_cmd *cmd_create(void)
 	return (cmd);
 }
 
-void	cmd_fill(t_cmd *node, char *cmd, char **args, t_bd_lst *fns)
+void	cmd_fill(t_cmd *node, char **args, t_bd_lst *fns)
 {
-	node->cmd = ft_strdup(cmd);
 	node->args = array_copy(args, ft_strdup);
 	node->filenames = fns;
 }
 
-int	add_cmd_node(t_prm *prm, char **arr_args, int i)
+int	add_cmd_node(t_prm *prm, t_cmd *cmd, int i)
 {
-	t_cmd		*cmd;
+	// t_cmd		*cmd;
 	t_bd_lst	*new;
 
-	cmd = command_create(arr_args[0], &arr_args[1]); // cmd, args
-	cmd->is_pipe = 1;
+	// cmd = command_create(arr_args); // cmd, args
+	cmd->is_pipe = 0;
 	new = bd_lstnew(cmd);
 	if (!new)
 		throw_error(BAD_ALLOC, 11);
@@ -144,10 +143,9 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			for (int z = 0; arr_args[z]; z++) // deubg
 				printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
 			// --- //
-			cmd_fill(cmd, arr_args[0], &arr_args[1], fns);
-			// add_cmd_node(prm, arr_args, i);
-			if (arr_args != NULL)
-				free_array(arr_args);
+			cmd_fill(cmd, arr_args, fns);
+			add_cmd_node(prm, cmd, i);
+			free_array(arr_args); //now we can delete it and modify cmd_fill
 			j++;
 		}
 		if (arr_pipe != NULL)
@@ -167,7 +165,7 @@ int split_on_semicolon(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = cmd_split(prm->history_ptr->content, ';');
+	arr_commands = cmd_split(prm->hptr->data, ';');
 	if (!arr_commands)
 		throw_error(BAD_ALLOC, 14);
 	while (arr_commands[i])
@@ -188,7 +186,6 @@ int split_on_semicolon(t_prm *prm)
 	if (!split_on_pipe(prm, arr_commands))
 	{
 		free_array(arr_commands);
-		arr_commands = 0;
 		return (0);
 	}
 	return (1);
@@ -196,7 +193,7 @@ int split_on_semicolon(t_prm *prm)
 
 int		parser(t_prm *prm)
 {
-	if (!lexer(prm->history_ptr->content))
+	if (!lexer(prm->hptr->data))
 		return (0);
 	if (!split_on_semicolon(prm))
 		return (0);

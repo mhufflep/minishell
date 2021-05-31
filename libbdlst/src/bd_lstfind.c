@@ -4,7 +4,7 @@ t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)())
 {
 	while (lst)
 	{
-		if (comp(lst->content, data, size) == 0)
+		if (comp(lst->data, data, size) == 0)
 		{
 			return (lst);
 		}

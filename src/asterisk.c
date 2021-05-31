@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include "libft.h"
+#include "minishell.h"
 
 int		is_end(char c)
 {
@@ -29,52 +26,123 @@ int		starts_with_dot(char *path)
 	return (path && path[0] == '.');
 }
 
-// int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
+// int 	skip_spaces(char *str, int i)
 // {
-
+// 	while (ft_isspace(str[i]))
+// 		i++;
+// 	return i;
 // }
 
-// char *asterisk2(char *dir, char *pattern, char *res)
-// { 
-// 	DIR				*dir;
-// 	char			*res;
-// 	char			*sep;
-//     struct dirent	*entry;
+char **array_join(char **arr, int start, int end)
+{
+	char **res;
+	int size;
 
-
-// 	char *current;
-
-// 	current = getcwd(NULL, 0);
-
-//     dir = opendir(dir);
-//     if (!dir)
-// 		return ;
+	//ERROR MANAGEMENT
+	size = sizeof_array(arr) - (end - start); //SIZE COULD BE 0
+	printf("size: %d\n", size);
+	res = (char **)ft_calloc((size + 1), sizeof(char *));
 	
-// 	// res = ft_strdup("");
+	//CHECK MALLOC
+	int arr_index;
+	int res_index;
 
-//     while ( (entry = readdir(dir)) != NULL)
-// 	{
-// 		if (opendir(entry->d_name))
-// 		if (matcher(entry->d_name, pattern) && !starts_with_dot(entry->d_name))
-// 		{
-			
-// 			char *tmp;
+	arr_index = 0;
+	res_index = 0;
+	while (arr_index < start)
+	{
+		res[res_index] = ft_strdup(arr[arr_index]); //COPY
+		res_index++;
+		arr_index++;
+	}
+	while (arr_index <= end)
+	{
+		res[res_index] = ft_strjoin_free(res[res_index], arr[arr_index]); //ft_strjoin_sepf(res[res_index], " ", arr[arr_index]); //NEED TO REPLACE BY STRJOIN_SEP WITH FREE
+		arr_index++;
+	}
+	res_index++;
+	while (arr[arr_index] != NULL)
+	{
+		res[res_index] = ft_strdup(arr[arr_index]); //COPY?
+		res_index++;
+		arr_index++;
+	}
+	res[size] = NULL;
+	free_array(arr);
+	return (res);
+}
 
-// 			tmp = res;
-// 			if (ft_strlen(res) != 0)
-// 				sep = " ";
-// 			else
-// 				sep = "";
-		
-// 			res = join_path(res, entry->d_name, sep);
-// 			free(tmp);
-// 		}
-//     };
-// 	printf("%s\n", res);
+void prt(char *data)
+{
+	if (data != NULL)
+		printf("|%s|\n", data);
+	else
+		printf("<null>\n");
+}
 
-//     closedir(dir);
-// };
+char **find_pattern(char *str)
+{
+	int quote;
+	int dquote;
+	int i;
+	int j;
+	int start_d;
+	int start_q;
 
+
+	i = 0;
+	quote = 0;
+	dquote = 0;
+	start_q = 0;
+	start_d = 0;
+	char **arr = ft_split(str, " ");
+	iter_array(arr, prt);
+	while (arr[i] != NULL)
+	{
+		j = 0;
+		while (arr[i][j] != '\0')
+		{
+			if (arr[i][j] == '\"' && !quote)
+			{
+				if (dquote && start_d != i)
+				{
+					arr = array_join(arr, start_d, i);
+					i = start_d;
+					dquote = 0;
+					break ;
+				}
+				else
+				{
+					start_d = i;
+					dquote = 1;
+				}
+			}
+			else if (arr[i][j] == '\'' && !dquote)
+			{
+				if (quote && start_q != i)
+				{
+					arr = array_join(arr, start_q, i);
+					i = start_q;
+					quote = 0;
+					break ;
+				}
+				else
+				{
+					start_q = i;
+					quote = 1;
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+	//check if quote and dquote are not closed
+	if (dquote || quote)
+		printf("Quotes are not closed\n");	
+	return (arr);
+}
+
+//Count slashes in pattern will give us directory diving depth
 
 char *asterisk(char *pattern)
 { 
@@ -118,7 +186,10 @@ char *asterisk(char *pattern)
 
 // int main(void)
 // {
-// 	char *pattern = "*";
-// 	asterisk(pattern);
+// 	char **res = find_pattern("\"Hello \'world \"my \'name is Ilnur\'");
+// 	// char *pattern = "*";
+// 	// asterisk(pattern);
+	
+// 	iter_array(res, prt);
 // 	return (0);
 // }

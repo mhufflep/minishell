@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-void	print_export_node(void *content)
+void	print_export_node(void *data)
 {
 	t_env *env;
 
-	env = (t_env *)content;
+	env = (t_env *)data;
 	if (env != NULL)
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
@@ -44,7 +44,7 @@ int		export_try_add(t_prm *prm, t_cmd *cmd)
 	t_env	*env;
 	int		i;
 
-	i = 0;
+	i = 1;
 	while (cmd->args[i])
 	{
 		env = copy_to_env(cmd->args[i]);
@@ -58,7 +58,7 @@ int		export_try_add(t_prm *prm, t_cmd *cmd)
 		}
 		else
 		{
-			cmd_error(cmd->cmd, cmd->args[i], CMD_NOT_VALID_ID);
+			cmd_error(cmd->args[0], cmd->args[i], CMD_NOT_VALID_ID);
 		}
 		env_del(env);
 		i++;
@@ -70,7 +70,7 @@ int		cmd_export(t_prm *prm, t_cmd *cmd)
 {
 	t_bd_lst *lst_copy;
 
-	if (sizeof_array(cmd->args) == 0)
+	if (sizeof_array(&cmd->args[1]) == 0)
 	{	
 		lst_copy = bd_lstcopy(prm->env_list, env_dup);
 		bd_lstsort_merge(&(lst_copy), env_cmp);
@@ -79,9 +79,7 @@ int		cmd_export(t_prm *prm, t_cmd *cmd)
 	}
 	else
 	{
-		printf("export add start\n");
 		prm->exit_code = export_try_add(prm, cmd);
-		printf("export add end\n");
 	}
 	return (0);
 }

@@ -27,16 +27,17 @@ void	replace_tilda(char **dst)
 	}
 }
 
-void	replace_asterisk(char **dst)
+void	replace_asterisk(char **args, int i)
 {
 	char *ast;
 	int index;
+	(void)i;
 
-	index = index_of(*dst, '*');
+	index = index_of(*args, '*');
 	if (index != -1)
 	{
-		ast = asterisk(*dst);
-		insert_into2(dst, ast, index, free);
+		ast = asterisk(*args);
+		insert_into2(args, ast, index, free);
 		free(ast);
 	}
 }
@@ -46,12 +47,10 @@ int replace(t_cmd *cmd)
 	int i;
 
 	i = 0;
-	replace_tilda(&cmd->cmd);
-	replace_asterisk(&cmd->cmd);
 	while (cmd->args[i] != NULL)
 	{
-		replace_tilda(&cmd->args[i]);
-		replace_asterisk(&cmd->args[i]);
+		if (ft_strchr(cmd->args[i], '*'))
+			replace_asterisk(cmd->args, i);
 		i++;
 	}
 	return (0);
@@ -63,7 +62,7 @@ int		exp_execute_block(t_bd_lst *lst)
 
 	while (lst != NULL)
 	{
-		cmd = (t_cmd *)lst->content;
+		cmd = (t_cmd *)lst->data;
 		replace(cmd);
 		lst = lst->next;
 	}

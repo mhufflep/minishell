@@ -43,7 +43,7 @@ char		**bd_parse_to_arr(t_bd_lst *lst, void *(*copy)(void *))
 		return (NULL);
 	while (i < size)
 	{
-		arr[i] = copy(lst->content);
+		arr[i] = copy(lst->data);
 		lst = lst->next;
 		i++;
 	}

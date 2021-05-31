@@ -4,7 +4,7 @@
 // {
 // 	if (lst && del)
 // 	{
-// 		del(lst->content);
+// 		del(lst->data);
 // 		if (lst->prev == NULL)
 // 			*head = lst->next;
 // 		else
@@ -35,7 +35,7 @@ void	bd_lstdelone(t_bd_lst *lst, void (*del)(void*))
 {
 	if (lst && del)
 	{
-		del(lst->content);
+		del(lst->data);
 		free(lst);
 	}
 }

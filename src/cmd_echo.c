@@ -18,13 +18,13 @@ int is_option(char *opt, char *valid_opt)
 
 int		cmd_echo(t_cmd *cmd)
 {
-	if (is_option(cmd->args[0], "n"))
+	if (is_option(cmd->args[1], "n"))
 	{
-		print_array(&cmd->args[1]);
+		print_array(&cmd->args[2]);
 	}
 	else
 	{
-		print_array(cmd->args);
+		print_array(&cmd->args[1]);
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	}
 	return (0);
