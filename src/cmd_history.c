@@ -14,7 +14,7 @@ int	cmd_history(t_prm *prm, t_cmd *cmd)
 	}
 	while (tmp)
 	{
-		printf("%5d  %s\n", i, (char *)tmp->content);
+		printf("%5d  %s\n", i, (char *)tmp->data);
 		i++;
 		tmp = tmp->next;
 	}

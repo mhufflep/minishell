@@ -8,7 +8,7 @@ typedef struct s_bd_lst
 {
 	struct s_bd_lst		*next;
 	struct s_bd_lst		*prev;
-	void				*content;
+	void				*data;
 }						t_bd_lst;
 
 size_t					bd_strlen(const char *s);
@@ -25,7 +25,7 @@ void		bd_lstclear(t_bd_lst **lst, void (*del)(void *));
 void		bd_lstremove(t_bd_lst **head, t_bd_lst *cur, void (*del)(void *));
 void		bd_lstrelink(t_bd_lst *n1, t_bd_lst *n2, t_bd_lst *new);
 
-t_bd_lst	*bd_lstnew(void *content);
+t_bd_lst	*bd_lstnew(void *data);
 t_bd_lst	*bd_lstlast(t_bd_lst *lst);
 int			bd_lstsize(t_bd_lst *lst);
 void		bd_lstadd_front(t_bd_lst **lst, t_bd_lst *new);
@@ -33,9 +33,9 @@ void		bd_lstadd_back(t_bd_lst **lst, t_bd_lst *new);
 void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *));
 
 void		bd_lstiter(t_bd_lst *lst, void (*f)(void *));
-void		*def_cont_copy(void *content);
+void		*def_cont_copy(void *data);
 void		bd_lstprint(t_bd_lst *lst, void (*print)(void *));
-t_bd_lst	*bd_lstcopy(t_bd_lst *list, void *(*content_copy)(void *));
+t_bd_lst	*bd_lstcopy(t_bd_lst *list, void *(*data_copy)(void *));
 t_bd_lst	*bd_lstmap(t_bd_lst *lst, void *(*f)(void *), void (*del)(void *));
 int			bd_lstmax_cont_len(t_bd_lst *lst);
 t_bd_lst	*bd_lstfind(t_bd_lst *lst, void *data, int size, int (*comp)()); //CHECK IF WORKS CORRECTLY

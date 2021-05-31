@@ -15,7 +15,7 @@ t_bd_lst	*bd_lstmap(t_bd_lst *lst, void *(*f)(void *), void (*del)(void *))
 	{
 		if (tmp && lst->next)
 		{
-			tmp->content = f(lst->content);
+			tmp->data = f(lst->data);
 			tmp->next = bd_lstnew(NULL);
 			if (tmp->next == NULL)
 			{

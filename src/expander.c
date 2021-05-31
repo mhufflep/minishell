@@ -63,7 +63,7 @@ int		exp_execute_block(t_bd_lst *lst)
 
 	while (lst != NULL)
 	{
-		cmd = (t_cmd *)lst->content;
+		cmd = (t_cmd *)lst->data;
 		replace(cmd);
 		lst = lst->next;
 	}

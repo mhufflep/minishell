@@ -46,7 +46,7 @@ void		bd_lstsplit(t_bd_lst *lst, t_bd_lst **first_part, t_bd_lst **second_part)
 // 	else if (n2 == NULL)
 // 		return (n1);
 
-// 	if (comp(n1->content, n2->content) <= 0)
+// 	if (comp(n1->data, n2->data) <= 0)
 // 	{
 // 		merged = n1;
 // 		merged->next = bd_lst_compared_merge(n1->next, n2, comp);

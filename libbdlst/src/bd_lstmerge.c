@@ -17,7 +17,7 @@ t_bd_lst	*bd_lst_compared_merge(t_bd_lst *n1, t_bd_lst *n2, int (*comp)())
 		return (n2);
 	else if (n2 == NULL)
 		return (n1);
-	else if (comp(n1->content, n2->content) <= 0)
+	else if (comp(n1->data, n2->data) <= 0)
 	{
 		n1->next = bd_lst_compared_merge(n1->next, n2, comp);
 		return (n1);

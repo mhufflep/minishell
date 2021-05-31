@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-void	print_export_node(void *content)
+void	print_export_node(void *data)
 {
 	t_env *env;
 
-	env = (t_env *)content;
+	env = (t_env *)data;
 	if (env != NULL)
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);

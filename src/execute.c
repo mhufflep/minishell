@@ -15,7 +15,7 @@ int		execute_cmd(t_prm *prm, t_cmd *cmd)
 	else if (!bd_strcmp(CMD_UNSET, cmd->cmd))
 		return (cmd_unset(prm, cmd));
 	else if (!bd_strcmp(CMD_CLEAR, cmd->cmd))
-		return (cmd_clear(cmd));
+		return (cmd_clear(prm, cmd));
 	else if (!bd_strcmp(CMD_EXPORT, cmd->cmd))
 		return (cmd_export(prm, cmd));
 	else if (!bd_strcmp(CMD_LEARNC, cmd->cmd))
@@ -26,13 +26,13 @@ int		execute_cmd(t_prm *prm, t_cmd *cmd)
 		return (cmd_usercmd(cmd));
 }
 
-void	free_cmd(void *content)
+void	free_cmd(void *data)
 {
 	t_cmd	*cmd;
 	int		i;
 
 	i = 0;
-	cmd = (t_cmd *)content;
+	cmd = (t_cmd *)data;
 	if (cmd->cmd)
 		free(cmd->cmd);
 	while (cmd->args[i])
@@ -65,7 +65,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 
 	while (lst != NULL)
 	{
-		cmd = (t_cmd *)lst->content;
+		cmd = (t_cmd *)lst->data;
 		print_cmd(cmd); //PRINT CMD!!!!!!
 		code = execute_cmd(prm, cmd);
 		lst = lst->next;

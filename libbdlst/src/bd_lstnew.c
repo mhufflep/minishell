@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-t_bd_lst	*bd_lstnew(void *content)
+t_bd_lst	*bd_lstnew(void *data)
 {
 	t_bd_lst	*new;
 
@@ -9,6 +9,6 @@ t_bd_lst	*bd_lstnew(void *content)
 		return (NULL);
 	new->next = NULL;
 	new->prev = NULL;
-	new->content = content;
+	new->data = data;
 	return (new);
 }

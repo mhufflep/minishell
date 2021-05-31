@@ -6,9 +6,9 @@ t_list	*ft_lstcopy(t_list *list)
 	t_list	*new;
 
 	head = NULL;
-	while (list && list->content)
+	while (list && list->data)
 	{
-		new = ft_lstnew(list->content);
+		new = ft_lstnew(list->data);
 		if (!new)
 		{
 			ft_lstclear(&head, free);

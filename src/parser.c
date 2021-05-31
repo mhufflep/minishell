@@ -145,7 +145,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 				printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
 			// --- //
 			cmd_fill(cmd, arr_args[0], &arr_args[1], fns);
-			// add_cmd_node(prm, arr_args, i);
+			add_cmd_node(prm, arr_args, i);
 			free_array(arr_args);
 			j++;
 		}
@@ -164,7 +164,7 @@ int split_on_semicolon(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = cmd_split(prm->history_ptr->content, ';');
+	arr_commands = cmd_split(prm->hptr->data, ';');
 	if (!arr_commands)
 		throw_error(BAD_ALLOC, 14);
 	while (arr_commands[i])
@@ -191,7 +191,7 @@ int split_on_semicolon(t_prm *prm)
 
 int		parser(t_prm *prm)
 {
-	if (!lexer(prm->history_ptr->content))
+	if (!lexer(prm->hptr->data))
 		return (0);
 	if (!split_on_semicolon(prm))
 		return (0);

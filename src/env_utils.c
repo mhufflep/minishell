@@ -85,7 +85,7 @@ t_env	*env_get_local(char *key)
 	env_del(env);
 	if (found)
 	{
-		got = (t_env *)found->content;
+		got = (t_env *)found->data;
 		return (got);
 	}
 	return (NULL);

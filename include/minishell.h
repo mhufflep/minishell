@@ -52,6 +52,7 @@ typedef struct	s_caps
 	char *ei;
 	char *ed;
 	char *am;
+	char *cl;
 }				t_caps;
 
 typedef struct	s_env
@@ -76,7 +77,7 @@ typedef struct  s_prm
 	char **env;
 	char **argv;
 	int argc;
-	int cursor_pos;
+	int curs_pos;
 	int	line_len;
 	int	exit_code;
 	int enable;
@@ -84,18 +85,18 @@ typedef struct  s_prm
 	char input[5];
 
 
-	char *rc;
-	char *cd;
-	char *le;
-	char *dc;
-	char *nd;
-	char *sc;
+	// char *rc;
+	// char *cd;
+	// char *le;
+	// char *dc;
+	// char *nd;
+	// char *sc;
 
-	char *im;
-	char *dm;
-	char *ei;
-	char *ed;
-	char *am;
+	// char *im;
+	// char *dm;
+	// char *ei;
+	// char *ed;
+	// char *am;
 
 	t_caps	caps; //remove?
 
@@ -103,10 +104,10 @@ typedef struct  s_prm
 	t_term	*def_term;
 
 	t_bd_lst	*history;
-	t_bd_lst	*history_ptr;
+	t_bd_lst	*hptr;
 	t_bd_lst	*env_list;
 	t_bd_lst	*cmds_ptr;
-	t_bd_lst	**cmds; //массив листов команд, в поле content каждой будет лежать t_cmd *
+	t_bd_lst	**cmds; //массив листов команд, в поле data каждой будет лежать t_cmd *
 }               t_prm;
 
 void		reader(t_prm *);
@@ -121,12 +122,9 @@ t_prm		*setup_settings(int, char **, char **);
 void		reset_parameters(t_prm *);
 
 /* HISTORY */
-int			read_history(t_prm *prm);
-int			history_add(t_bd_lst *node);
-int			history_next(t_prm *prm);
-int			history_prev(t_prm *prm);
-int			save_history(t_bd_lst *node);
-
+void		history_read(t_prm *prm);
+void		history_add(t_prm *prm);
+void		history_save(t_prm *prm);
 
 /* BUILTIN */
 int			cmd_cd(t_cmd *cmd);
@@ -134,7 +132,7 @@ int			cmd_pwd(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd);
 int			cmd_exit(t_prm *prm, t_cmd *cmd);
 int			cmd_echo(t_cmd *cmd);
-int			cmd_clear(t_cmd *cmd);
+int			cmd_clear(t_prm *prm, t_cmd *cmd);
 int			cmd_unset(t_prm *prm, t_cmd *cmd);
 int			cmd_learnc(t_cmd *cmd);
 int			cmd_export(t_prm *prm, t_cmd *cmd);
@@ -156,6 +154,7 @@ void		key_left_action(t_prm *prm);
 void		key_right_action(t_prm *prm);
 void		key_tab_action(void);
 void		key_ctrl_l_action(t_prm *prm);
+void		key_ctrl_d_action(t_prm *prm);
 void		key_bspace_action(t_prm *prm);
 void		key_other_action(t_prm *prm);
 void		key_home_action(t_prm *prm);
@@ -178,10 +177,10 @@ char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
 char		*remove_from(char *src, int index, void (*free_ctl)(void *));
 char		*replace_by(char **src, int index, int len, char *add, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
-void		print_export_node(void *content);
+void		print_export_node(void *data);
 char 		*asterisk(char *pattern);
-int is_option(char *opt, char *valid_opt);
-void 	clrscr(void);
+int			is_option(char *opt, char *valid_opt);
+void 		clrscr(t_prm *prm);
 
 /* INIT */
 t_prm		*setup_settings(int argc, char **argv, char **env);
@@ -224,9 +223,10 @@ int			env_valid(t_env *env);
 void		*copy_to_env(void *str);
 void		*copy_from_env(void *node);
 
-int		export_update(t_env *found, t_env *replacer);
-int		export_add(t_prm *prm, t_env *env);
+int			export_update(t_env *found, t_env *replacer);
+int			export_add(t_prm *prm, t_env *env);
 
-
+void		handler_int(int num);
+void		handler_quit(int num);
 
 #endif

@@ -20,6 +20,8 @@ void	recognize_symbol(t_prm *prm)
 		key_end_action(prm);
 	else if (!ft_strcmp(prm->input, KEY_CTRL_L))
 		key_ctrl_l_action(prm);
+	else if (!ft_strcmp(prm->input, KEY_CTRL_D))
+		key_ctrl_d_action(prm);
 	else
 		key_other_action(prm);
 }
@@ -43,36 +45,29 @@ int		is_endinput(char *input)
 }
 
 void	reader(t_prm *prm)
-{	
-	while (SEREGA_LEZHIT_V_BOLNITSE)
+{
+	signal(SIGQUIT, handler_quit);
+	signal(SIGINT, handler_int);
+	while (1)
 	{
-		//print prompt name and save cursor
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
-		
-		// tputs(save_cursor, 1, ft_putchar);
 		tputs(prm->caps.sc, 1, ft_putchar);
 	
-
 		//initial params
 		prm->line_len = 0;
-		prm->cursor_pos = 0;
-		prm->history_ptr->content = insert_into(0, 0, 0, 0); //allocates an empty string 
+		prm->curs_pos = 0;
+		prm->hptr->data = bd_strdup(""); 
 
 		//clean buffer
 		ft_memset(prm->input, 0, 5);
-		while (SEREGA_LEZHIT_V_BOLNITSE)
+		while (1)
 		{
 			if (is_endinput(prm->input))
 				break ;
 			read_symbol(prm->input);
 			recognize_symbol(prm);
 		}
-		if (ft_strcmp(prm->history_ptr->content, ""))
+		if (prm->hptr->data && ft_strcmp(prm->hptr->data, ""))
 			break ;
-		// if (!ft_strcmp(prm->history_ptr->content, "") && !ft_strcmp(prm->input, KEY_CTRL_D))
-		// {
-		// 	ft_putendl_fd("exit", STDOUT_FILENO);
-		// 	exit(1);
-		// }
 	}
 }

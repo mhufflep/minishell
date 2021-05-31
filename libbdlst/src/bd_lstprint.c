@@ -1,10 +1,10 @@
 #include "bidirectional_list.h"
 
-void	node_print(void *content)
+void	node_print(void *data)
 {
-	if (content != NULL)
+	if (data != NULL)
 	{
-		printf("%s\n", (char *)content);
+		printf("%s\n", (char *)data);
 	}
 }
 
