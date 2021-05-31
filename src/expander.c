@@ -27,16 +27,16 @@ void	replace_tilda(char **dst)
 	}
 }
 
-void	replace_asterisk(char **dst)
+void	replace_asterisk(char **args, int i)
 {
 	char *ast;
 	int index;
 
-	index = index_of(*dst, '*');
+	index = index_of(*args, '*');
 	if (index != -1)
 	{
-		ast = asterisk(*dst);
-		insert_into2(dst, ast, index, free);
+		ast = asterisk(*args);
+		insert_into2(args, ast, index, free);
 		free(ast);
 	}
 }
@@ -46,12 +46,10 @@ int replace(t_cmd *cmd)
 	int i;
 
 	i = 0;
-	replace_tilda(&cmd->args[0]);
-	replace_asterisk(&cmd->args[0]);
 	while (cmd->args[i] != NULL)
 	{
-		replace_tilda(&cmd->args[i]);
-		replace_asterisk(&cmd->args[i]);
+		if (ft_strchr(cmd->args[i], '*'))
+			replace_asterisk(cmd->args, i);
 		i++;
 	}
 	return (0);

@@ -80,18 +80,6 @@ void prt(char *data)
 		printf("<null>\n");
 }
 
-// if (str[i] == '*')
-// {
-// 	start = i;
-// 	while (str[i] != '\0' || (str[i] != ' ' && !quote))
-// 	{
-// 		i++;
-// 	}
-// 	char *pattern = ft_substr(str, start, i - start);
-// 	char *replacer = find_pattern(pattern);
-// 	str = replace_by(str, start, i, replacer);
-// }
-
 char **find_pattern(char *str)
 {
 	int quote;

@@ -228,7 +228,16 @@ void		*copy_from_env(void *node);
 int			export_update(t_env *found, t_env *replacer);
 int			export_add(t_prm *prm, t_env *env);
 
+
+/* SIGNAL */
 void		handler_int(int num);
 void		handler_quit(int num);
+
+/* DIR_UTILS */
+int			is_dir(char *directory);
+int			is_in_dir(char *name, char *directory);
+
+
+
 
 #endif
