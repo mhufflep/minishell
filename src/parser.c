@@ -116,13 +116,13 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 	int j;
 	char		**arr_pipe;
 	char		**arr_args;
-	while (arr_commands[i])
+	while (arr_commands && arr_commands[i])
 	{
 		j = 0;
 		arr_pipe = cmd_split(arr_commands[i], '|');
 		if (!arr_pipe)
 			throw_error(BAD_ALLOC, 12);
-		while (arr_pipe[j])
+		while (arr_pipe && arr_pipe[j])
 		{
 
 			t_cmd *cmd = cmd_create();
@@ -146,13 +146,16 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			// --- //
 			cmd_fill(cmd, arr_args[0], &arr_args[1], fns);
 			// add_cmd_node(prm, arr_args, i);
-			free_array(arr_args);
+			if (arr_args != NULL)
+				free_array(arr_args);
 			j++;
 		}
-		free_array(arr_pipe);
+		if (arr_pipe != NULL)
+			free_array(arr_pipe);
 		i++;
 	}
-	free_array(arr_commands);
+	if (arr_commands != NULL)
+		free_array(arr_commands);
 	return (1);
 }
 
@@ -174,6 +177,7 @@ int split_on_semicolon(t_prm *prm)
 		else
 		{
 			free_array(arr_commands);
+			arr_commands = 0;
 			prm->exit_code = 258;
 			print_error(SYNTAX_ERROR_SEMICOLON, 0);
 			return (0);
@@ -184,6 +188,7 @@ int split_on_semicolon(t_prm *prm)
 	if (!split_on_pipe(prm, arr_commands))
 	{
 		free_array(arr_commands);
+		arr_commands = 0;
 		return (0);
 	}
 	return (1);
