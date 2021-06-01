@@ -37,17 +37,16 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
-t_bd_lst	*parse_redirect(char **str)
+int		parse_redirect(char **str, t_cmd *cmd)
 {
 	int	i;
 	// int index;
 	int	is_quote;
 	int	is_redirect;
-	t_bd_lst	*head;
 	t_bd_lst	*new;
 	char		*filename;
 
-	head = NULL;
+	cmd->filenames = NULL;
 	i = 0;
 	is_quote = 0;
 	is_redirect = 0;
@@ -56,26 +55,25 @@ t_bd_lst	*parse_redirect(char **str)
 		skip_spaces(*str, &i);
 		if ((*str)[i] == '>')
 		{
-			is_redirect = TRUNC;
+			cmd->is_redirect = TRUNC;
 			*str = remove_from(*str, i, free);
 			if ((*str)[i] == '>')
 			{
-				is_redirect = APPEND;
+				cmd->is_redirect = APPEND;
 				*str = remove_from(*str, i, free);
 			}
 			skip_spaces(*str, &i);
 			// index = i;
 			filename = ft_substr(*str, i, go_to_end_word(&(*str)[i]));
-			printf("!%s!\n", filename);
 			new = bd_lstnew(filename);
 			if (!new)
 				throw_error(BAD_ALLOC, 10);
-			bd_lstadd_back(&head, new);
+			bd_lstadd_back(&cmd->filenames, new);
 			replace_by(str, i, go_to_end_word(&(*str)[i]), "", free);
 		}
 		i++;
 	}
-	return (head);
+	return (1);
 }
 
 t_cmd *cmd_create(void)
@@ -89,10 +87,9 @@ t_cmd *cmd_create(void)
 	return (cmd);
 }
 
-void	cmd_fill(t_cmd *node, char **args, t_bd_lst *fns)
+void	cmd_fill(t_cmd *node, char **args)
 {
 	node->args = array_copy(args, ft_strdup);
-	node->filenames = fns;
 }
 
 int	add_cmd_node(t_prm *prm, t_cmd *cmd, int i)
@@ -134,8 +131,13 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 				print_error(SYNTAX_ERROR_PIPE, 0);
 				return (0);
 			}
-			t_bd_lst *fns = parse_redirect(&(arr_pipe[j]));
+			parse_redirect(&(arr_pipe[j]), cmd);
+			printf("====== FILENAMES ======\n");
+			bd_lstprint(cmd->filenames, node_print);
+			printf("====== FILENAMES ======\n");
+			//
 			printf("|%s|\n", arr_pipe[j]);
+			//
 			arr_args = cmd_split(arr_pipe[j], ' ');
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);
@@ -143,7 +145,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			for (int z = 0; arr_args[z]; z++) // deubg
 				printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
 			// --- //
-			cmd_fill(cmd, arr_args, fns);
+			cmd_fill(cmd, arr_args);
 			add_cmd_node(prm, cmd, i);
 			free_array(arr_args); //now we can delete it and modify cmd_fill
 			j++;
@@ -175,7 +177,6 @@ int split_on_semicolon(t_prm *prm)
 		else
 		{
 			free_array(arr_commands);
-			arr_commands = 0;
 			prm->exit_code = 258;
 			print_error(SYNTAX_ERROR_SEMICOLON, 0);
 			return (0);

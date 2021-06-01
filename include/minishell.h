@@ -67,8 +67,7 @@ typedef struct	s_env
 
 typedef struct  s_cmd
 {
-	char		*options;			//опции команды
-	char		**args;				//аргументы команды
+	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
     int			is_redirect;		//стоит ли после команды redir, если значение 2 - значит двойной
 	t_bd_lst	*filenames;
