@@ -2,26 +2,10 @@
 
 // char *replace_by(char **src, char *add, int index, int len, void (*free_ctl)(void *));
 
-void	skip_spaces(char *str, int *i)
-{
-	while (str[*i] == ' ')
-		(*i)++;
-}
-
 // int		is_separator(char c)
 // {
 // 	return (c != ' ' || c != '<' || c != '>' || c != '|' | c != ';' | c != '$');
 // }
-
-int		go_to_end_word(char *str)
-{
-	int i;
-
-	i = 0;
-	while (!ft_strchr(" >", str[i]))
-		i++;
-	return (i);
-}
 
 int		amount_spaces(char *str)
 {
@@ -35,45 +19,6 @@ int		amount_spaces(char *str)
 		j++;
 	}
 	return (j);
-}
-
-int		parse_redirect(char **str, t_cmd *cmd)
-{
-	int	i;
-	// int index;
-	int	is_quote;
-	int	is_redirect;
-	t_bd_lst	*new;
-	char		*filename;
-
-	cmd->filenames = NULL;
-	i = 0;
-	is_quote = 0;
-	is_redirect = 0;
-	while ((*str)[i])
-	{
-		skip_spaces(*str, &i);
-		if ((*str)[i] == '>')
-		{
-			cmd->is_redirect = TRUNC;
-			*str = remove_from(*str, i, free);
-			if ((*str)[i] == '>')
-			{
-				cmd->is_redirect = APPEND;
-				*str = remove_from(*str, i, free);
-			}
-			skip_spaces(*str, &i);
-			// index = i;
-			filename = ft_substr(*str, i, go_to_end_word(&(*str)[i]));
-			new = bd_lstnew(filename);
-			if (!new)
-				throw_error(BAD_ALLOC, 10);
-			bd_lstadd_back(&cmd->filenames, new);
-			replace_by(str, i, go_to_end_word(&(*str)[i]), "", free);
-		}
-		i++;
-	}
-	return (1);
 }
 
 t_cmd *cmd_create(void)

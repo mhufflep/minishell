@@ -38,7 +38,7 @@ char		**bd_parse_to_arr(t_bd_lst *lst, void *(*copy)(void *))
 	arr = NULL;
 	size = bd_lstsize(lst);
 	if (size != 0)
-		arr = malloc(sizeof(char *) * size);
+		arr = malloc(sizeof(char *) * (size + 1));
 	if (arr == NULL)
 		return (NULL);
 	while (i < size)
@@ -47,5 +47,6 @@ char		**bd_parse_to_arr(t_bd_lst *lst, void *(*copy)(void *))
 		lst = lst->next;
 		i++;
 	}
+	arr[i] = NULL;
 	return (arr);		
 }

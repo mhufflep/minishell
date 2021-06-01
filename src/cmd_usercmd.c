@@ -12,7 +12,6 @@ int		cmd_usercmd(t_cmd *cmd)
 	char **bin;
 
 	//Check if cmd is a directory
-
 	///////////////////////////////////////////////
 
 	pid_t pid;
@@ -38,10 +37,13 @@ int		cmd_usercmd(t_cmd *cmd)
 	while (bin[i] && !is_in_dir(cmd->args[0], bin[i]))
 		i++;
 
-	// for (int i = 0; bin[i]; i++)
+	// i = 0;
+	// for (; bin[i]; i++)
 	// {
 	// 	printf("bin[%d]:|%s|\n", i, bin[i]);
 	// }
+	// if (bin[i] == NULL)
+	// 	printf("(null)\n");
 
 	dir = bin[i];
 
@@ -92,8 +94,10 @@ int		cmd_usercmd(t_cmd *cmd)
 		}
 
 	}
-
-	free_array(env);
+	if (bin != NULL)
+		free_array(bin);
+	if (env != NULL)   //env -> poniter being freed was not allocated
+		free_array(env);   
 	
 	printf("exit code: %d\n", code);
 

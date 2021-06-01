@@ -66,24 +66,15 @@ char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 	return (dst);
 }
 
-char *remove_from(char *src, int index, void (*free_ctl)(void *))
+char *remove_from(char *src, int index)
 {
-	char	*dst;
-	int		len;
-	int		src_index;
-	int		dst_index;
+	int	len;
 
-	src_index = 0;
-	dst_index = 0;
+	if (index < 0)
+		return (NULL);
 	len = ft_strlen(src);
-	dst = (char *)malloc((len) * sizeof(char));
-	if (dst == NULL)
-		throw_error(BAD_ALLOC, 6);
-	ft_strlcpy(dst, src, index + 1);
-	ft_strlcpy(&dst[index], &src[index + 1], len - index);
-	if (free_ctl != NULL)
-		free_ctl(src);
-	return (dst);
+	ft_memmove(&src[index], &src[index + 1], len - index);
+	return (src);
 }
 
 t_bd_lst *env_llist(void)

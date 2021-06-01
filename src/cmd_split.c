@@ -1,39 +1,6 @@
 #include "minishell.h"
 
-size_t	read_str(char **s, int i, char separator, int is_escaped)
-{
-	// size_t	i;
-
-	// i = 0;
-	while (((*s)[i] && (*s)[i] != separator) || ((*s)[i] == separator && is_escaped))
-	{
-		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))
-		{
-			if (separator == ' ')
-				*s = remove_from(*s, i, free);
-			i = check_quote(s, i, QUOTE, separator);
-		}
-		else if ((*s)[i] == D_QUOTE && !is_slash(*s, i - 1)) // remove from
-		{
-			if (separator == ' ')
-			{
-				*s = remove_from(*s, i, free);
-				escape_pair(s);
-			}
-			i = check_quote(s, i, D_QUOTE, separator);
-		}
-		else
-			i++;
-	}
-	// if ((*s)[i] == separator && is_slash(*s, i - 1))
-	// {
-	// 	char *str = ft_strdup(*s);
-	// 	*s = remove_from(str, i - 1, free);
-	// }
-	return (i);
-}
-
-int		check_quote(char **s, int i, char quote_mark, char separator)
+static	int		check_quote(char **s, int i, char quote_mark, char separator)
 {
 	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
 	// чтобы войти в цикл и дойти до закрывающей кавычки
@@ -48,7 +15,7 @@ int		check_quote(char **s, int i, char quote_mark, char separator)
 	if ((*s)[i] == quote_mark && !is_slash(*s, i - 1))
 	{
 		if (separator == ' ')
-			*s = remove_from(*s, i, free);
+			*s = remove_from(*s, i);
 		else
 			i++;
 		return (i);
@@ -56,6 +23,39 @@ int		check_quote(char **s, int i, char quote_mark, char separator)
 	else
 		throw_error(QUOTE_NOT_FOUND, 21);
 	return (0);
+}
+
+static	size_t	read_str(char **s, int i, char separator, int is_escaped)
+{
+	// size_t	i;
+
+	// i = 0;
+	while (((*s)[i] && (*s)[i] != separator) || ((*s)[i] == separator && is_escaped))
+	{
+		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))
+		{
+			if (separator == ' ')
+				*s = remove_from(*s, i);
+			i = check_quote(s, i, QUOTE, separator);
+		}
+		else if ((*s)[i] == D_QUOTE && !is_slash(*s, i - 1)) // remove from
+		{
+			if (separator == ' ')
+			{
+				*s = remove_from(*s, i);
+				escape_pair(s);
+			}
+			i = check_quote(s, i, D_QUOTE, separator);
+		}
+		else
+			i++;
+	}
+	// if ((*s)[i] == separator && is_slash(*s, i - 1))
+	// {
+	// 	char *str = ft_strdup(*s);
+	// 	*s = remove_from(str, i - 1);
+	// }
+	return (i);
 }
 
 static size_t	count_str(char *s, char separator)
@@ -133,12 +133,12 @@ char	**cmd_split(char *s, char separator)
 		// }
 		if ((s[i] == SLASH && !is_slash(s, i - 1)) && s[i + 1] == separator)
 		{
-			s = remove_from(s, i, free);
+			s = remove_from(s, i);
 			is_escaped = 1;
 		}
 		if ((s[i] != separator && !is_slash(s, i - 1)) || (s[i] == separator && is_escaped))
 		{
-			array[amount] = ft_substr(s, i, read_str(&s, i, separator, is_escaped));
+			array[amount] = ft_substr(s, i, read_str(&s, i, separator, is_escaped) - i);
 			if (separator == ' ')
 				escape_all(&(array[amount]));
 			if (!array[amount++])

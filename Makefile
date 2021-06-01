@@ -32,6 +32,7 @@ SOURCES			=	main.c \
 					split_utils.c \
 					cmd_split.c \
 					parser.c \
+					parse_redirect.c \
 					asterisk.c \
 					lexer.c \
 					history.c \
