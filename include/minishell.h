@@ -176,7 +176,7 @@ void		iter_array(char **arr, void (*func)(char *));
 //MOVE TO SPECIFIC AREAS
 char		*insert_into2(char **src, char *add, int index, void (*free_ctl)(void *));
 char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
-char		*remove_from(char *src, int index, void (*free_ctl)(void *));
+char 		*remove_from(char *src, int index);
 char		*replace_by(char **src, int index, int len, char *add, void (*free_ctl)(void *));
 void		recognize_symbol(t_prm *prm);
 void		print_export_node(void *data);
