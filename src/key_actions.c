@@ -103,7 +103,7 @@ void	key_bspace_action(t_prm *prm)
 		tputs(prm->caps.dc, 1, ft_putchar);
 
 		prm->curs_pos--;
-		prm->hptr->data = remove_from(prm->hptr->data, prm->curs_pos, free);
+		prm->hptr->data = remove_from(prm->hptr->data, prm->curs_pos); //here was free
 		prm->line_len--;
 	}
 }

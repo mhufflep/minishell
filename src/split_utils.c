@@ -40,9 +40,9 @@ int		escape_pair(char **str)
 		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
 		{
 			if ((*str)[i + 1] == SLASH)
-				*str = remove_from(*str, i, free);
+				*str = remove_from(*str, i);
 			else if ((*str)[i + 1] == D_QUOTE)
-				*str = remove_from(*str, i, free);
+				*str = remove_from(*str, i);
 		}
 		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
 			throw_error(NOT_PROVIDED, 99);
@@ -59,7 +59,7 @@ int		escape_all(char **str)
 	while ((*str)[i])
 	{
 		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
-			*str = remove_from(*str, i, free);
+			*str = remove_from(*str, i);
 		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
 			throw_error(NOT_PROVIDED, 100);
 		i++;

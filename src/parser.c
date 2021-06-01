@@ -57,11 +57,11 @@ t_bd_lst	*parse_redirect(char **str)
 		if ((*str)[i] == '>')
 		{
 			is_redirect = TRUNC;
-			*str = remove_from(*str, i, free);
+			*str = remove_from(*str, i);
 			if ((*str)[i] == '>')
 			{
 				is_redirect = APPEND;
-				*str = remove_from(*str, i, free);
+				*str = remove_from(*str, i);
 			}
 			skip_spaces(*str, &i);
 			// index = i;

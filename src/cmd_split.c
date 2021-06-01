@@ -10,14 +10,14 @@ size_t	read_str(char **s, int i, char separator, int is_escaped)
 		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))
 		{
 			if (separator == ' ')
-				*s = remove_from(*s, i, free);
+				*s = remove_from(*s, i);
 			i = check_quote(s, i, QUOTE, separator);
 		}
 		else if ((*s)[i] == D_QUOTE && !is_slash(*s, i - 1)) // remove from
 		{
 			if (separator == ' ')
 			{
-				*s = remove_from(*s, i, free);
+				*s = remove_from(*s, i);
 				escape_pair(s);
 			}
 			i = check_quote(s, i, D_QUOTE, separator);
@@ -28,7 +28,7 @@ size_t	read_str(char **s, int i, char separator, int is_escaped)
 	// if ((*s)[i] == separator && is_slash(*s, i - 1))
 	// {
 	// 	char *str = ft_strdup(*s);
-	// 	*s = remove_from(str, i - 1, free);
+	// 	*s = remove_from(str, i - 1);
 	// }
 	return (i);
 }
@@ -48,7 +48,7 @@ int		check_quote(char **s, int i, char quote_mark, char separator)
 	if ((*s)[i] == quote_mark && !is_slash(*s, i - 1))
 	{
 		if (separator == ' ')
-			*s = remove_from(*s, i, free);
+			*s = remove_from(*s, i);
 		else
 			i++;
 		return (i);
@@ -133,7 +133,7 @@ char	**cmd_split(char *str, char separator)
 		// }
 		if ((s[i] == SLASH && !is_slash(s, i - 1)) && s[i + 1] == separator)
 		{
-			s = remove_from(s, i, free);
+			s = remove_from(s, i);
 			is_escaped = 1;
 		}
 		if ((s[i] != separator && !is_slash(s, i - 1)) || (s[i] == separator && is_escaped))
