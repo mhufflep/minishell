@@ -21,11 +21,8 @@ int		is_in_dir(char *name, char *directory)
 	dir = opendir(directory);	
 	if (!dir)
 	{
-		// ft_putstr_fd(directory, STDERR_FILENO);
-		// ft_putstr_fd(": ", STDERR_FILENO);
-		// ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		return (0);
-    };
+	};
 
     while (1)
 	{
@@ -35,11 +32,11 @@ int		is_in_dir(char *name, char *directory)
 			break ;
 		if (!ft_strcmp(entry->d_name, ".") ||
 			!ft_strcmp(entry->d_name, ".."))
-   			continue;
+			continue;
 		if (!ft_strcmp(entry->d_name, name))
 			return (1);
-    };
+	};
 
-    closedir(dir);
+	closedir(dir);
 	return (0);
 };

@@ -51,6 +51,7 @@ SOURCES			=	main.c \
 					cmd_cd.c \
 					cmd_pwd.c \
 					cmd_env.c \
+					cmd_egg.c \
 					cmd_echo.c \
 					cmd_exit.c \
 					cmd_unset.c \
@@ -64,7 +65,8 @@ SOURCES			=	main.c \
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \
 					shell_keys.h \
-					builtin.h
+					builtin.h \
+					egg.h \
 
 GNL_SRC			=	get_next_line.c
 

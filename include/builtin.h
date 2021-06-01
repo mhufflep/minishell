@@ -11,6 +11,6 @@
 # define CMD_CLEAR		"clear"
 # define CMD_LEARNC		"learnc"
 # define CMD_HISTORY	"history"
-
+# define CMD_21SCHOOL	"21school"
 
 #endif

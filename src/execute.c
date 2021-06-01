@@ -22,6 +22,8 @@ int		execute_cmd(t_prm *prm, t_cmd *cmd)
 		return (cmd_learnc(cmd));
 	else if (!bd_strcmp(CMD_HISTORY, cmd->args[0]))
 		return (cmd_history(prm, cmd));
+	else if (!bd_strcmp(CMD_21SCHOOL, cmd->args[0]))
+		return (cmd_21school(prm, cmd));
 	else
 		return (cmd_usercmd(cmd));
 }

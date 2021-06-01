@@ -26,13 +26,6 @@ int		starts_with_dot(char *path)
 	return (path && path[0] == '.');
 }
 
-// int 	skip_spaces(char *str, int i)
-// {
-// 	while (ft_isspace(str[i]))
-// 		i++;
-// 	return i;
-// }
-
 char **array_join(char **arr, int start, int end)
 {
 	char **res;
@@ -150,7 +143,6 @@ char *asterisk(char *pattern)
 	char			*res;
 	char			*sep;
     struct dirent	*entry;
-
 
 	char *current;
 

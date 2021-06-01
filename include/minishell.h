@@ -18,7 +18,7 @@
 # include <sys/types.h>
 # include <dirent.h>
 
-
+# include "egg.h"
 # include "libft.h"
 # include "builtin.h"
 # include "shell_keys.h"
@@ -85,22 +85,7 @@ typedef struct  s_prm
 	char *line;
 	char input[5];
 
-
-	// char *rc;
-	// char *cd;
-	// char *le;
-	// char *dc;
-	// char *nd;
-	// char *sc;
-
-	// char *im;
-	// char *dm;
-	// char *ei;
-	// char *ed;
-	// char *am;
-
-	t_caps	caps; //remove?
-
+	t_caps	caps;
 	t_term	*term;
 	t_term	*def_term;
 
@@ -129,6 +114,8 @@ void		history_save(t_prm *prm);
 void		history_if_prev(t_prm *prm);
 
 /* BUILTIN */
+int	cmd_21school(t_prm *prm, t_cmd *cmd);
+
 int			cmd_cd(t_cmd *cmd);
 int			cmd_pwd(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd);
@@ -236,8 +223,6 @@ void		handler_quit(int num);
 /* DIR_UTILS */
 int			is_dir(char *directory);
 int			is_in_dir(char *name, char *directory);
-
-
 
 
 #endif
