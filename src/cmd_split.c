@@ -97,10 +97,10 @@ static size_t	count_str(char *s, char separator)
 }
 
 
-char	**cmd_split(char *str, char separator)
+char	**cmd_split(char *s, char separator)
 {
 	char	**array;
-	char *s = ft_strdup(str);
+	// char *s = ft_strdup(str);
 	int		is_escaped;
 	size_t	i;
 	size_t	amount;
@@ -149,6 +149,6 @@ char	**cmd_split(char *str, char separator)
 			i++;
 	}
 	array[amount] = NULL;
-	free(s);
+	// free(s);
 	return (array);
 }

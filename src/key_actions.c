@@ -93,6 +93,7 @@ void	cursor_restore(void)
 void	key_tab_action(void)
 {
 	ft_putstr_fd("\e[g", STDOUT_FILENO);
+	ft_putstr_fd("\a", STDOUT_FILENO);
 }
 
 void	key_bspace_action(t_prm *prm)

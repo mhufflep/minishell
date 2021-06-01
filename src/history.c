@@ -7,7 +7,7 @@ void	history_read(t_prm *prm)
 	int			res;
 	int			fd;
 
-	fd = open(HISTORY_FILENAME, O_CREAT | O_RDONLY, 777);
+	fd = open(HISTORY_FILENAME, O_CREAT | O_RDONLY, 0777);
 	if (fd < 0)
 		return ;
 
@@ -32,7 +32,7 @@ void	history_save(t_prm *prm)
 {
 	int fd;
 
-	fd = open(HISTORY_FILENAME, O_CREAT | O_APPEND | O_WRONLY, 777);
+	fd = open(HISTORY_FILENAME, O_CREAT | O_APPEND | O_WRONLY, 0777);
 	if (fd < 0)
 		return ;
 	if (prm->hptr && prm->hptr->data)
@@ -55,4 +55,16 @@ void	history_add(t_prm *prm)
 		throw_error(BAD_ALLOC, 9);
 	bd_lstadd_back(&(prm->history), new);
 	prm->hptr = bd_lstlast(prm->history);
+}
+
+void	history_if_prev(t_prm *prm)
+{
+	char *temp;
+
+	if (prm->hptr != bd_lstlast(prm->history))
+	{
+		temp = prm->hptr->data;
+		prm->hptr = bd_lstlast(prm->history);
+		prm->hptr->data = bd_strdup(temp);
+	}
 }
