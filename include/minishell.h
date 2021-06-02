@@ -72,11 +72,13 @@ typedef struct  s_cmd
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
     int			rflag;				//стоит ли после команды redir, если значение 2 - значит двойной
-	t_bd_lst	*filenames;
+	t_bd_lst	*out;
+	t_bd_lst	*in;
 }               t_cmd;
 
 typedef struct  s_prm
 {
+	int	def[3];
 	char **env;
 	char **argv;
 	int argc;

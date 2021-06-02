@@ -78,7 +78,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			}
 			parse_redirect(&(arr_pipe[j]), cmd);
 			printf("====== FILENAMES ======\n");
-			bd_lstprint(cmd->filenames, node_print);
+			bd_lstprint(cmd->out, node_print);
 			printf("====== FILENAMES ======\n");
 			//
 			printf("|%s|\n", arr_pipe[j]);

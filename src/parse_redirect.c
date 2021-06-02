@@ -57,7 +57,7 @@ int		parse_redirect(char **str, t_cmd *cmd)
 
 	separator = ' ';
 
-	cmd->filenames = NULL;
+	cmd->out = NULL;
 	i = 0;
 	cmd->rflag = 0;
 	while ((*str)[i])
@@ -80,7 +80,7 @@ int		parse_redirect(char **str, t_cmd *cmd)
 			new = bd_lstnew(filename);
 			if (!new)
 				throw_error(BAD_ALLOC, 10);
-			bd_lstadd_back(&cmd->filenames, new);
+			bd_lstadd_back(&cmd->out, new);
 			replace_by(str, i, read_str(str, i, " >") - i, "", free);
 		}
 		else if ((*str)[i] == '>' && is_slash(*str, i - 1))
