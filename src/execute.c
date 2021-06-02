@@ -61,7 +61,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 	while (lst != NULL)
 	{
 		cmd = (t_cmd *)lst->data;
-		print_cmd(cmd); //PRINT CMD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		print_cmd(cmd);	//PRINT CMD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 		if (cmd->out || cmd->in)
 		{
@@ -93,6 +93,6 @@ void	executor(t_prm *prm)
 		bd_lstclear(&(prm->cmds[i]), free_cmd);
 		i++;
 	}
-	free(prm->cmds); //MAY CAUSE AN ERROR
+	free(prm->cmds);	//MAY CAUSE AN ERROR
 	prm->cmds = NULL;
 }

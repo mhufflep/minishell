@@ -9,3 +9,4 @@ test.c
 minishell
 /.theia
 test*.c
+file*
