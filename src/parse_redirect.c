@@ -59,17 +59,17 @@ int		parse_redirect(char **str, t_cmd *cmd)
 
 	cmd->filenames = NULL;
 	i = 0;
-	cmd->is_redirect = 0;
+	cmd->rflag = 0;
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '>' && !is_slash(*str, i - 1))
 		{
-			cmd->is_redirect = TRUNC;
+			cmd->rflag = O_TRUNC;
 			*str = remove_from(*str, i);
 
 			if ((*str)[i] == '>' && !is_slash(*str, i - 1))
 			{
-				cmd->is_redirect = APPEND;
+				cmd->rflag = O_APPEND;
 				*str = remove_from(*str, i);
 			}
 			else if ((*str)[i] == '>' && is_slash(*str, i - 1))

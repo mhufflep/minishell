@@ -67,9 +67,11 @@ typedef struct	s_env
 
 typedef struct  s_cmd
 {
+	int			rdir[2];
+	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
-    int			is_redirect;		//стоит ли после команды redir, если значение 2 - значит двойной
+    int			rflag;				//стоит ли после команды redir, если значение 2 - значит двойной
 	t_bd_lst	*filenames;
 }               t_cmd;
 
@@ -114,7 +116,9 @@ void		history_save(t_prm *prm);
 void		history_if_prev(t_prm *prm);
 
 /* BUILTIN */
-int	cmd_21school(t_prm *prm, t_cmd *cmd);
+int			cmd_21school(t_prm *prm, t_cmd *cmd);
+
+int			redirects(t_cmd *cmd);
 
 int			cmd_cd(t_cmd *cmd);
 int			cmd_pwd(t_cmd *cmd);

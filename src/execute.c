@@ -61,8 +61,19 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 	while (lst != NULL)
 	{
 		cmd = (t_cmd *)lst->data;
-		print_cmd(cmd); //PRINT CMD!!!!!!
+		print_cmd(cmd); //PRINT CMD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		//redirects
+		if (cmd->rflag)
+			redirects(cmd);
+	
+		int s1 = dup(1);
+		dup2(cmd->rdir[1], 1);
 		code = execute_cmd(prm, cmd);
+		dup2(s1, 1);
+		close(cmd->rdir[1]);
+
+	
 		lst = lst->next;
 	}
 	return (code);
