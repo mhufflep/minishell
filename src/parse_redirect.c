@@ -47,19 +47,31 @@ static size_t	read_str(char **s, int i, char *separators)
 	return (i);
 }
 
+t_redir 	*redir_alloc(void)
+{
+	t_redir *redir;
+
+	redir = (t_redir *)malloc(sizeof(t_redir));
+	if (redir == NULL)
+		throw_error(BAD_ALLOC, 9999);
+	ft_memset(redir, 0, sizeof(t_redir));
+	return (redir);
+}
 
 void		write_out(t_cmd *cmd, char **str, int *i)
 {
-	char		*filename;
 	char		*copy_str;
+	t_redir		*redir;
 	t_bd_lst	*new;
 
-	cmd->r_flag = O_TRUNC;
+	redir = redir_alloc();
+	redir->s_id = OUT;
+	redir->flag = O_TRUNC;
 	*str = remove_from(*str, *i);
 
 	if ((*str)[*i] == '>' && !is_slash(*str, *i - 1))
 	{
-		cmd->r_flag = O_APPEND;
+		redir->flag = O_APPEND;
 		*str = remove_from(*str, *i);
 	}
 	else if ((*str)[*i] == '>' && is_slash(*str, *i - 1))
@@ -67,9 +79,9 @@ void		write_out(t_cmd *cmd, char **str, int *i)
 
 	skip_spaces(*str, i);
 	copy_str = ft_strdup(*str);
-	filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
+	redir->filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
 	
-	new = bd_lstnew(filename);
+	new = bd_lstnew(redir);
 	if (!new)
 		throw_error(BAD_ALLOC, 10);
 	bd_lstadd_back(&cmd->out, new);
@@ -79,16 +91,18 @@ void		write_out(t_cmd *cmd, char **str, int *i)
 
 void		write_in(t_cmd *cmd, char **str, int *i)
 {
-	char		*filename;
 	char		*copy_str;
+	t_redir		*redir;
 	t_bd_lst	*new;
 
-	cmd->rr_flag = O_TRUNC;
+	redir = redir_alloc();
+	redir->s_id = IN;
+	redir->flag = O_TRUNC;
 	*str = remove_from(*str, *i);
 
 	if ((*str)[*i] == '<' && !is_slash(*str, *i - 1))
 	{
-		cmd->rr_flag = O_APPEND;
+		redir->flag = O_APPEND;
 		*str = remove_from(*str, *i);
 	}
 	else if ((*str)[*i] == '<' && is_slash(*str, *i - 1))
@@ -96,9 +110,9 @@ void		write_in(t_cmd *cmd, char **str, int *i)
 
 	skip_spaces(*str, i);
 	copy_str = ft_strdup(*str);
-	filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
+	redir->filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
 	
-	new = bd_lstnew(filename);
+	new = bd_lstnew(redir);
 	if (!new)
 		throw_error(BAD_ALLOC, 10);
 	bd_lstadd_back(&cmd->in, new);
@@ -111,10 +125,6 @@ int		parse_redirect(t_cmd *cmd, char **str)
 	int			i;
 
 	i = 0;
-	cmd->out = NULL;
-	cmd->in = NULL;
-	cmd->r_flag = 0;
-	cmd->rr_flag = 0;
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '>' && !is_slash(*str, i - 1))

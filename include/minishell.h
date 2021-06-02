@@ -41,6 +41,13 @@
 
 typedef struct termios t_term;
 
+typedef enum e_stream
+{
+	IN = 0,
+	OUT = 1,
+	ERR = 2
+}			t_stream;
+
 typedef struct	s_caps
 {
 	char *rc;
@@ -65,6 +72,13 @@ typedef struct	s_env
 	char	*val;
 }				t_env;
 
+typedef struct	s_redir
+{
+	t_stream	s_id;
+	int			flag;
+	char		*filename;
+}				t_redir;
+
 typedef struct  s_cmd
 {
 	int			rdir[2];
@@ -75,6 +89,7 @@ typedef struct  s_cmd
 	int			rr_flag;
 	t_bd_lst	*out;
 	t_bd_lst	*in;
+	t_bd_lst	*err;
 }               t_cmd;
 
 typedef struct  s_prm
