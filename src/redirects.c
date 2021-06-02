@@ -10,7 +10,7 @@ int redirects(t_cmd *cmd)
 	fns = cmd->out;
 	while (fns)
 	{
-		fd = open(fns->data, O_CREAT | O_WRONLY | cmd->rflag, 0644);
+		fd = open(fns->data, O_CREAT | O_WRONLY | cmd->r_flag, 0644);
 		
 		cmd->rdir[1] = fd;
 		

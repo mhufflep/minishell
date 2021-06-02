@@ -76,10 +76,11 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 				print_error(SYNTAX_ERROR_PIPE, 0);
 				return (0);
 			}
-			parse_redirect(&(arr_pipe[j]), cmd);
-			printf("====== FILENAMES ======\n");
+			parse_redirect(cmd, &(arr_pipe[j]));
+			printf("====== FILENAMES OUT ======\n");
 			bd_lstprint(cmd->out, node_print);
-			printf("====== FILENAMES ======\n");
+			printf("====== FILENAMES IN ======\n");
+			bd_lstprint(cmd->in, node_print);
 			//
 			printf("|%s|\n", arr_pipe[j]);
 			//
@@ -145,20 +146,3 @@ int		parser(t_prm *prm)
 		return (0);
 	return (1);
 }
-
-// Разделяем по ; и | и \0
-// Сначала делятся блоки по ; потом уже по |
-
-// если встречаю один из редиректов > >>
-//		первое слово после редиректа - файл (который нужно создать)
-//		если одинарный редирект, то open(O_CREAT, O_TRUNC), если двойной, то open(O_APPEND, O_CREAT)
-//		все остальное - это аргументы, которые нужно присоединить к аргументам текущей команды (то есть все аргументы джойнятся к друг другу)
-
-// если встретил пайп |
-//		первое слово после пайпа - команда
-//		все остальное это аргументы
-//		ставится флаг is_pipe = 1;
-//
-
-
-// ~ -> ft_strdup(getenv("HOME"));

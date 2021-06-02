@@ -71,9 +71,11 @@ typedef struct  s_cmd
 	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
-    int			rflag;				//стоит ли после команды redir, если значение 2 - значит двойной
+    int			r_flag;				//стоит ли после команды redir, если значение 2 - значит двойной
+	int			rr_flag;
 	t_bd_lst	*out;
 	t_bd_lst	*in;
+	t_bd_lst	*err;
 }               t_cmd;
 
 typedef struct  s_prm
@@ -192,7 +194,7 @@ t_bd_lst	*env_llist(void);
 
 /* PARSER */
 
-int			parse_redirect(char **str, t_cmd *cmd);
+int			parse_redirect(t_cmd *cmd, char **str);
 int			is_slash(char *s, int i);
 int			escape_pair(char **str);
 int			escape_all(char **str);
