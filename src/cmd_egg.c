@@ -104,11 +104,6 @@ void	delay(int milli_seconds)
 	while (clock() < start_time + milli_seconds);
 }
 
-// int     is_numeric(char symbol)
-// {
-// 	return (symbol >= '0' && symbol <= '9');
-// }
-
 void	print_colored_symbol(const char *color, char symbol)
 {
 	set_color(color);

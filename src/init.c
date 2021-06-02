@@ -9,7 +9,7 @@ int		setup_parameters(t_prm **prm)
 	return (0);
 }
 
-void		increase_lvl(t_prm *prm)
+void		update_shlvl(t_prm *prm)
 {
 	t_env *shlvl;
 	int res;
@@ -29,6 +29,23 @@ void		increase_lvl(t_prm *prm)
 		shlvl = env_create("SHLVL", ENV_SEP, "1");
 		export_add(prm, shlvl);
 		env_del(shlvl);
+	}
+}
+
+void	update_path(void)
+{
+	t_env *path;
+	char *cwd;
+	char *tmp;
+
+	path = env_get_local("PATH");
+	if (path != NULL)
+	{
+		tmp = path->val;
+		cwd = getcwd(NULL, 0);
+		path->val = ft_strjoin_sep(path->val, ":", cwd);
+		free(cwd);
+		free(tmp);
 	}
 }
 
@@ -95,7 +112,8 @@ t_prm	*setup_settings(int argc, char **argv, char **env)
 	setup_caps(prm);
 	setup_env_lists(prm);
 	history_read(prm);
-	increase_lvl(prm);
+	update_path();
+	update_shlvl(prm);
 	prm->enable = 1;
 	return (prm);
 }
