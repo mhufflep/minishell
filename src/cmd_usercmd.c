@@ -10,15 +10,21 @@ int		cmd_usercmd(t_cmd *cmd)
 
 	pid_t pid;
 	char *dir = NULL;
-
+	char *sep = "/";
 	
-	//Checking bin and cmd
+	//Check if first arg is a directory
+	if (is_dir(cmd->args[0]))
+	{
+		cmd_error(cmd->args[0], NULL, CMD_IS_DIR);
+		return (126);
+	}
+
+	//Check if relative or absolute path given to the first arg OR it is commmand
 	if (ft_strchr(cmd->args[0], '/'))
 	{
-		if (is_dir(cmd->args[0]))
+		if (cmd->args[0][0] == '.')
 		{
-			cmd_error(cmd->args[0], NULL, CMD_IS_DIR);
-			return (126);
+			sep = "";
 		}
 		dir = ft_strdup("");
 	}
@@ -31,7 +37,7 @@ int		cmd_usercmd(t_cmd *cmd)
 		while (bin[i] && !is_in_dir(cmd->args[0], bin[i]))
 			i++;
 
-		dir = ft_strdup(bin[i]); //need to dup value
+		dir = ft_strdup(bin[i]);
 
 		if (bin != NULL)
 			free_array(bin);
@@ -46,7 +52,7 @@ int		cmd_usercmd(t_cmd *cmd)
 	{
 		// Get fullname of exec
 		char *tmp = cmd->args[0];
-		cmd->args[0] = ft_strjoin_sep(dir, "/", cmd->args[0]);
+		cmd->args[0] = ft_strjoin_sep(dir, sep, cmd->args[0]);
 		free(tmp);
 
 

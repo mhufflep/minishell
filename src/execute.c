@@ -63,16 +63,20 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 		cmd = (t_cmd *)lst->data;
 		print_cmd(cmd); //PRINT CMD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
-		//redirects
 		if (cmd->rflag)
-			redirects(cmd);
-
-		dup2(cmd->rdir[0], 0);
-		dup2(cmd->rdir[1], 1);
-		code = execute_cmd(prm, cmd);
-		dup2(prm->def[0], 0);
-		dup2(prm->def[1], 1);
-		close(cmd->rdir[1]);
+		{
+			if (redirects(cmd))
+			{
+				code = execute_cmd(prm, cmd);
+				dup2(prm->def[0], 0);
+				dup2(prm->def[1], 1);
+				close(cmd->rdir[1]);
+			}
+		}
+		else
+		{
+			code = execute_cmd(prm, cmd);
+		}
 
 
 		lst = lst->next;
