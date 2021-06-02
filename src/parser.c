@@ -21,7 +21,7 @@ int		amount_spaces(char *str)
 	return (j);
 }
 
-t_cmd *cmd_create(void)
+t_cmd *cmd_alloc(void)
 {
 	t_cmd *cmd;
 
@@ -51,6 +51,20 @@ int	add_cmd_node(t_prm *prm, t_cmd *cmd, int i)
 	return (1);
 }
 
+void	redirect_print(void *data)
+{
+	t_redir *redir;
+
+	redir = (t_redir *)data;
+	if (redir)
+	{
+		if (redir->filename)
+			printf("%s\n", redir->filename);
+		else
+			printf("<null>\n");
+	}
+}
+
 int split_on_pipe(t_prm *prm, char **arr_commands)
 {
 	int i = 0;
@@ -66,7 +80,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 		while (arr_pipe && arr_pipe[j])
 		{
 
-			t_cmd *cmd = cmd_create();
+			t_cmd *cmd = cmd_alloc();
 			if (amount_spaces(arr_pipe[j]) != (int)ft_strlen(arr_pipe[j]))
 				printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
 			else
@@ -78,9 +92,9 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			}
 			parse_redirect(cmd, &(arr_pipe[j]));
 			printf("====== FILENAMES OUT ======\n");
-			bd_lstprint(cmd->out, node_print);
+			bd_lstprint(cmd->out, redirect_print);
 			printf("====== FILENAMES IN ======\n");
-			bd_lstprint(cmd->in, node_print);
+			bd_lstprint(cmd->in, redirect_print);
 			//
 			printf("|%s|\n", arr_pipe[j]);
 			//
