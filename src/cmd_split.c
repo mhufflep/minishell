@@ -1,6 +1,31 @@
 #include "minishell.h"
 
-size_t	read_str(char **s, int i, char separator, int is_escaped)
+static	int		check_quote(char **s, int i, char quote_mark, char separator)
+{
+	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
+	// чтобы войти в цикл и дойти до закрывающей кавычки
+	if (separator != ' ')
+		i++;
+	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш,
+	// и пока текущий символ не равняется концу строки
+	while ((*s)[i] && ((*s)[i] != quote_mark || ((*s)[i] == quote_mark && is_slash(*s, i - 1))))
+		i++;
+	// Если текущий символ - кавычка и она не экранирована, то значит кавычки закрыты,
+	// возвращаем следующий от нее индекс строки
+	if ((*s)[i] == quote_mark && !is_slash(*s, i - 1))
+	{
+		if (separator == ' ')
+			*s = remove_from(*s, i);
+		else
+			i++;
+		return (i);
+	}
+	else
+		throw_error(QUOTE_NOT_FOUND, 21);
+	return (0);
+}
+
+static	size_t	read_str(char **s, int i, char separator, int is_escaped)
 {
 	// size_t	i;
 
@@ -31,31 +56,6 @@ size_t	read_str(char **s, int i, char separator, int is_escaped)
 	// 	*s = remove_from(str, i - 1);
 	// }
 	return (i);
-}
-
-int		check_quote(char **s, int i, char quote_mark, char separator)
-{
-	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
-	// чтобы войти в цикл и дойти до закрывающей кавычки
-	if (separator != ' ')
-		i++;
-	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш,
-	// и пока текущий символ не равняется концу строки
-	while ((*s)[i] && ((*s)[i] != quote_mark || ((*s)[i] == quote_mark && is_slash(*s, i - 1))))
-		i++;
-	// Если текущий символ - кавычка и она не экранирована, то значит кавычки закрыты,
-	// возвращаем следующий от нее индекс строки
-	if ((*s)[i] == quote_mark && !is_slash(*s, i - 1))
-	{
-		if (separator == ' ')
-			*s = remove_from(*s, i);
-		else
-			i++;
-		return (i);
-	}
-	else
-		throw_error(QUOTE_NOT_FOUND, 21);
-	return (0);
 }
 
 static size_t	count_str(char *s, char separator)
@@ -138,7 +138,7 @@ char	**cmd_split(char *s, char separator)
 		}
 		if ((s[i] != separator && !is_slash(s, i - 1)) || (s[i] == separator && is_escaped))
 		{
-			array[amount] = ft_substr(s, i, read_str(&s, i, separator, is_escaped));
+			array[amount] = ft_substr(s, i, read_str(&s, i, separator, is_escaped) - i);
 			if (separator == ' ')
 				escape_all(&(array[amount]));
 			if (!array[amount++])
