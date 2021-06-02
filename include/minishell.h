@@ -44,8 +44,8 @@ typedef struct termios t_term;
 typedef enum e_stream
 {
 	IN = 0,
-	OUT = 1,
-	ERR = 2
+	OUT = 1
+	// ERR = 2
 }			t_stream;
 
 typedef struct	s_caps
@@ -81,7 +81,7 @@ typedef struct	s_redir
 
 typedef struct  s_cmd
 {
-	int			rdir[2];
+	int			rdir[2];	// change name
 	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
@@ -89,10 +89,10 @@ typedef struct  s_cmd
 	int			rr_flag;
 	t_bd_lst	*out;
 	t_bd_lst	*in;
-	t_bd_lst	*err;
+	// t_bd_lst	*err;
 }               t_cmd;
 
-typedef struct  s_prm
+typedef struct	s_prm
 {
 	int	def[3];
 	char **env;
@@ -113,8 +113,8 @@ typedef struct  s_prm
 	t_bd_lst	*hptr;
 	t_bd_lst	*env_list;
 	t_bd_lst	*cmds_ptr;
-	t_bd_lst	**cmds; //массив листов команд, в поле data каждой будет лежать t_cmd *
-}               t_prm;
+	t_bd_lst	**cmds; 			//массив листов команд, в поле data каждой будет лежать t_cmd *
+}					t_prm;
 
 void		reader(t_prm *);
 int			lexer(char *str);

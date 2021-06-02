@@ -63,7 +63,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 		cmd = (t_cmd *)lst->data;
 		print_cmd(cmd); //PRINT CMD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
-		if (cmd->r_flag || cmd->rr_flag)
+		if (cmd->out || cmd->in)
 		{
 			if (redirects(cmd))
 			{
@@ -77,8 +77,6 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 		{
 			code = execute_cmd(prm, cmd);
 		}
-
-
 		lst = lst->next;
 	}
 	return (code);
