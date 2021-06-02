@@ -54,6 +54,7 @@ int		parse_redirect(char **str, t_cmd *cmd)
 	char		separator;
 	t_bd_lst	*new;
 	char		*filename;
+	char		*copy_str;
 
 	separator = ' ';
 
@@ -64,24 +65,27 @@ int		parse_redirect(char **str, t_cmd *cmd)
 	{
 		if ((*str)[i] == '>' && !is_slash(*str, i - 1))
 		{
-			cmd->is_redirect = TRUNC;
+			cmd->is_redirect = O_TRUNC;
 			*str = remove_from(*str, i);
 
 			if ((*str)[i] == '>' && !is_slash(*str, i - 1))
 			{
-				cmd->is_redirect = APPEND;
+				cmd->is_redirect = O_APPEND;
 				*str = remove_from(*str, i);
 			}
 			else if ((*str)[i] == '>' && is_slash(*str, i - 1))
 				*str = remove_from(*str, i - 1);
 
 			skip_spaces(*str, &i);
-			filename = ft_substr(*str, i, read_str(str, i, " >") - i);
+			copy_str = ft_strdup(*str);
+			filename = ft_substr(copy_str, i, read_str(&copy_str, i, " >") - i);
+			
 			new = bd_lstnew(filename);
 			if (!new)
 				throw_error(BAD_ALLOC, 10);
 			bd_lstadd_back(&cmd->filenames, new);
 			replace_by(str, i, read_str(str, i, " >") - i, "", free);
+			free(copy_str);
 		}
 		else if ((*str)[i] == '>' && is_slash(*str, i - 1))
 			*str = remove_from(*str, i - 1);
