@@ -99,6 +99,14 @@ void	setup_caps(t_prm *prm)
 	prm->caps.cl = init_tcap(prm, "cl");		// clear screen
 }
 
+void	save_default_fd(t_prm *prm)
+{
+	prm->def[2] = dup(2);
+	prm->def[1] = dup(1);
+	prm->def[0] = dup(0);
+	//do i need to close these fds ?
+}
+
 t_prm	*setup_settings(int argc, char **argv, char **env)
 {
 	t_prm	*prm;
@@ -114,6 +122,7 @@ t_prm	*setup_settings(int argc, char **argv, char **env)
 	history_read(prm);
 	update_path();
 	update_shlvl(prm);
+	save_default_fd(prm);
 	prm->enable = 1;
 	return (prm);
 }

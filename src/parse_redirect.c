@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void	skip_spaces(char *str, int *i)
+{
+	while (str[*i] == ' ')
+		(*i)++;
+}
+
 static	int		check_quote(char **s, int i, char quote_mark)
 {
 	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
@@ -41,53 +47,83 @@ static size_t	read_str(char **s, int i, char *separators)
 	return (i);
 }
 
-void	skip_spaces(char *str, int *i)
-{
-	while (str[*i] == ' ')
-		(*i)++;
-}
 
-int		parse_redirect(char **str, t_cmd *cmd)
+void		write_out(t_cmd *cmd, char **str, int *i)
 {
-	int			i;
-	// int index;
-	char		separator;
-	t_bd_lst	*new;
 	char		*filename;
 	char		*copy_str;
+	t_bd_lst	*new;
 
-	separator = ' ';
+	cmd->r_flag = O_TRUNC;
+	*str = remove_from(*str, *i);
 
-	cmd->filenames = NULL;
+	if ((*str)[*i] == '>' && !is_slash(*str, *i - 1))
+	{
+		cmd->r_flag = O_APPEND;
+		*str = remove_from(*str, *i);
+	}
+	else if ((*str)[*i] == '>' && is_slash(*str, *i - 1))
+		*str = remove_from(*str, *i - 1);
+
+	skip_spaces(*str, i);
+	copy_str = ft_strdup(*str);
+	filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
+	
+	new = bd_lstnew(filename);
+	if (!new)
+		throw_error(BAD_ALLOC, 10);
+	bd_lstadd_back(&cmd->out, new);
+	replace_by(str, *i, read_str(str, *i, " ><") - *i, "", free);
+	free(copy_str);
+}
+
+void		write_in(t_cmd *cmd, char **str, int *i)
+{
+	char		*filename;
+	char		*copy_str;
+	t_bd_lst	*new;
+
+	cmd->rr_flag = O_TRUNC;
+	*str = remove_from(*str, *i);
+
+	if ((*str)[*i] == '<' && !is_slash(*str, *i - 1))
+	{
+		cmd->rr_flag = O_APPEND;
+		*str = remove_from(*str, *i);
+	}
+	else if ((*str)[*i] == '<' && is_slash(*str, *i - 1))
+		*str = remove_from(*str, *i - 1);
+
+	skip_spaces(*str, i);
+	copy_str = ft_strdup(*str);
+	filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
+	
+	new = bd_lstnew(filename);
+	if (!new)
+		throw_error(BAD_ALLOC, 10);
+	bd_lstadd_back(&cmd->in, new);
+	replace_by(str, *i, read_str(str, *i, " ><") - *i, "", free);
+	free(copy_str);
+}
+
+int		parse_redirect(t_cmd *cmd, char **str)
+{
+	int			i;
+
 	i = 0;
-	cmd->is_redirect = 0;
+	cmd->out = NULL;
+	cmd->in = NULL;
+	cmd->r_flag = 0;
+	cmd->rr_flag = 0;
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '>' && !is_slash(*str, i - 1))
-		{
-			cmd->is_redirect = O_TRUNC;
-			*str = remove_from(*str, i);
-
-			if ((*str)[i] == '>' && !is_slash(*str, i - 1))
-			{
-				cmd->is_redirect = O_APPEND;
-				*str = remove_from(*str, i);
-			}
-			else if ((*str)[i] == '>' && is_slash(*str, i - 1))
-				*str = remove_from(*str, i - 1);
-
-			skip_spaces(*str, &i);
-			copy_str = ft_strdup(*str);
-			filename = ft_substr(copy_str, i, read_str(&copy_str, i, " >") - i);
-			
-			new = bd_lstnew(filename);
-			if (!new)
-				throw_error(BAD_ALLOC, 10);
-			bd_lstadd_back(&cmd->filenames, new);
-			replace_by(str, i, read_str(str, i, " >") - i, "", free);
-			free(copy_str);
-		}
+			write_out(cmd, str, &i);
 		else if ((*str)[i] == '>' && is_slash(*str, i - 1))
+			*str = remove_from(*str, i - 1);
+		else if ((*str)[i] == '<' && !is_slash(*str, i - 1))
+			write_in(cmd, str, &i);
+		else if ((*str)[i] == '<' && is_slash(*str, i - 1))
 			*str = remove_from(*str, i - 1);
 		else
 			i++;

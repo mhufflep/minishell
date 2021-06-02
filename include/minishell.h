@@ -67,14 +67,19 @@ typedef struct	s_env
 
 typedef struct  s_cmd
 {
+	int			rdir[2];
+	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
-    int			is_redirect;		//стоит ли после команды redir, если значение 2 - значит двойной
-	t_bd_lst	*filenames;
+    int			r_flag;				//стоит ли после команды redir, если значение 2 - значит двойной
+	int			rr_flag;
+	t_bd_lst	*out;
+	t_bd_lst	*in;
 }               t_cmd;
 
 typedef struct  s_prm
 {
+	int	def[3];
 	char **env;
 	char **argv;
 	int argc;
@@ -114,7 +119,9 @@ void		history_save(t_prm *prm);
 void		history_if_prev(t_prm *prm);
 
 /* BUILTIN */
-int	cmd_21school(t_prm *prm, t_cmd *cmd);
+int			cmd_21school(t_prm *prm, t_cmd *cmd);
+
+int			redirects(t_cmd *cmd);
 
 int			cmd_cd(t_cmd *cmd);
 int			cmd_pwd(t_cmd *cmd);
@@ -186,7 +193,7 @@ t_bd_lst	*env_llist(void);
 
 /* PARSER */
 
-int			parse_redirect(char **str, t_cmd *cmd);
+int			parse_redirect(t_cmd *cmd, char **str);
 int			is_slash(char *s, int i);
 int			escape_pair(char **str);
 int			escape_all(char **str);

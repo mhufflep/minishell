@@ -46,6 +46,7 @@ SOURCES			=	main.c \
 					expander.c \
 					readline.c \
 					signal.c \
+					redirects.c \
 					main_functions.c \
 					array_utils.c \
 					env_utils.c \
