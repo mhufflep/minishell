@@ -62,6 +62,21 @@ void	dup_and_close(t_prm *prm, t_cmd *cmd, t_stream sid)
 	}
 }
 
+int pipes(t_bd_lst *lst)
+{
+	t_cmd *cmd;
+
+	while (lst->next != NULL)
+	{
+		cmd = (t_cmd *)lst->data;
+		pipe(cmd->pipe);			//if is pipe
+
+		//pipes
+
+		lst = lst->next;
+	}
+}
+
 int		execute_block(t_prm *prm, t_bd_lst *lst)
 {
 	t_cmd *cmd;
