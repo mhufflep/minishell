@@ -7,6 +7,7 @@ CFLAGS	= -Wall -Wextra -Werror
 INCLUDE = -I./
 
 OBJ_DIR = obj
+SRC_DIR = src
 
 SRCS	=	ft_atoi.c		ft_bzero.c		ft_isalnum.c \
 			ft_isalpha.c	ft_isascii.c	ft_isdigit.c \
@@ -19,7 +20,8 @@ SRCS	=	ft_atoi.c		ft_bzero.c		ft_isalnum.c \
 			ft_putchar_fd.c	ft_itoa.c 		ft_substr.c \
 			ft_putstr_fd.c	ft_putendl_fd.c	ft_putnbr_fd.c \
 			ft_strjoin.c	ft_strtrim.c 	ft_strmapi.c \
-			ft_realloc_str.c ft_split.c 
+			ft_realloc_str.c ft_split.c		ft_strjoin_sep.c \
+			ft_isspace.c \
 
 SRCS_B	= 	ft_lstmap.c \
 			ft_lstnew.c \
@@ -34,18 +36,18 @@ SRCS_B	= 	ft_lstmap.c \
 			ft_lstadd_front.c \
 			ft_lstmax_cont_len.c
 
-OBJS	= $(SRCS:.c=.o)
-OBJS_B	= $(SRCS_B:.c=.o)
+OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+OBJS_B	= $(addprefix $(OBJ_DIR)/, $(SRCS_B:.c=.o))
 
 all: create_dir $(NAME)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< $(INCLUDE) -o $@
 
 create_dir:
 	@mkdir -p $(OBJ_DIR)
 
-clean: 
+clean:
 	@rm -rf $(OBJS) $(OBJS_B)
 
 fclean: clean

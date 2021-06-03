@@ -16,7 +16,7 @@ t_term *create_term_struct(void)
 	term = (t_term *)malloc(sizeof(t_term));
 	if (term == NULL)
 		return (NULL);
-	if (tcgetattr(STDIN_FILENO, term))
+	if (tcgetattr(STDIN_FILENO, term) == -1)
 	{
 		free(term);
 		return (NULL);
@@ -24,3 +24,8 @@ t_term *create_term_struct(void)
 	return (term);
 }
 
+void	reset_parameters(t_prm *prm)
+{
+	tcsetattr(0, TCSANOW, prm->def_term);
+	exit(prm->exit_code);
+}

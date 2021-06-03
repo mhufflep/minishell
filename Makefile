@@ -29,18 +29,46 @@ GNL_DIR		= get_next_line
 ######################### SOURCES ############################
 
 SOURCES			=	main.c \
+					split_utils.c \
+					cmd_split.c \
+					parser.c \
+					parse_redirect.c \
+					asterisk.c \
+					lexer.c \
 					history.c \
+					dir_utils.c \
 					commands.c \
 					execute.c \
+					key_actions.c \
 					term_utils.c \
 					init.c \
-					parser.c \
-					main_functions.c
+					error.c \
+					expander.c \
+					readline.c \
+					signal.c \
+					redirects.c \
+					main_functions.c \
+					array_utils.c \
+					env_utils.c \
+					cmd_cd.c \
+					cmd_pwd.c \
+					cmd_env.c \
+					cmd_egg.c \
+					cmd_echo.c \
+					cmd_exit.c \
+					cmd_unset.c \
+					cmd_clear.c \
+					cmd_export.c \
+					cmd_history.c \
+					cmd_usercmd.c \
+					cmd_utils.c \
+					cmd_not_found.c \
 					
 HEADER_FILES	=	minishell.h \
 					get_next_line.h \
 					shell_keys.h \
-					builtin.h
+					builtin.h \
+					egg.h \
 
 GNL_SRC			=	get_next_line.c
 

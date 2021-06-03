@@ -1,142 +1,141 @@
-
 #include "minishell.h"
 
-void	buffer_shift_left(char *buf, int i, int len)
+char *insert_into2(char **src, char *add, int index, void (*free_ctl)(void *))
 {
-	while (i < len)
-	{
-		buf[i] = buf[i + 1];
-		i++;
-	}
+	char	*dst;
+	int		src_len;
+	int		add_len;
+
+	src_len = ft_strlen(*src);
+	add_len = ft_strlen(add);
+
+	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
+	if (dst == NULL)
+		throw_error(BAD_ALLOC, 4);
+	ft_memset(dst, 0, src_len + add_len + 1);
+	ft_strlcpy(dst, *src, index + 1);
+	ft_strlcpy(&dst[index], add, add_len + 1);
+	ft_strlcpy(&dst[index + add_len], &(*src)[index], src_len - index + 1);
+	if (free_ctl != NULL)
+		free_ctl(*src);
+	*src = dst;
+	return (dst);
 }
 
-void	buffer_shift_right(char *buf, int start, int end)
+char *replace_by(char **src, int index, int len, char *add, void (*free_ctl)(void *))
 {
-	// buf[end + 1] = '\0';
-	while (start < end)
-	{
-		buf[end + 1] = buf[end];
-		end--;
-	}
+	char	*dst;
+	int		src_len;
+	int		add_len;
+
+	src_len = ft_strlen(*src);
+	add_len = ft_strlen(add);
+
+	dst = (char *)malloc((src_len - len + add_len) * sizeof(char));
+	if (dst == NULL)
+		throw_error(BAD_ALLOC, 0);
+	ft_memset(dst, 0, src_len - len + add_len);
+	ft_strlcpy(dst, *src, index + 1);
+	ft_strlcpy(&dst[index], add, add_len + 1);
+	ft_strlcpy(&dst[index + add_len], &(*src)[index + len], src_len - index - len + 1);
+	if (free_ctl != NULL)
+		free_ctl(*src);
+	*src = dst;
+	return (dst);
 }
 
-void	cursor_save(void)
+
+char *insert_into(char *src, char *add, int index, void (*free_ctl)(void *))
 {
-	write(1, "\e[s", ft_strlen("\e[s"));
+	char	*dst;
+	int		src_len;
+	int		add_len;
+
+	src_len = ft_strlen(src);
+	add_len = ft_strlen(add);
+
+	dst = (char *)malloc((src_len + add_len + 1) * sizeof(char));
+	if (dst == NULL)
+		throw_error(BAD_ALLOC, 5);
+	ft_memset(dst, 0, src_len + add_len + 1);
+	ft_strlcpy(dst, src, index + 1);
+	ft_strlcpy(&dst[index], add, add_len + 1);
+	ft_strlcpy(&dst[index + add_len], &src[index], src_len - index + 1);
+	if (free_ctl != NULL)
+		free_ctl(src);
+	return (dst);
 }
 
-void	cursor_restore(void)
+char *remove_from(char *src, int index)
 {
-	write(1, "\e[u", ft_strlen("\e[u"));
+	int	len;
+
+	if (index < 0)
+		return (NULL);
+	len = ft_strlen(src);
+	ft_memmove(&src[index], &src[index + 1], len - index);
+	return (src);
 }
+
+t_bd_lst *env_llist(void)
+{
+	t_prm *prm;
+
+	prm = get_prm(0);
+	return (prm->env_list);
+}
+
+t_prm *get_prm(t_prm *prm)
+{
+	static t_prm *struct_ptr;
+
+	if (struct_ptr == NULL)
+		struct_ptr = prm;
+	return (struct_ptr);
+}
+
+// Not working after moving in history and applying some command --> need to check 
+
+// Fixed: New symbol does not print correctly. It is print into current cursor position.
+// Problem could appear while writing the rest of the line after printing new symbol.
 
 // MAIN FUNCTIONS
-void	read_line(t_prm *prm)
+
+char **array_copy(char **proto, char *(*copy_func)(const char *))
 {
-	// t_bd_lst *cur; 
-	
-	int l;
-	char input[40] = {'\0'};
+	char **copy;
+	int i;
+	int size;
 
-	prm->line_len = 0;
-	prm->cursor_pos = 0;
-
-	char buff[40] = {'\0'};
-
-	write(1, SHELL_PROMPT, strlen(SHELL_PROMPT));
-	tputs(save_cursor, 1, ft_putchar);
-	
-	do	// DO WHILE CYCLE IS FORBIDDEN
+	i = 0;
+	size = sizeof_array(proto);
+	copy = malloc(sizeof(char *) * (size + 1));
+	while (proto[i])
 	{
-		//need to clean buffer
-		l = read(0, input, 20);
-		input[l] = 0;
-
-		// recognize_input(input);
-		if (is_printable(input))
-		{
-			// if (prm->cursor_pos != prm->line_len)
-			// {
-			// 	buffer_shift_right(buff, prm->cursor_pos, prm->line_len + 1);
-			// }
-			buff[prm->cursor_pos] = input[0];
-			prm->line_len += l;
-			prm->cursor_pos += l;
-			// write(1, &buff[prm->cursor_pos], prm->line_len - prm->cursor_pos);
-		}
-
-		if (!ft_strcmp(input, KEY_ARROW_UP))
-			key_up_action(prm);
-		else if (!ft_strcmp(input, KEY_ARROW_DOWN))
-			key_down_action(prm);
-		else if (!ft_strcmp(input, KEY_ARROW_LEFT))
-			key_left_action(prm);
-		else if (!ft_strcmp(input, KEY_ARROW_RIGHT))
-			key_right_action(prm);
-		else if (!ft_strcmp(input, KEY_BACKSPACE))
-		{
-			//tab
-			if (prm->cursor_pos > 0)
-			{
-				prm->cursor_pos--;
-				tputs(cursor_left, 1, ft_putchar);
-				cursor_save();
-				tputs(tigetstr("ed"), 1, ft_putchar);
-				buffer_shift_left(buff, prm->cursor_pos, prm->line_len);
-				prm->line_len--;
-				write(1, &buff[prm->cursor_pos], prm->line_len - prm->cursor_pos);
-				cursor_restore();
-			}
-		}
-		else if (!ft_strcmp(input, KEY_CTRL_L))
-		{
-			printf("\e[1;1H\e[2J\n");
-		}
-		else
-		{
-			write(1, input, l);
-		}
-
-	} while (ft_strcmp(input, KEY_ENTER) && ft_strcmp(input, KEY_CTRL_L) && ft_strcmp(input, KEY_CTRL_D));
-	
-	prm->history_ptr->content = ft_strdup(buff);
-	// prm->line = ft_strdup(buff);
-}
-
-void	parse_line(t_prm *prm)
-{
-	t_cmd *cmd;
-	t_bd_lst *new;
-
-	cmd = malloc(sizeof(t_cmd)); //protect
-	cmd->cmd = prm->history_ptr->content;
-	cmd->args = "..";
-	new = bd_lstnew(cmd);
-	if (!new)
-	{
-		//parse error
-		printf("parse error\n");
+		copy[i] = copy_func(proto[i]);
+		i++;
 	}
-	bd_lstadd_back(&(prm->cmds), new);
+	copy[i] = NULL;
+	return (copy);
 }
 
-void	execute_line(t_prm *prm)
+t_cmd	*command_create(char **args)
 {
-	prm->cmds_ptr = prm->cmds;
-	while (prm->cmds_ptr != NULL)
-	{
-		t_cmd *cmd;
+	t_cmd *new_cmd;
 
-		cmd = (t_cmd *)prm->cmds->content;
-		execute(cmd->cmd, prm); //not line but cmds
-		prm->cmds_ptr = prm->cmds_ptr->next;
-	}
-	bd_lstclear(&(prm->cmds), free);
-	prm->cmds_ptr = NULL;
+	new_cmd = malloc(sizeof(t_cmd));
+	if (!new_cmd)
+		throw_error(BAD_ALLOC, 7);
+	new_cmd->is_pipe = 0;
+	// new_cmd->args[0] = ft_strdup(cmd);
+	new_cmd->args = array_copy(args, ft_strdup);
+	return (new_cmd);
 }
 
-void	reset_parameters(t_prm *prm)
+void	cmds_arr_create(t_prm *prm, int size)
 {
-	if (tcsetattr(0, TCSANOW, prm->def_term))
-		exit(1);
+	prm->cmds = malloc(sizeof(t_bd_lst *) * size);
+	if (!prm->cmds)
+		throw_error(BAD_ALLOC, 8);
+	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
 }

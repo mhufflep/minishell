@@ -1,20 +1,5 @@
 #include "minishell.h"
 
-int is_spec_key(char *input)
-{
-	if (!ft_strcmp(input, KEY_ARROW_UP) || 
-	    !ft_strcmp(input, KEY_ARROW_DOWN) ||
-		!ft_strcmp(input, KEY_ARROW_LEFT) || 
-		!ft_strcmp(input, KEY_ARROW_RIGHT) || 
-		!ft_strcmp(input, KEY_BACKSPACE) ||
-		(*input == 12))
-		return (1);
-	else
-	{
-		return (0);
-	}
-}
-
 int is_printable(char *input)
 {
 	int i;
@@ -22,66 +7,139 @@ int is_printable(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (!ft_isprint(input[i]))//if (input[i] < 32) //
+		if (!ft_isprint(input[i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	clear_prompt(void)
+void	clear_prompt(t_prm *prm)
 {
-	tputs(restore_cursor, 1, ft_putchar);
-	tputs(tigetstr("ed"), 1, ft_putchar);
+	tputs(prm->caps.rc, 1, ft_putchar);
+	tputs(prm->caps.cd, 1, ft_putchar);
+}
+
+void	update_curs_pos(t_prm *prm)
+{
+	prm->curs_pos = bd_strlen(prm->hptr->data);
+	prm->line_len = prm->curs_pos;
+	ft_putstr_fd(prm->hptr->data, STDOUT_FILENO);
 }
 
 void	key_up_action(t_prm *prm)
 {
-	clear_prompt();
-	if (prm->history_ptr && prm->history_ptr->prev != NULL)
-		prm->history_ptr = prm->history_ptr->prev;
-	//set cursor pos and line len to the end of the line
-	ft_putstr_fd(prm->history_ptr->content, 1); //segfault when trying to press arrow exactly after start of the program
-	//copy from history to buffer and set i to len of buffer
+	if (prm->hptr && prm->hptr->prev != NULL)
+	{
+		clear_prompt(prm);
+		prm->hptr = prm->hptr->prev;
+		update_curs_pos(prm);
+	}
 }
 
 void	key_down_action(t_prm *prm)
 {
-	clear_prompt();
-	if (prm->history_ptr && prm->history_ptr->next != NULL)
-		prm->history_ptr = prm->history_ptr->next;
-		//set cursor pos and line len to the end of the lines
-	ft_putstr_fd(prm->history_ptr->content, 1); //segfault when trying to press arrow exactly after start of the program
-	//copy from history to buffer and set i to len of buffer
+	if (prm->hptr && prm->hptr->next != NULL)
+	{
+		clear_prompt(prm);
+		prm->hptr = prm->hptr->next;
+		update_curs_pos(prm);
+	}
 }
 
 void	key_left_action(t_prm *prm)
 {
-	if (prm->cursor_pos > 0)
+	if (prm->curs_pos > 0)
 	{
-		prm->cursor_pos--;
-		tputs(cursor_left, 1, ft_putchar);
+		prm->curs_pos--;
+		tputs(prm->caps.le, 1, ft_putchar);
+	}
+}
+
+void	key_home_action(t_prm *prm)
+{
+	prm->curs_pos = 0;
+	tputs(prm->caps.rc, 1, ft_putchar);
+}
+
+void	key_end_action(t_prm *prm)
+{
+	while (prm->curs_pos != prm->line_len)
+	{
+		prm->curs_pos++;
+		tputs(prm->caps.nd, 1, ft_putchar);	
 	}
 }
 
 void	key_right_action(t_prm *prm)
 {
-	if (prm->cursor_pos < prm->line_len)
+	if (prm->curs_pos < prm->line_len)
 	{
-		prm->cursor_pos++;
-		tputs(cursor_right, 1, ft_putchar);	
+		prm->curs_pos++;
+		tputs(prm->caps.nd, 1, ft_putchar);	
 	}
 }
 
-// void	key_backspace_action(t_prm *prm)
-// {
-// 	buff[i--] = '\0'; //deleting symbol from buffer
-// 	tputs(cursor_left, 1, ft_putchar);
-// 	tputs(tigetstr("ed"), 1, ft_putchar);
-// 	clean_prompt();
-// }
+void	cursor_save(void)
+{
+	ft_putstr_fd("\e[s", STDOUT_FILENO);
+}
 
-// void	key_other_action(t_prm *prm)
-// {
-// 	write (1, input, l);
-// }
+void	cursor_restore(void)
+{
+	ft_putstr_fd("\e[u", STDOUT_FILENO);
+}
+
+void	key_tab_action(void)
+{
+	ft_putstr_fd("\e[g", STDOUT_FILENO);
+	ft_putstr_fd("\a", STDOUT_FILENO);
+}
+
+void	key_bspace_action(t_prm *prm)
+{
+	if (prm->curs_pos > 0)
+	{
+		tputs(prm->caps.le, 1, ft_putchar);
+		tputs(prm->caps.dc, 1, ft_putchar);
+
+		prm->curs_pos--;
+		prm->hptr->data = remove_from(prm->hptr->data, prm->curs_pos); //here was free
+		prm->line_len--;
+	}
+}
+
+void 	clrscr(t_prm *prm)
+{
+	tputs(prm->caps.cl, 1, ft_putchar);
+}
+
+void	key_ctrl_l_action(t_prm *prm)
+{
+	free(prm->hptr->data);
+	prm->hptr->data = NULL;
+	clrscr(prm);
+}
+
+void	key_ctrl_d_action(t_prm *prm)
+{
+	if (prm->hptr->data && !ft_strcmp(prm->hptr->data, ""))
+	{
+		free(prm->hptr->data);
+		ft_putendl_fd("exit", STDERR_FILENO);
+		reset_parameters(prm);
+	}
+}
+
+void	key_other_action(t_prm *prm)
+{
+	if (is_printable(prm->input))
+	{
+		prm->hptr->data = insert_into(prm->hptr->data, prm->input, prm->curs_pos, free);
+		prm->line_len += bd_strlen(prm->input);
+		prm->curs_pos += bd_strlen(prm->input);	
+	}
+	tputs(enter_insert_mode, 1, ft_putchar);
+	ft_putstr_fd(prm->input, STDOUT_FILENO);
+	tputs(exit_insert_mode, 1, ft_putchar);
+}

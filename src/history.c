@@ -1,79 +1,70 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   history.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mhufflep <mhufflep@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/06 01:32:20 by mhufflep          #+#    #+#             */
-/*   Updated: 2021/05/08 21:11:00 by mhufflep         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-char	*get_history_filename(void)
+void	history_read(t_prm *prm)
 {
-	char *path;
+	t_bd_lst	*new;
+	char		*line;
+	int			res;
+	int			fd;
 
-	path = ft_strjoin(HISTORY_FILEPATH, HISTORY_FILENAME); //memory leak, fuck
-	return (path);
-}
-
-int		read_history(t_prm *prm)
-{
-	t_bd_lst *new;
-	char *path;
-	char *line;
-	int fd;
-	int res;
-
-	line = NULL;
-	path = get_history_filename();
-	fd = open(path, O_CREAT | O_RDONLY, 777);
+	fd = open(HISTORY_FILENAME, O_CREAT | O_RDONLY, 0777);
 	if (fd < 0)
-		return (-2);
+		return ;
+
 	res = 1;
+	line = NULL;
 	while (res > 0)
 	{
 		res = get_next_line(fd, &line);
 		new = bd_lstnew(line);
 		if (new == NULL)
-		{
 			res = -3;
-			break ;
-		}
-		bd_lstadd_back(&(prm->history), new);
+		bd_lstadd_back(&prm->history, new);
 	}
-	//need to free line
 	if (res < 0)
 	{
-		bd_lstclear(&(prm->history), free);
+		bd_lstclear(&prm->history, free);
 	}
 	close(fd);
-	return (res);
 }
 
-int		history_add(t_bd_lst *node)
+void	history_save(t_prm *prm)
 {
-	char *path;
 	int fd;
 
-	path = get_history_filename();
-	if (!path)
-		return (-1);
-	fd = open(path, O_APPEND | O_WRONLY);
+	fd = open(HISTORY_FILENAME, O_CREAT | O_APPEND | O_WRONLY, 0777);
 	if (fd < 0)
-		return (-2);
-	
-	if (node && node->content)
+		return ;
+	if (prm->hptr && prm->hptr->data)
 	{
-		if (ft_strcmp(node->content, "\n"))
+		if (ft_strcmp(prm->hptr->data, "\n"))
 		{
 			write(fd, "\n", 1);
-			write(fd, node->content, bd_strlen((char *)node->content));
+			write(fd, prm->hptr->data, bd_strlen((char *)prm->hptr->data));
 		}
 	}
 	close(fd);
-	return (0);
+}
+
+void	history_add(t_prm *prm)
+{
+	t_bd_lst *new;
+	
+	new = bd_lstnew(NULL);
+	if (new == NULL)
+		throw_error(BAD_ALLOC, 9);
+	bd_lstadd_back(&(prm->history), new);
+	prm->hptr = bd_lstlast(prm->history);
+}
+
+void	history_if_prev(t_prm *prm)
+{
+	char *temp;
+
+	if (prm->hptr != bd_lstlast(prm->history))
+	{
+		temp = prm->hptr->data;
+		prm->hptr = bd_lstlast(prm->history);
+		prm->hptr->data = bd_strdup(temp);
+	}
 }

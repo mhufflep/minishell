@@ -1,26 +1,102 @@
 #include "minishell.h"
 
-int		execute(char buff[], t_prm *prm)
+int		execute_cmd(t_prm *prm, t_cmd *cmd)
 {
-	if (!ft_strncmp(CMD_EXIT, buff, ft_strlen(CMD_EXIT)))
-		prm->status = 1;
-	else if (!ft_strncmp(CMD_CD, buff, ft_strlen(CMD_CD)))
-		cmd_cd(prm);
-	else if (!ft_strncmp(CMD_ENV, buff, ft_strlen(CMD_ENV)))
-		cmd_env(prm);
-	else if (!ft_strncmp(CMD_PWD, buff, ft_strlen(CMD_PWD)))
-		cmd_pwd(prm);
-	else if (!ft_strncmp(CMD_UNSET, buff, ft_strlen(CMD_UNSET)))
-		cmd_unset(prm);
-	else if (!ft_strncmp(CMD_EXPORT, buff, ft_strlen(CMD_EXPORT)))
-		cmd_export(prm);
-	else if (!ft_strncmp(CMD_LEARNC, buff, ft_strlen(CMD_LEARNC)))
-		cmd_learnc(prm);
-	else if (!ft_strncmp(CMD_HISTORY, buff, ft_strlen(CMD_HISTORY)))
-		cmd_history(prm);
-	else if (!ft_strncmp(CMD_ECHO, buff, ft_strlen(CMD_ECHO)))
-		cmd_echo(prm);
+	if (!bd_strcmp(CMD_EXIT, cmd->args[0]))
+		return (cmd_exit(prm, cmd));
+	else if (!bd_strcmp(CMD_CD, cmd->args[0]))
+		return (cmd_cd(cmd));
+	else if (!bd_strcmp(CMD_ENV, cmd->args[0]))
+		return (cmd_env(cmd));
+	else if (!bd_strcmp(CMD_PWD, cmd->args[0]))
+		return (cmd_pwd(cmd));
+	else if (!bd_strcmp(CMD_ECHO, cmd->args[0]))
+		return (cmd_echo(cmd));
+	else if (!bd_strcmp(CMD_UNSET, cmd->args[0]))
+		return (cmd_unset(prm, cmd));
+	else if (!bd_strcmp(CMD_CLEAR, cmd->args[0]))
+		return (cmd_clear(prm, cmd));
+	else if (!bd_strcmp(CMD_EXPORT, cmd->args[0]))
+		return (cmd_export(prm, cmd));
+	else if (!bd_strcmp(CMD_LEARNC, cmd->args[0]))
+		return (cmd_learnc(cmd));
+	else if (!bd_strcmp(CMD_HISTORY, cmd->args[0]))
+		return (cmd_history(prm, cmd));
+	else if (!bd_strcmp(CMD_21SCHOOL, cmd->args[0]))
+		return (cmd_21school(prm, cmd));
 	else
-		cmd_not_found(prm);
-	return (1);
+		return (cmd_usercmd(cmd));
+}
+
+void	free_cmd(void *data)
+{
+	t_cmd	*cmd;
+
+	cmd = (t_cmd *)data;
+	free_array(cmd->args);
+	free(cmd);
+}
+
+void	print_cmd(t_cmd *cmd)
+{
+	int i;
+
+	i = 1;
+	ft_putstr_fd("CURRENT COMMAND: ", STDOUT_FILENO);
+	ft_putstr_fd(cmd->args[0], STDOUT_FILENO);
+	while (cmd->args[i])
+	{
+		ft_putstr_fd(" ", STDOUT_FILENO);
+		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
+		i++;
+	}
+	ft_putendl_fd("", STDOUT_FILENO);
+}
+
+void	dup_and_close(t_prm *prm, t_cmd *cmd, t_stream sid)
+{
+	if (!isatty(sid))
+	{
+		close(cmd->rdir[sid]);
+		dup2(prm->def[sid], sid);
+	}
+}
+
+int		execute_block(t_prm *prm, t_bd_lst *lst)
+{
+	t_cmd *cmd;
+	int code;
+
+	while (lst != NULL)
+	{
+		// pipe(cmd->pipe);			// echo hello | grep l | wc -l
+		cmd = (t_cmd *)lst->data;
+		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
+		
+		cmd->rdir[0] = redirect(cmd->in, IN);
+		cmd->rdir[1] = redirect(cmd->out, OUT);
+		if (cmd->rdir[0] != INVALID && cmd->rdir[1] != INVALID)
+		{
+			code = execute_cmd(prm, cmd);
+			dup_and_close(prm, cmd, IN);
+			dup_and_close(prm, cmd, OUT);
+		}
+		lst = lst->next;
+	}
+	return (code);
+}
+
+void	executor(t_prm *prm)
+{
+	int i;
+
+	i = 0;
+	while (prm->cmds && prm->cmds[i] != NULL)
+	{
+		prm->exit_code = execute_block(prm, prm->cmds[i]);
+		bd_lstclear(&(prm->cmds[i]), free_cmd);
+		i++;
+	}
+	free(prm->cmds);	//MAY CAUSE AN ERROR
+	prm->cmds = NULL;
 }

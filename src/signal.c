@@ -1,11 +1,22 @@
-void handler_kill(int num)
+#include "minishell.h"
+
+void handler_int(int num)
 {
-	printf("%d\n", num);
-	exit(0);
+	t_prm *prm;
+	
+	prm = get_prm(0);
+	prm->exit_code = 1;
+	(void)num;
+	// ft_putnbr_fd(num, STDOUT_FILENO);
 }
 
 void handler_quit(int num)
 {
-	printf("Quit: %d\n", num);
+	t_prm *prm;
+	
+	prm = get_prm(0);
+	prm->enable = 0;
+	ft_putendl_fd("Quit: ", STDOUT_FILENO);
+	ft_putnbr_fd(num, STDOUT_FILENO);
 	exit(0);
 }
