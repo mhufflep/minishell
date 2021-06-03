@@ -75,6 +75,7 @@ int pipes(t_bd_lst *lst)
 
 		lst = lst->next;
 	}
+	return (0);
 }
 
 int		execute_block(t_prm *prm, t_bd_lst *lst)
@@ -82,9 +83,9 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 	t_cmd *cmd;
 	int code;
 
+	// pipes(lst);
 	while (lst != NULL)
 	{
-		// pipe(cmd->pipe);
 		cmd = (t_cmd *)lst->data;
 		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
 		
