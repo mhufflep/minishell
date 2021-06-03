@@ -43,6 +43,8 @@ typedef struct termios t_term;
 
 typedef enum e_stream
 {
+	INVALID = -2,
+	UNDEFINED = -1,
 	IN = 0,
 	OUT = 1
 	// ERR = 2
@@ -76,12 +78,13 @@ typedef struct	s_redir
 {
 	t_stream	s_id;
 	int			flag;
+	int			rights;
 	char		*filename;
 }				t_redir;
 
 typedef struct  s_cmd
 {
-	int			rdir[2];	// change name
+	int			rdir[2];		// change name
 	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
@@ -247,5 +250,5 @@ void		handler_quit(int num);
 int			is_dir(char *directory);
 int			is_in_dir(char *name, char *directory);
 
-
+int 		redirect(t_bd_lst *io, t_stream sid);
 #endif

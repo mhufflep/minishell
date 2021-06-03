@@ -66,12 +66,13 @@ void		write_out(t_cmd *cmd, char **str, int *i)
 
 	redir = redir_alloc();
 	redir->s_id = OUT;
-	redir->flag = O_TRUNC;
+	redir->flag = O_CREAT | O_WRONLY | O_TRUNC;
+	redir->rights = 0644;
 	*str = remove_from(*str, *i);
 
 	if ((*str)[*i] == '>' && !is_slash(*str, *i - 1))
 	{
-		redir->flag = O_APPEND;
+		redir->flag = O_CREAT | O_WRONLY | O_APPEND;
 		*str = remove_from(*str, *i);
 	}
 	else if ((*str)[*i] == '>' && is_slash(*str, *i - 1))
@@ -97,12 +98,13 @@ void		write_in(t_cmd *cmd, char **str, int *i)
 
 	redir = redir_alloc();
 	redir->s_id = IN;
-	redir->flag = O_TRUNC;
+	redir->flag = O_RDONLY; //O_TRUNC;
+	redir->rights = 0;
 	*str = remove_from(*str, *i);
 
 	if ((*str)[*i] == '<' && !is_slash(*str, *i - 1))
 	{
-		redir->flag = O_APPEND;
+		redir->flag = O_RDONLY; //O_APPEND;
 		*str = remove_from(*str, *i);
 	}
 	else if ((*str)[*i] == '<' && is_slash(*str, *i - 1))

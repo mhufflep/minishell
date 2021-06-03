@@ -32,7 +32,7 @@ void	read_symbol(char *input)
 
 	readed = read(0, input, 5);
 	if (readed == -1)
-		throw_error(READ_ERR, 0);
+		throw_error(strerror(errno), 0);
 	input[readed] = 0;
 }
 
@@ -44,10 +44,24 @@ int		is_endinput(char *input)
 			!ft_strcmp(input, KEY_CTRL_D));
 }
 
+void	set_tcap_prm(t_prm *prm)
+{
+	prm->term->c_lflag &= ~(ECHO);
+	prm->term->c_lflag &= ~(ICANON);
+	tcsetattr(0, TCSANOW, prm->term);
+}
+
+void	restore_tcap_prm(t_prm *prm)
+{
+	prm->term->c_lflag |= (ECHO | ICANON);
+	tcsetattr(0, TCSANOW, prm->term);
+}
+
 void	reader(t_prm *prm)
 {
 	signal(SIGQUIT, handler_quit);
 	signal(SIGINT, handler_int);
+	set_tcap_prm(prm);
 	while (1)
 	{
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
@@ -70,4 +84,5 @@ void	reader(t_prm *prm)
 		if (prm->hptr->data && ft_strcmp(prm->hptr->data, ""))
 			break ;
 	}
+	restore_tcap_prm(prm);
 }

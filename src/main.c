@@ -9,7 +9,6 @@ int main(int argc, char **argv, char **env)
 	{
 		history_add(prm);
 		reader(prm);
-		// printf("got: %s\n", (char *)prm->hptr->data);
 		history_if_prev(prm);
 		history_save(prm);
 		if (parser(prm))

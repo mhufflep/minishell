@@ -53,6 +53,15 @@ void	print_cmd(t_cmd *cmd)
 	ft_putendl_fd("", STDOUT_FILENO);
 }
 
+void	dup_and_close(t_prm *prm, t_cmd *cmd, t_stream sid)
+{
+	if (!isatty(sid))
+	{
+		close(cmd->rdir[sid]);
+		dup2(prm->def[sid], sid);
+	}
+}
+
 int		execute_block(t_prm *prm, t_bd_lst *lst)
 {
 	t_cmd *cmd;
@@ -60,22 +69,17 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 
 	while (lst != NULL)
 	{
+		// pipe(cmd->pipe);			// echo hello | grep l | wc -l
 		cmd = (t_cmd *)lst->data;
-		print_cmd(cmd);	//PRINT CMD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
 		
-		if (cmd->out || cmd->in)
-		{
-			if (redirects(cmd))
-			{
-				code = execute_cmd(prm, cmd);
-				dup2(prm->def[0], 0);
-				dup2(prm->def[1], 1);
-				close(cmd->rdir[1]);
-			}
-		}
-		else
+		cmd->rdir[0] = redirect(cmd->in, IN);
+		cmd->rdir[1] = redirect(cmd->out, OUT);
+		if (cmd->rdir[0] != INVALID && cmd->rdir[1] != INVALID)
 		{
 			code = execute_cmd(prm, cmd);
+			dup_and_close(prm, cmd, IN);
+			dup_and_close(prm, cmd, OUT);
 		}
 		lst = lst->next;
 	}

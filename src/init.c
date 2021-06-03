@@ -66,9 +66,6 @@ int setup_terminal(t_prm *prm)
 	prm->def_term = create_term_struct();
 	if (prm->term == NULL || prm->def_term == NULL)
 		exit(1);
-	change_term_settings(prm->term);
-	if (tcsetattr(0, TCSANOW, prm->term) == -1)
-		exit(1);
 	return (0);
 }
 
@@ -104,7 +101,6 @@ void	save_default_fd(t_prm *prm)
 	prm->def[2] = dup(2);
 	prm->def[1] = dup(1);
 	prm->def[0] = dup(0);
-	//do i need to close these fds ?
 }
 
 t_prm	*setup_settings(int argc, char **argv, char **env)
