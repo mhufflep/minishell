@@ -43,7 +43,7 @@ int	add_cmd_node(t_prm *prm, t_cmd *cmd, int i)
 	t_bd_lst	*new;
 
 	// cmd = command_create(arr_args); // cmd, args
-	cmd->is_pipe = 0;
+	cmd->is_pipe = 1;
 	new = bd_lstnew(cmd);
 	if (!new)
 		throw_error(BAD_ALLOC, 11);
@@ -78,8 +78,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 		if (!arr_pipe)
 			throw_error(BAD_ALLOC, 12);
 		while (arr_pipe && arr_pipe[j])
-		{
-
+		{	
 			t_cmd *cmd = cmd_alloc();
 			if (amount_spaces(arr_pipe[j]) != (int)ft_strlen(arr_pipe[j]))
 				printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
@@ -98,6 +97,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			//
 			printf("|%s|\n", arr_pipe[j]);
 			//
+			parse_dollar(&(arr_pipe[j]), prm->exit_code);
 			arr_args = cmd_split(arr_pipe[j], ' ');
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);
@@ -107,6 +107,8 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			// --- //
 			cmd_fill(cmd, arr_args);
 			add_cmd_node(prm, cmd, i);
+			if (arr_pipe[j + 1] == NULL)
+				cmd->is_pipe = 0;
 			free_array(arr_args); //now we can delete it and modify cmd_fill
 			j++;
 		}

@@ -33,6 +33,7 @@ SOURCES			=	main.c \
 					cmd_split.c \
 					parser.c \
 					parse_redirect.c \
+					dollar.c \
 					asterisk.c \
 					lexer.c \
 					history.c \
