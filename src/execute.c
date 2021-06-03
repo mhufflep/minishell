@@ -69,7 +69,7 @@ int		execute_block(t_prm *prm, t_bd_lst *lst)
 
 	while (lst != NULL)
 	{
-		// pipe(cmd->pipe);			// echo hello | grep l | wc -l
+		// pipe(cmd->pipe);
 		cmd = (t_cmd *)lst->data;
 		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
 		
