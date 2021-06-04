@@ -213,6 +213,7 @@ t_bd_lst	*env_llist(void);
 
 int			parse_redirect(t_cmd *cmd, char **str);
 void		parse_dollar(char **s, int code);
+void		parse_tilda(char **s);
 int			is_slash(char *s, int i);
 int			escape_pair(char **str);
 int			escape_all(char **str);

@@ -99,6 +99,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 			//
 			parse_dollar(&(arr_pipe[j]), prm->exit_code);
 			arr_args = cmd_split(arr_pipe[j], ' ');
+			parse_tilda(arr_args);
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);
 			// ---- //

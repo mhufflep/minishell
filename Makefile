@@ -34,6 +34,7 @@ SOURCES			=	main.c \
 					parser.c \
 					parse_redirect.c \
 					dollar.c \
+					tilda.c \
 					asterisk.c \
 					lexer.c \
 					history.c \
