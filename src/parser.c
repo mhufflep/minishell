@@ -74,7 +74,7 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 	while (arr_commands && arr_commands[i])
 	{
 		j = 0;
-		arr_pipe = cmd_split(arr_commands[i], '|');
+		arr_pipe = shell_split(arr_commands[i], '|');
 		if (!arr_pipe)
 			throw_error(BAD_ALLOC, 12);
 		while (arr_pipe && arr_pipe[j])
@@ -90,15 +90,16 @@ int split_on_pipe(t_prm *prm, char **arr_commands)
 				return (0);
 			}
 			parse_redirect(cmd, &(arr_pipe[j]));
+			//
 			printf("====== FILENAMES OUT ======\n");
 			bd_lstprint(cmd->out, redirect_print);
 			printf("====== FILENAMES IN ======\n");
 			bd_lstprint(cmd->in, redirect_print);
-			//
 			printf("|%s|\n", arr_pipe[j]);
 			//
 			parse_dollar(&(arr_pipe[j]), prm->exit_code);
-			arr_args = cmd_split(arr_pipe[j], ' ');
+			arr_args = shell_split(arr_pipe[j], ' ');
+			escape_symbols(arr_args);
 			parse_tilda(arr_args);
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);
@@ -130,7 +131,7 @@ int split_on_semicolon(t_prm *prm)
 
 	i = 0;
 	amount_commands = 0;
-	arr_commands = cmd_split(prm->hptr->data, ';');
+	arr_commands = shell_split(prm->hptr->data, ';');
 	if (!arr_commands)
 		throw_error(BAD_ALLOC, 14);
 	while (arr_commands[i])

@@ -29,40 +29,59 @@ int		is_space(char *s, int i)
 	return (0);
 }
 
-// Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
-int		escape_pair(char **str)
+// // Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
+// int		escape_pair(char **str)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while ((*str)[i])
+// 	{
+// 		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+// 		{
+// 			if ((*str)[i + 1] == SLASH)
+// 				*str = remove_from(*str, i);
+// 			else if ((*str)[i + 1] == D_QUOTE)
+// 				*str = remove_from(*str, i);
+// 		}
+// 		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+// 			throw_error(NOT_PROVIDED, 99);
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+int		escape_symbols(char **s)
 {
 	int i;
+	int	j;
 
 	i = 0;
-	while ((*str)[i])
+	while (s[i])
 	{
-		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
+		j = 0;
+		while (s[i][j])
 		{
-			if ((*str)[i + 1] == SLASH)
-				*str = remove_from(*str, i);
-			else if ((*str)[i + 1] == D_QUOTE)
-				*str = remove_from(*str, i);
+			if (s[i][j] == SLASH && s[i][j + 1] && s[i][j + 1] != '~')
+			{
+				s[i] = remove_from(s[i], j);
+				if (s[i][j] == SLASH || s[i][j] == '\"' || s[i][j] == '\'')
+					j++;
+			}
+			else if (s[i][j] == SLASH && !s[i][j + 1]) 
+				throw_error(NOT_PROVIDED, 100);
+			else if (s[i][j] == QUOTE)
+			{
+				s[i] = remove_from(s[i], j);
+				j = skip_in_quote(&(s[i]), j, QUOTE);
+				s[i] = remove_from(s[i], j - 1);
+			}
+			else if (s[i][j] == D_QUOTE)
+				s[i] = remove_from(s[i], j);
+			else
+				j++;
 		}
-		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
-			throw_error(NOT_PROVIDED, 99);
 		i++;
 	}
-	return (0);
-}
-
-int		escape_all(char **str)
-{
-	int i;
-
-	i = 0;
-	while ((*str)[i])
-	{
-		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
-			*str = remove_from(*str, i);
-		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
-			throw_error(NOT_PROVIDED, 100);
-		i++;
-	}		
 	return (0);
 }
