@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static	void	insert_value(char **s, int *i)
+static	void	insert_value(char **s, int i)
 {
 	int		start;
 	int		len;
@@ -8,17 +8,18 @@ static	void	insert_value(char **s, int *i)
 
 	len = 0;
 	start = 0;
-	*s = remove_from(*s, *i);
-	start = *i;
-	while ((*s)[*i] && (ft_isalnum((*s)[*i]) || (*s)[*i] == '_'))
+	*s = remove_from(*s, i);
+	start = i;
+	while ((*s)[i] && (ft_isalnum((*s)[i]) || (*s)[i] == '_'))
 	{
 		len++;
-		(*i)++;
+		i++;
 	}
 	var = env_get_local(ft_substr(*s, start, len));
-	replace_by(s, start, len, var->val, free);
-	// перемещаем счетчик на индекс, где заканчивается value в уже измененной строке
-	*i = (*i - len) + ft_strlen(var->val);
+	if (var)
+		replace_by(s, start, len, var->val, free);
+	else
+		replace_by(s, start, len, "", free);
 }
 
 void			parse_dollar(char **s, int code)
@@ -29,12 +30,15 @@ void			parse_dollar(char **s, int code)
 	i = 0;
 	while ((*s)[i])
 	{	
-		if ((*s)[i] == '$' && !is_slash(*s, i - 1) && (*s)[i + 1] != '?')
+		// в строгих кавычках все символы экранируются, соответственно здесь пропускаем key
+		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))
+			i = skip_in_quote(s, i, QUOTE);
+		else if ((*s)[i] == '$' && !is_slash(*s, i - 1) && (*s)[i + 1] != '?')
 		{
 			if (ft_isdigit((*s)[i + 1]))
 				replace_by(s, i, 2, "", free);
 			else
-				insert_value(s, &i);
+				insert_value(s, i);
 		}
 		else if ((*s)[i] == '$' && !is_slash(*s, i - 1) && (*s)[i + 1] == '?')
 		{

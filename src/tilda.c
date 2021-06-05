@@ -18,6 +18,8 @@ void	parse_tilda(char **s)
 				replace_by(&(s[i]), j, 1, value, free);
 				j += ft_strlen(value);
 			}
+			else if (s[i][j] == '~' && is_slash(s[i], j - 1))
+				s[i] = remove_from(s[i], j - 1);
 			else
 				j++;
 		}

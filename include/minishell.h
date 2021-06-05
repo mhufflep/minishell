@@ -215,11 +215,11 @@ int			parse_redirect(t_cmd *cmd, char **str);
 void		parse_dollar(char **s, int code);
 void		parse_tilda(char **s);
 int			is_slash(char *s, int i);
-int			escape_pair(char **str);
-int			escape_all(char **str);
-char		**cmd_split(char *s, char separator);
-// size_t		read_str(char **s, int i, char separator, int is_escaped);
-// int			check_quote(char **s, int i, char quote_mark, char separator);
+// int			escape_pair(char **str);
+int			escape_symbols(char **arr_str);
+char		**shell_split(char *s, char separator);
+int			skip_in_quote(char **s, int i, char quote_mark);
+size_t		read_str(char **s, int i, char separator, int is_escaped);
 void		cmds_arr_create(t_prm *prm, int size);
 t_cmd		*command_create(char **args);
 

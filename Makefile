@@ -30,7 +30,7 @@ GNL_DIR		= get_next_line
 
 SOURCES			=	main.c \
 					split_utils.c \
-					cmd_split.c \
+					shell_split.c \
 					parser.c \
 					parse_redirect.c \
 					dollar.c \

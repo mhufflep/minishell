@@ -6,7 +6,7 @@ void	skip_spaces(char *str, int *i)
 		(*i)++;
 }
 
-static	int		check_quote(char **s, int i, char quote_mark)
+static	int		skip_in_quote2(char **s, int i, char quote_mark)
 {
 	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
 	// чтобы войти в цикл и дойти до закрывающей кавычки
@@ -26,20 +26,22 @@ static	int		check_quote(char **s, int i, char quote_mark)
 	return (0);
 }
 
-static size_t	read_str(char **s, int i, char *separators)
+// Отличие от read_str, в том, что эта ф-ия принимает строку, а не символ,
+// но отсутствие перегрузки в СИ вынудило написать ее отдельно
+static size_t	read_str2(char **s, int i, char *separators)
 {
 	while ((*s)[i] && !ft_strchr(separators, (*s)[i]))
 	{
 		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))
 		{
 			*s = remove_from(*s, i);
-			i = check_quote(s, i, QUOTE);
+			i = skip_in_quote2(s, i, QUOTE);
 		}
 		else if ((*s)[i] == D_QUOTE && !is_slash(*s, i - 1))
 		{
 			*s = remove_from(*s, i);
-			escape_pair(s);
-			i = check_quote(s, i, D_QUOTE);
+			// escape_pair(s);
+			i = skip_in_quote2(s, i, D_QUOTE);
 		}
 		else
 			i++;
@@ -80,13 +82,13 @@ void		write_out(t_cmd *cmd, char **str, int *i)
 
 	skip_spaces(*str, i);
 	copy_str = ft_strdup(*str);
-	redir->filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
+	redir->filename = ft_substr(copy_str, *i, read_str2(&copy_str, *i, " ><") - *i);
 	
 	new = bd_lstnew(redir);
 	if (!new)
 		throw_error(BAD_ALLOC, 10);
 	bd_lstadd_back(&cmd->out, new);
-	replace_by(str, *i, read_str(str, *i, " ><") - *i, "", free);
+	replace_by(str, *i, read_str2(str, *i, " ><") - *i, "", free);
 	free(copy_str);
 }
 
@@ -112,13 +114,13 @@ void		write_in(t_cmd *cmd, char **str, int *i)
 
 	skip_spaces(*str, i);
 	copy_str = ft_strdup(*str);
-	redir->filename = ft_substr(copy_str, *i, read_str(&copy_str, *i, " ><") - *i);
+	redir->filename = ft_substr(copy_str, *i, read_str2(&copy_str, *i, " ><") - *i);
 	
 	new = bd_lstnew(redir);
 	if (!new)
 		throw_error(BAD_ALLOC, 10);
 	bd_lstadd_back(&cmd->in, new);
-	replace_by(str, *i, read_str(str, *i, " ><") - *i, "", free);
+	replace_by(str, *i, read_str2(str, *i, " ><") - *i, "", free);
 	free(copy_str);
 }
 
