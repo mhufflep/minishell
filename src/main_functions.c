@@ -77,20 +77,20 @@ char *remove_from(char *src, int index)
 	return (src);
 }
 
-t_bd_lst *env_llist(void)
+t_blst *env_llist(void)
 {
-	t_prm *prm;
+	t_sh *sh;
 
-	prm = get_prm(0);
-	return (prm->env_list);
+	sh = get_sh(0);
+	return (sh->env_list);
 }
 
-t_prm *get_prm(t_prm *prm)
+t_sh *get_sh(t_sh *sh)
 {
-	static t_prm *struct_ptr;
+	static t_sh *struct_ptr;
 
 	if (struct_ptr == NULL)
-		struct_ptr = prm;
+		struct_ptr = sh;
 	return (struct_ptr);
 }
 
@@ -132,10 +132,10 @@ t_cmd	*command_create(char **args)
 	return (new_cmd);
 }
 
-void	cmds_arr_create(t_prm *prm, int size)
+void	cmds_arr_create(t_sh *sh, int size)
 {
-	prm->cmds = malloc(sizeof(t_bd_lst *) * size);
-	if (!prm->cmds)
+	sh->cmds = malloc(sizeof(t_blst *) * size);
+	if (!sh->cmds)
 		throw_error(BAD_ALLOC, 8);
-	ft_memset(prm->cmds, 0, sizeof(t_bd_lst *) * size);
+	ft_memset(sh->cmds, 0, sizeof(t_blst *) * size);
 }

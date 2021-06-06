@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-int	cmd_history(t_prm *prm, t_cmd *cmd)
+int	cmd_history(t_sh *sh, t_cmd *cmd)
 {
-	t_bd_lst *tmp;
+	t_blst *tmp;
 	int			i;
 
 	i = 0;
-	tmp = prm->history;
+	tmp = sh->history;
 	if (sizeof_array(cmd->args) > 1)
 	{
 		cmd_error(cmd->args[0], cmd->args[1], CMD_NOT_SUPPORTED);

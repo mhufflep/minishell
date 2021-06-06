@@ -1,13 +1,13 @@
 #include "bidirectional_list.h"
 
-t_bd_lst	*bd_lstmap(t_bd_lst *lst, void *(*f)(void *), void (*del)(void *))
+t_blst	*bd_lstmap(t_blst *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_bd_lst	*newlist;
-	t_bd_lst	*tmp;
+	t_blst	*newlist;
+	t_blst	*tmp;
 
 	if (!f || !lst)
 		return (NULL);
-	newlist = malloc(bd_lstsize(lst) * sizeof(t_bd_lst));
+	newlist = malloc(bd_lstsize(lst) * sizeof(t_blst));
 	if (!newlist)
 		return (NULL);
 	tmp = newlist;

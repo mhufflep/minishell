@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int redirect(t_bd_lst *io, t_stream sid)
+int redirect(t_blst *io, t_stream sid)
 {
 	t_redir	*rd;
 	int		fd;

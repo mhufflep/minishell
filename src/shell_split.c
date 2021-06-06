@@ -24,8 +24,8 @@ size_t	read_str(char **s, int i, char separator, int is_escaped)
 	{
 		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))
 			i = skip_in_quote(s, i, QUOTE);
-		else if ((*s)[i] == D_QUOTE && !is_slash(*s, i - 1))
-			i = skip_in_quote(s, i, D_QUOTE);
+		else if ((*s)[i] == DQOUTE && !is_slash(*s, i - 1))
+			i = skip_in_quote(s, i, DQOUTE);
 		else
 			i++;
 	}

@@ -1,4 +1,4 @@
-.PHONY: all clean fclean re bonus libft libbdlst create_dir debug_prm
+.PHONY: all clean fclean re bonus libft libbdlst create_dir debug_sh
 .SILENT: libft libbdlst
 
 NAME			= minishell
@@ -8,8 +8,8 @@ LIBBDLST_NAME	= libbdlst.a
 
 ######################### CC && FLAGS ########################
 
-CC		= gcc
-DEBUG	= -g
+CC		= gcc 	# clang
+DEBUG	= -g 	# -fsanitize=address
 CFLAGS	= -Wall -Wextra -Werror 
 
 TERMCAP 		= -ltermcap
@@ -47,6 +47,7 @@ SOURCES			=	main.c \
 					error.c \
 					expander.c \
 					readline.c \
+					shell_exit.c \
 					signal.c \
 					redirects.c \
 					main_functions.c \

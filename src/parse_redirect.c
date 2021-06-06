@@ -37,11 +37,11 @@ static size_t	read_str2(char **s, int i, char *separators)
 			*s = remove_from(*s, i);
 			i = skip_in_quote2(s, i, QUOTE);
 		}
-		else if ((*s)[i] == D_QUOTE && !is_slash(*s, i - 1))
+		else if ((*s)[i] == DQOUTE && !is_slash(*s, i - 1))
 		{
 			*s = remove_from(*s, i);
 			// escape_pair(s);
-			i = skip_in_quote2(s, i, D_QUOTE);
+			i = skip_in_quote2(s, i, DQOUTE);
 		}
 		else
 			i++;
@@ -64,7 +64,7 @@ void		write_out(t_cmd *cmd, char **str, int *i)
 {
 	char		*copy_str;
 	t_redir		*redir;
-	t_bd_lst	*new;
+	t_blst	*new;
 
 	redir = redir_alloc();
 	redir->s_id = OUT;
@@ -96,7 +96,7 @@ void		write_in(t_cmd *cmd, char **str, int *i)
 {
 	char		*copy_str;
 	t_redir		*redir;
-	t_bd_lst	*new;
+	t_blst	*new;
 
 	redir = redir_alloc();
 	redir->s_id = IN;

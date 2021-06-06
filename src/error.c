@@ -13,7 +13,7 @@ void 	print_error(char *msg, int code_status)
 
 void	throw_error(char *msg, int code_status)
 {
-	tcsetattr(0, TCSANOW, get_prm(NULL)->def_term);
+	tcsetattr(0, TCSANOW, get_sh(NULL)->def_term);
 	print_error(msg, code_status);
 	exit(1);
 }

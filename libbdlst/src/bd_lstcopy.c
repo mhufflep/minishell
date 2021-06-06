@@ -5,10 +5,10 @@ void	*def_cont_copy(void *data)
 	return ((void *)bd_strdup((char *)data));
 }
 
-t_bd_lst	*bd_lstcopy(t_bd_lst *list, void *(*data_copy)(void *))
+t_blst	*bd_lstcopy(t_blst *list, void *(*data_copy)(void *))
 {
-	t_bd_lst	*head;
-	t_bd_lst	*new;
+	t_blst	*head;
+	t_blst	*new;
 
 	head = NULL;
 	while (list && list->data)

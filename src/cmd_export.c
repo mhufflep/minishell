@@ -27,18 +27,18 @@ int		export_update(t_env *found, t_env *replacer)
 	return (0);
 }
 
-int		export_add(t_prm *prm, t_env *env)
+int		export_add(t_sh *sh, t_env *env)
 {
-	t_bd_lst *new;
+	t_blst *new;
 
 	new = bd_lstnew(env_dup(env));
 	if (new == NULL)
 		throw_error(BAD_ALLOC, 1);
-	bd_lstadd_back(&prm->env_list, new);
+	bd_lstadd_back(&sh->env_list, new);
 	return (0);
 }
 
-int		export_try_add(t_prm *prm, t_cmd *cmd)
+int		export_try_add(t_sh *sh, t_cmd *cmd)
 {
 	t_env	*found;
 	t_env	*env;
@@ -54,7 +54,7 @@ int		export_try_add(t_prm *prm, t_cmd *cmd)
 			if (found != NULL && found->val != NULL)
 				export_update(found, env);
 			else
-				export_add(prm, env);
+				export_add(sh, env);
 		}
 		else
 		{
@@ -66,20 +66,20 @@ int		export_try_add(t_prm *prm, t_cmd *cmd)
 	return (0);
 }
 
-int		cmd_export(t_prm *prm, t_cmd *cmd)
+int		cmd_export(t_sh *sh, t_cmd *cmd)
 {
-	t_bd_lst *lst_copy;
+	t_blst *lst_copy;
 
 	if (sizeof_array(&cmd->args[1]) == 0)
 	{	
-		lst_copy = bd_lstcopy(prm->env_list, env_dup);
+		lst_copy = bd_lstcopy(sh->env_list, env_dup);
 		bd_lstsort_merge(&(lst_copy), env_cmp);
 		bd_lstiter(lst_copy, print_export_node);
 		bd_lstclear(&lst_copy, env_del);
 	}
 	else
 	{
-		prm->exit_code = export_try_add(prm, cmd);
+		sh->exit_code = export_try_add(sh, cmd);
 	}
 	return (0);
 }

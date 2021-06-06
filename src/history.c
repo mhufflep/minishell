@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void	history_read(t_prm *prm)
+void	history_read(t_sh *sh)
 {
-	t_bd_lst	*new;
+	t_blst	*new;
 	char		*line;
 	int			res;
 	int			fd;
@@ -19,52 +19,52 @@ void	history_read(t_prm *prm)
 		new = bd_lstnew(line);
 		if (new == NULL)
 			res = -3;
-		bd_lstadd_back(&prm->history, new);
+		bd_lstadd_back(&sh->history, new);
 	}
 	if (res < 0)
 	{
-		bd_lstclear(&prm->history, free);
+		bd_lstclear(&sh->history, free);
 	}
 	close(fd);
 }
 
-void	history_save(t_prm *prm)
+void	history_save(t_sh *sh)
 {
 	int fd;
 
 	fd = open(HISTORY_FILENAME, O_CREAT | O_APPEND | O_WRONLY, 0777);
 	if (fd < 0)
 		return ;
-	if (prm->hptr && prm->hptr->data)
+	if (sh->hptr && sh->hptr->data)
 	{
-		if (ft_strcmp(prm->hptr->data, "\n"))
+		if (ft_strcmp(sh->hptr->data, "\n"))
 		{
 			write(fd, "\n", 1);
-			write(fd, prm->hptr->data, bd_strlen((char *)prm->hptr->data));
+			write(fd, sh->hptr->data, bd_strlen((char *)sh->hptr->data));
 		}
 	}
 	close(fd);
 }
 
-void	history_add(t_prm *prm)
+void	history_add(t_sh *sh)
 {
-	t_bd_lst *new;
+	t_blst *new;
 	
 	new = bd_lstnew(NULL);
 	if (new == NULL)
 		throw_error(BAD_ALLOC, 9);
-	bd_lstadd_back(&(prm->history), new);
-	prm->hptr = bd_lstlast(prm->history);
+	bd_lstadd_back(&(sh->history), new);
+	sh->hptr = bd_lstlast(sh->history);
 }
 
-void	history_if_prev(t_prm *prm)
+void	history_if_prev(t_sh *sh)
 {
 	char *temp;
 
-	if (prm->hptr != bd_lstlast(prm->history))
+	if (sh->hptr != bd_lstlast(sh->history))
 	{
-		temp = prm->hptr->data;
-		prm->hptr = bd_lstlast(prm->history);
-		prm->hptr->data = bd_strdup(temp);
+		temp = sh->hptr->data;
+		sh->hptr = bd_lstlast(sh->history);
+		sh->hptr->data = bd_strdup(temp);
 	}
 }

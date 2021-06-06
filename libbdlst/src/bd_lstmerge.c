@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-t_bd_lst	*bd_lst_merge(t_bd_lst **n1, t_bd_lst **n2)
+t_blst	*bd_lst_merge(t_blst **n1, t_blst **n2)
 {
 	if (n1 == NULL || *n1 == NULL)
 		return (NULL);
@@ -11,7 +11,7 @@ t_bd_lst	*bd_lst_merge(t_bd_lst **n1, t_bd_lst **n2)
 	return (*n1);
 }
 
-t_bd_lst	*bd_lst_compared_merge(t_bd_lst *n1, t_bd_lst *n2, int (*comp)())
+t_blst	*bd_lst_compared_merge(t_blst *n1, t_blst *n2, int (*comp)())
 {
 	if (n1 == NULL)
 		return (n2);

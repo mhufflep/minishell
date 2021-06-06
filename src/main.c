@@ -2,19 +2,18 @@
 
 int main(int argc, char **argv, char **env)
 {
-	t_prm	*prm;
+	t_sh	*sh;
 
-	prm = setup_settings(argc, argv, env);
-	while (prm->enable)
+	sh = setup_settings(argc, argv, env);
+	while (sh->enable)
 	{
-		history_add(prm);
-		reader(prm);
-		history_if_prev(prm);
-		history_save(prm);
-		if (parser(prm))
-			executor(prm);
-		// expander(prm);
+		history_add(sh);
+		reader(sh);
+		history_if_prev(sh);
+		history_save(sh);
+		if (parser(sh))
+			executor(sh);
+		// expander(sh);
 	}
-	reset_parameters(prm);
-	return (prm->exit_code);
+	shell_exit(sh);
 }

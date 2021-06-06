@@ -2,21 +2,23 @@
 
 void handler_int(int num)
 {
-	t_prm *prm;
-	
-	prm = get_prm(0);
-	prm->exit_code = 1;
 	(void)num;
+	t_sh *sh;
+	
+	sh = get_sh(0);
+	sh->exit_code = 1;
 	// ft_putnbr_fd(num, STDOUT_FILENO);
 }
 
 void handler_quit(int num)
 {
-	t_prm *prm;
+	t_sh *sh;
 	
-	prm = get_prm(0);
-	prm->enable = 0;
-	ft_putendl_fd("Quit: ", STDOUT_FILENO);
+	sh = get_sh(0);
+	sh->enable = 0; // It shouldnt be here
+	ft_putendl_fd("", STDOUT_FILENO);
+	ft_putstr_fd("Quit: ", STDOUT_FILENO);
 	ft_putnbr_fd(num, STDOUT_FILENO);
+	ft_putendl_fd("", STDOUT_FILENO);
 	exit(0);
 }

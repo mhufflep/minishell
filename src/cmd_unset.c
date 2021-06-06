@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int		cmd_unset(t_prm *prm, t_cmd *cmd)
+int		cmd_unset(t_sh *sh, t_cmd *cmd)
 {
-	t_bd_lst	*found;
+	t_blst	*found;
 	t_env		*env;
 	int i;
 
@@ -12,10 +12,10 @@ int		cmd_unset(t_prm *prm, t_cmd *cmd)
 		env = copy_to_env(cmd->args[i]);
 		if (env_valid(env))
 		{
-			found = bd_lstfind(prm->env_list, env, bd_strlen(env->key), env_cmp);
+			found = bd_lstfind(sh->env_list, env, bd_strlen(env->key), env_cmp);
 			if (found != NULL)
 			{
-				bd_lstremove(&prm->env_list, found, env_del);
+				bd_lstremove(&sh->env_list, found, env_del);
 			}
 		}
 		else

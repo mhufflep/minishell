@@ -56,7 +56,7 @@ int replace(t_cmd *cmd)
 	return (0);
 }
 
-int		exp_execute_block(t_bd_lst *lst)
+int		exp_execute_block(t_blst *lst)
 {
 	t_cmd *cmd;
 
@@ -69,14 +69,14 @@ int		exp_execute_block(t_bd_lst *lst)
 	return (0);
 }
 
-int expander(t_prm *prm)
+int expander(t_sh *sh)
 {
 	int i;
 
 	i = 0;
-	while (prm->cmds[i] != NULL)
+	while (sh->cmds[i] != NULL)
 	{
-		exp_execute_block(prm->cmds[i]);
+		exp_execute_block(sh->cmds[i]);
 		i++;
 	}
 	return (0);

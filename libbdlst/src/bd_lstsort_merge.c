@@ -1,9 +1,9 @@
 #include "bidirectional_list.h"
 
-void		bd_lstsort_merge(t_bd_lst **head, int (*comp)())
+void		bd_lstsort_merge(t_blst **head, int (*comp)())
 {
-	t_bd_lst	*n1;
-	t_bd_lst	*n2;
+	t_blst	*n1;
+	t_blst	*n2;
 
 	if ((*head == NULL) || ((*head)->next == NULL))
 		return;
@@ -15,10 +15,10 @@ void		bd_lstsort_merge(t_bd_lst **head, int (*comp)())
 	*head = bd_lst_compared_merge(n1, n2, comp);
 }
 
-void		bd_lstsplit(t_bd_lst *lst, t_bd_lst **first_part, t_bd_lst **second_part)
+void		bd_lstsplit(t_blst *lst, t_blst **first_part, t_blst **second_part)
 {
-	t_bd_lst	*end;
-	t_bd_lst	*middle;
+	t_blst	*end;
+	t_blst	*middle;
 
 	middle = lst;
 	end = lst->next;
@@ -36,9 +36,9 @@ void		bd_lstsplit(t_bd_lst *lst, t_bd_lst **first_part, t_bd_lst **second_part)
 	middle->next = NULL;
 }
 
-// t_bd_lst	*bd_lst_compared_merge(t_bd_lst *n1, t_bd_lst *n2, int (*comp)())
+// t_blst	*bd_lst_compared_merge(t_blst *n1, t_blst *n2, int (*comp)())
 // {
-// 	t_bd_lst	*merged;
+// 	t_blst	*merged;
 
 // 	merged = NULL;
 // 	if (n1 == NULL)
