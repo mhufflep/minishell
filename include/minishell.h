@@ -85,8 +85,6 @@ typedef struct	s_redir
 typedef struct  s_cmd
 {
 	pid_t		pid;
-	// int			*def;
-	// int			io[2];
 	int			rdir[2];		// change name
 	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
@@ -255,7 +253,7 @@ void		handler_quit(int num);
 int			is_dir(char *directory);
 int			is_in_dir(char *name, char *directory);
 
-int 		redirect(t_blst *io, t_stream sid);
+int 		redirect(t_blst *io);//, t_stream sid);
 
 int			shell_exit(t_sh *sh);
 #endif

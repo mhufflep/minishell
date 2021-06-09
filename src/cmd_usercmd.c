@@ -6,7 +6,7 @@ int		cmd_usercmd(t_cmd *cmd)
 	char **bin;
 	char **env;
 	t_env *path;
-	pid_t pid;
+	// pid_t pid;
 	char *dir = NULL;
 	char *sep = "/";
 
@@ -60,13 +60,13 @@ int		cmd_usercmd(t_cmd *cmd)
 	free(tmp);
 	free(dir);
 
-	pid = fork();
-	if (pid == -1)
+	cmd->pid = fork();
+	if (cmd->pid == -1)
 	{
 		ft_putstr_fd("fork failed", STDERR_FILENO);
 		return -1; //NEED TO FREE RESOURSES
 	}
-	else if (pid == 0)
+	else if (cmd->pid == 0)
 	{
 		code = execve(cmd->args[0], cmd->args, env);
 		if (code == -1)
@@ -79,17 +79,18 @@ int		cmd_usercmd(t_cmd *cmd)
 		free_array(env);
 
 	// Parent process will wait for child's exit or ret
-	int status;
-	if ( waitpid(pid, &status, 0) == -1 )
-	{
-		ft_putstr_fd("waitpid failed", STDERR_FILENO);
-	}
+	
+	// int status;
+	// if ( waitpid(pid, &status, 0) == -1 )
+	// {
+	// 	ft_putstr_fd("waitpid failed", STDERR_FILENO);
+	// }
 
-	if ( WIFEXITED(status) )
-	{
-		code = WEXITSTATUS(status);
-		printf("exit status was %d\n", code);
-	}
+	// if ( WIFEXITED(status) )
+	// {
+	// 	code = WEXITSTATUS(status);
+	// 	printf("exit status was %d\n", code);
+	// }
 
 
 	

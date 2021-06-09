@@ -8,6 +8,7 @@ void handler_int(int num)
 	sh = get_sh(0);
 	sh->exit_code = 1;
 	// ft_putnbr_fd(num, STDOUT_FILENO);
+	//for chingiz
 }
 
 void handler_quit(int num)

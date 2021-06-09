@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int redirect(t_blst *io, t_stream sid)
+int redirect(t_blst *io)// t_stream sid)
 {
 	t_redir	*rd;
 	int		fd;
@@ -23,7 +23,7 @@ int redirect(t_blst *io, t_stream sid)
 		io = io->next;
 	}
 
-	if (fd != UNDEFINED)
-		dup2(fd, sid);
+	// if (fd != UNDEFINED)
+	// 	dup2(fd, sid);
 	return (fd);
 }

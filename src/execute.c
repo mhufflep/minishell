@@ -62,214 +62,123 @@ void	dup_and_close(t_sh *sh, t_cmd *cmd, t_stream sid)
 	}
 }
 
-
-int		exec(t_sh *sh,  t_cmd *cmd)
+int pipes(t_sh *sh, t_blst *lst)
 {
-	int code;
+	int tmpin = dup(0);
+    int tmpout = dup(1);
 
-	// cmd->rdir[IN] = redirect(cmd->in, IN);
-	// cmd->rdir[OUT] = redirect(cmd->out, OUT);
-	code = sh->exit_code;
-	if (cmd->rdir[IN] != INVALID && cmd->rdir[OUT] != INVALID)
+	t_cmd *cmd = NULL;
+    int fdin;
+	int fdout;
+
+
+	cmd = (t_cmd *)lst->data;
+	if (cmd->in)
 	{
-		code = execute_cmd(sh, cmd);
-		// dup_and_close(sh, cmd, IN);
-		// dup_and_close(sh, cmd, OUT);
+		t_redir *rd = (t_redir *)cmd->in->data;
+		//redirect(cmd->in);//, IN);
+		fdin = open(rd->filename, rd->flag, rd->rights);
 	}
-	return (code);
-}
-
-// Close all but dup necessary file descriptors 
-
-	// dup2(all->fdtmp_1, 1);
-	// 	dup2(fd[i - 1][0], 0);
-
-int close_unused_pipes(t_sh *sh, t_blst *lst)
-{
-	t_cmd *ccmd;
-	t_cmd *pcmd;
-
-	ccmd = (t_cmd *)lst->data;
-	// pcmd = (t_cmd *)lst->prev->data;
-	if (lst->prev == NULL)
+	else 
 	{
-		printf("cmd: %s\n", ccmd->args[0]);
-		dup2(ccmd->pipe[OUT], OUT);
-		// close all except cmd->pipe[1]
-		// close(cmd->pipe[0]);
-		// close(cmd->pipe[1]);
+		fdin = dup(tmpin);
 	}
-	else if (lst->next != NULL)
-	{
-		pcmd = (t_cmd *)lst->prev->data;
-		printf("1 pcmd: %s\n", pcmd->args[0]);
-		close(pcmd->pipe[OUT]);
-		dup2(pcmd->pipe[IN], IN);
-		dup2(ccmd->pipe[OUT], OUT);
-	}
-	else
-	{
-		pcmd = (t_cmd *)lst->prev->data;
-		printf("2 pcmd: %s\n", pcmd->args[0]);
-		close(pcmd->pipe[OUT]);
-		dup2(pcmd->pipe[IN], IN);
-		dup2(sh->io[OUT], OUT);
-		// close all except cmd->pipe[0]
-
-	}
-	return (0);
-}
-
-
-int close_fd(int *fd)
-{
-	if (*fd != UNDEFINED)
-	{
-		if (close(*fd) == -1)
-			return (0);
-	}
-	*fd = UNDEFINED;
-	return (1);
-}
-
-int close_pipe(int *fd)
-{
-	if (!close_fd(&fd[IN]) || !close_fd(&fd[OUT]))
-		return (0);
-	return (1);
-}
-
-int close_pipes(t_blst *lst)
-{
-	t_cmd *cmd;
-
-	while (lst != NULL)
-	{
+  
+    // for (int i = 0; i < num; i++) 
+	while (lst)
+    {
 		cmd = (t_cmd *)lst->data;
-		// assert(cmd == NULL, "close pipes cmd equals to zero");
-		if (cmd->pipe[IN] != UNDEFINED)
-			close(cmd->pipe[IN]);
-		if (cmd->pipe[OUT] != UNDEFINED)
-			close(cmd->pipe[OUT]);
-	}
-	return (0);
-}
+        //redirect input
+        dup2(fdin, 0);
+        close(fdin);
 
-int init_pipes(t_blst *lst)
-{
-	t_cmd *cmd;
+        //setup output
+		if (!lst->next)
+		{
+			
+            // Last simple command 
+			if (cmd->out)
+			{
+				t_redir *rd = (t_redir *)cmd->out->data;
+				// 
+				fdout = open(rd->filename, rd->flag, rd->rights);
+				// fdout = redirect(cmd->out);//, OUT);
+			}
+			else
+			{
+				// Use default output
+				fdout = dup(tmpout);
+			}
+        }
+        else
+		{
+            // Not last 
+            //simple command
+            //create pipe
+            int fd[2];
+            pipe(fd);
+            fdout = fd[1];
+            fdin = fd[0];
+		}
 
-	while (lst != NULL)
-	{
-		cmd = (t_cmd *)lst->data;
-		// assert(cmd == NULL, "close pipes cmd equals to zero");
-		cmd->pipe[IN] = UNDEFINED;
-		cmd->pipe[OUT] = UNDEFINED;
+        // Redirect output
+        dup2(fdout, 1);
+        close(fdout);
+ 
+
+		// ret = fork();
+        // if (ret == 0)
+        // {
+        //     // write(tmpout, cmds[i].args[0], strlen(cmds[i].args[0]));
+        //     // write(tmpout, "\n", 1);
+        //     // printf("%s\n", cmds[i].args[0]);
+        //     execve(cmds[i].args[0], cmds[i].args, env);
+        //     perror("failed exec");
+        //     _exit(1);
+        // }
+		// Create child process
+		sh->exit_code = execute_cmd(sh, cmd);
 		lst = lst->next;
 	}
-	return (0);
+ 
+    //restore in/out defaults
+    dup2(tmpin, 0);
+    dup2(tmpout, 1);
+    close(tmpin);
+    close(tmpout);
+
+	// if (!background) 
+    // {
+	// Wait for last command
+        waitpid(cmd->pid, NULL, 0);
+    // }
+    return (sh->exit_code);
 }
 
-int create_pipes(t_blst *lst)
-{
-	t_blst *tmp;
-	t_cmd *cmd;
 
-	tmp = lst;
-	init_pipes(lst);
-	while (tmp->next != NULL)
-	{
-		cmd = (t_cmd *)tmp->data;
+// int		execute_block(t_sh *sh, t_blst *lst)
+// {
+// 	t_cmd *cmd;
+// 	int code;
+
+// 	// code = pipes(sh, lst);
+// 	while (lst != NULL)
+// 	{
+// 		cmd = (t_cmd *)lst->data;
+// 		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
 		
-		if (pipe(cmd->pipe) < 0)
-			close_pipes(lst);
-
-		tmp = tmp->next;
-	}
-	return (0);                                                            
-}
-
-int		pipes(t_sh *sh, t_blst *lst)
-{
-	t_blst *tmp;
-	t_cmd *cmd;
-	int code;
-
-	// create_pipes(lst);
-	// int i = 0;
-	tmp = lst;
-	code = sh->exit_code;
-	while (tmp != NULL)
-	{
-		cmd = (t_cmd *)tmp->data;
-
-		if (pipe(cmd->pipe) < 0)
-			close_pipes(tmp);
-
-		close_unused_pipes(sh, tmp); //<- cause danging here
-
-		cmd->pid = fork();
-		if (cmd->pid < 0)
-		{
-			cmd_error(cmd->args[0], NULL, "fork failed");
-			shell_exit(sh);
-		}
-		else if (cmd->pid == 0)
-		{
-			// close(cmd->pipe[1]);
-			// code = exec(sh, cmd);
-			// close(cmd->pipe[0]);
-
-			// dup2(sh->io[IN], IN);
-
-			// cmd->rdir[IN] = redirect(cmd->in, IN);
-			// cmd->rdir[OUT] = redirect(cmd->out, OUT);
-			// if (cmd->rdir[IN] != INVALID && cmd->rdir[OUT] != INVALID)
-			// {
-			// 	code = execute_cmd(sh, cmd);
-			// 	dup_and_close(sh, cmd, IN);
-			// 	dup_and_close(sh, cmd, OUT);
-			// }
-			exit(1);
-		}
-		// close(cmd->pipe[0]);
-		tmp = tmp->next;
-	}
-
-	while (lst != NULL)	
-	{
-		cmd = (t_cmd *)lst->data;
-		waitpid(cmd->pid, NULL, 0);
-		lst = lst->next;
-	}
-
-	return (code);
-}
-
-
-int		execute_block(t_sh *sh, t_blst *lst)
-{
-	t_cmd *cmd;
-	int code;
-
-	// code = pipes(sh, lst);
-	while (lst != NULL)
-	{
-		cmd = (t_cmd *)lst->data;
-		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
-		
-		cmd->rdir[IN] = redirect(cmd->in, IN);
-		cmd->rdir[OUT] = redirect(cmd->out, OUT);
-		if (cmd->rdir[IN] != INVALID && cmd->rdir[OUT] != INVALID)
-		{
-			code = execute_cmd(sh, cmd);
-			dup_and_close(sh, cmd, IN);
-			dup_and_close(sh, cmd, OUT);
-		}
-		lst = lst->next;
-	}
-	return (code);
-}
+// 		cmd->rdir[IN] = redirect(cmd->in, IN);
+// 		cmd->rdir[OUT] = redirect(cmd->out, OUT);
+// 		if (cmd->rdir[IN] != INVALID && cmd->rdir[OUT] != INVALID)
+// 		{
+// 			code = execute_cmd(sh, cmd);
+// 			dup_and_close(sh, cmd, IN);
+// 			dup_and_close(sh, cmd, OUT);
+// 		}
+// 		lst = lst->next;
+// 	}
+// 	return (code);
+// }
 
 void	executor(t_sh *sh)
 {
@@ -278,7 +187,7 @@ void	executor(t_sh *sh)
 	i = 0;
 	while (sh->cmds && sh->cmds[i] != NULL)
 	{
-		sh->exit_code = execute_block(sh, sh->cmds[i]); //pipes(sh, sh->cmds[i]); //
+		sh->exit_code = pipes(sh, sh->cmds[i]); //execute_block(sh, sh->cmds[i]);
 		bd_lstclear(&(sh->cmds[i]), free_cmd);
 		i++;
 	}
