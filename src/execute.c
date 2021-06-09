@@ -73,16 +73,16 @@ int pipes(t_sh *sh, t_blst *lst)
 
 
 	cmd = (t_cmd *)lst->data;
-	if (cmd->in)
-	{
-		t_redir *rd = (t_redir *)cmd->in->data;
-		//redirect(cmd->in);//, IN);
-		fdin = open(rd->filename, rd->flag, rd->rights);
-	}
-	else 
-	{
+	// if (cmd->in)
+	// {
+	// 	t_redir *rd = (t_redir *)cmd->in->data;
+	// 	//redirect(cmd->in);//, IN);
+	// 	fdin = open(rd->filename, rd->flag, rd->rights);
+	// }
+	// else 
+	// {
 		fdin = dup(tmpin);
-	}
+	// }
   
     // for (int i = 0; i < num; i++) 
 	while (lst)
@@ -97,18 +97,7 @@ int pipes(t_sh *sh, t_blst *lst)
 		{
 			
             // Last simple command 
-			if (cmd->out)
-			{
-				t_redir *rd = (t_redir *)cmd->out->data;
-				// 
-				fdout = open(rd->filename, rd->flag, rd->rights);
-				// fdout = redirect(cmd->out);//, OUT);
-			}
-			else
-			{
-				// Use default output
-				fdout = dup(tmpout);
-			}
+			fdout = dup(tmpout);
         }
         else
 		{
@@ -124,7 +113,30 @@ int pipes(t_sh *sh, t_blst *lst)
         // Redirect output
         dup2(fdout, 1);
         close(fdout);
- 
+
+		if (cmd->in)
+		{
+			t_redir *rd = (t_redir *)cmd->in->data;
+			//redirect(cmd->in);//, IN);
+			fdin = open(rd->filename, rd->flag, rd->rights);
+		}
+		// else 
+		// {
+		// 	fdin = dup(tmpin);
+		// }
+
+		if (cmd->out)
+		{
+			t_redir *rd = (t_redir *)cmd->out->data;
+			// 
+			fdout = open(rd->filename, rd->flag, rd->rights);
+			// fdout = redirect(cmd->out);//, OUT);
+		}
+		// else
+		// {
+		// 	// Use default output
+		// 	fdout = dup(tmpout);
+		// }
 
 		// ret = fork();
         // if (ret == 0)
