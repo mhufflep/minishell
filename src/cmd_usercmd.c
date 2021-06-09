@@ -80,17 +80,17 @@ int		cmd_usercmd(t_cmd *cmd)
 
 	// Parent process will wait for child's exit or ret
 	
-	// int status;
-	// if ( waitpid(pid, &status, 0) == -1 )
+	int status;
+	// if ( waitpid(cmd->pid, &status, 0) == -1 )
 	// {
 	// 	ft_putstr_fd("waitpid failed", STDERR_FILENO);
 	// }
 
-	// if ( WIFEXITED(status) )
-	// {
-	// 	code = WEXITSTATUS(status);
-	// 	printf("exit status was %d\n", code);
-	// }
+	if ( WIFEXITED(status) )
+	{
+		code = WEXITSTATUS(status);
+		printf("exit status was %d\n", code);
+	}
 
 
 	

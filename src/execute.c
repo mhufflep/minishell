@@ -120,34 +120,14 @@ int pipes(t_sh *sh, t_blst *lst)
 			//redirect(cmd->in);//, IN);
 			fdin = open(rd->filename, rd->flag, rd->rights);
 		}
-		// else 
-		// {
-		// 	fdin = dup(tmpin);
-		// }
 
 		if (cmd->out)
 		{
 			t_redir *rd = (t_redir *)cmd->out->data;
-			// 
 			fdout = open(rd->filename, rd->flag, rd->rights);
 			// fdout = redirect(cmd->out);//, OUT);
 		}
-		// else
-		// {
-		// 	// Use default output
-		// 	fdout = dup(tmpout);
-		// }
 
-		// ret = fork();
-        // if (ret == 0)
-        // {
-        //     // write(tmpout, cmds[i].args[0], strlen(cmds[i].args[0]));
-        //     // write(tmpout, "\n", 1);
-        //     // printf("%s\n", cmds[i].args[0]);
-        //     execve(cmds[i].args[0], cmds[i].args, env);
-        //     perror("failed exec");
-        //     _exit(1);
-        // }
 		// Create child process
 		sh->exit_code = execute_cmd(sh, cmd);
 		lst = lst->next;
@@ -164,6 +144,7 @@ int pipes(t_sh *sh, t_blst *lst)
 	// Wait for last command
         waitpid(cmd->pid, NULL, 0);
     // }
+
     return (sh->exit_code);
 }
 
@@ -191,6 +172,17 @@ int pipes(t_sh *sh, t_blst *lst)
 // 	}
 // 	return (code);
 // }
+void	killpids(t_blst *lst)
+{
+	t_cmd *cmd;
+
+	while (lst)
+	{
+		cmd = (t_cmd *)lst->data;
+		kill(cmd->pid, SIGTERM);
+		lst = lst->next;
+	}
+}
 
 void	executor(t_sh *sh)
 {
@@ -199,7 +191,9 @@ void	executor(t_sh *sh)
 	i = 0;
 	while (sh->cmds && sh->cmds[i] != NULL)
 	{
-		sh->exit_code = pipes(sh, sh->cmds[i]); //execute_block(sh, sh->cmds[i]);
+		sh->exit_code = pipes(sh, sh->cmds[i]); 
+		killpids(sh->cmds[i]);
+		//execute_block(sh, sh->cmds[i]);
 		bd_lstclear(&(sh->cmds[i]), free_cmd);
 		i++;
 	}

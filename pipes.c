@@ -97,9 +97,8 @@ int pipes(t_cmd *cmds, char **env)
             // write(tmpout, cmds[i].args[0], strlen(cmds[i].args[0]));
             // write(tmpout, "\n", 1);
             // printf("%s\n", cmds[i].args[0]);
-            execve(cmds[i].args[0], cmds[i].args, env);
-            perror("failed exec");
-            _exit(1);
+            execve(grep[0], grep, env);
+            exit(1);
         }
     } 
  
