@@ -64,7 +64,8 @@ int		cmd_usercmd(t_cmd *cmd)
 		}
 		else if (pid == 0)
 		{
-			
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, handler_quit);
 			code = execve(cmd->args[0], cmd->args, env);
 			if (code == -1)
 			{

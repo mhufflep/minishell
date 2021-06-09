@@ -59,7 +59,7 @@ void	restore_tcap_prm(t_prm *prm)
 
 void	reader(t_prm *prm)
 {
-	signal(SIGQUIT, handler_quit);
+	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler_int);
 	set_tcap_prm(prm);
 	while (1)
