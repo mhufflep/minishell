@@ -58,10 +58,10 @@ void	redirect_print(void *data)
 	redir = (t_redir *)data;
 	if (redir)
 	{
-		if (redir->filename)
-			printf("%s\n", redir->filename);
-		else
-			printf("<null>\n");
+		// if (redir->filename)
+		// 	printf("%s\n", redir->filename);
+		// else
+		// 	printf("<null>\n");
 	}
 }
 
@@ -80,9 +80,9 @@ int split_on_pipe(t_sh *sh, char **arr_commands)
 		while (arr_pipe && arr_pipe[j])
 		{	
 			t_cmd *cmd = cmd_alloc();
-			if (amount_spaces(arr_pipe[j]) != (int)ft_strlen(arr_pipe[j]))
-				printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
-			else
+				// printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
+				// else
+			if (amount_spaces(arr_pipe[j]) == (int)ft_strlen(arr_pipe[j]))
 			{
 				free_array(arr_pipe);
 				sh->exit_code = 258;

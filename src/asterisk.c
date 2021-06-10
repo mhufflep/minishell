@@ -33,7 +33,7 @@ char **array_join(char **arr, int start, int end)
 
 	//ERROR MANAGEMENT
 	size = sizeof_array(arr) - (end - start); //SIZE COULD BE 0
-	printf("size: %d\n", size);
+	// printf("size: %d\n", size);
 	res = (char **)ft_calloc((size + 1), sizeof(char *));
 	
 	//CHECK MALLOC

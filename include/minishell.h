@@ -84,6 +84,7 @@ typedef struct	s_redir
 
 typedef struct  s_cmd
 {
+	int			is_child;
 	pid_t		pid;
 	int			rdir[2];		// change name
 	int			pipe[2];
@@ -91,8 +92,8 @@ typedef struct  s_cmd
     int			is_pipe;			//стоит ли после команды pipe
     int			r_flag;				//стоит ли после команды redir, если значение 2 - значит двойной
 	int			rr_flag;
-	t_blst	*out;
-	t_blst	*in;
+	t_blst		*out;
+	t_blst		*in;
 	// t_blst	*err;
 }               t_cmd;
 

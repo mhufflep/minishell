@@ -115,7 +115,7 @@ t_sh	*setup_settings(int argc, char **argv, char **env)
 	sh->env = env;
 	setup_caps(sh);
 	setup_env_lists(sh);
-	setup_def_fd(sh);
+	// setup_def_fd(sh);
 	history_read(sh);
 	update_path();
 	update_shlvl(sh);
