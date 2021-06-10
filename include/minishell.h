@@ -245,8 +245,8 @@ int			export_add(t_prm *prm, t_env *env);
 
 
 /* SIGNAL */
-void		handler_int(int num);
-void		handler_quit(int num);
+void		int_handler(int num);
+void		quit_handler(int num);
 
 /* DIR_UTILS */
 int			is_dir(char *directory);

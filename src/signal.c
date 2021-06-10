@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void handler_int(int num)
+void int_handler(int num)
 {
 	t_prm *prm;
 	
@@ -16,13 +16,9 @@ void handler_int(int num)
 	tputs(prm->caps.sc, 1, ft_putchar);
 }
 
-void handler_quit(int num)
+void quit_handler(int num)
 {
-	t_prm *prm;
-	
-	prm = get_prm(0);
-	prm->enable = 0;
-	ft_putstr_fd("^\\Quit: ", STDOUT_FILENO);
+	ft_putstr_fd("Quit: ", STDOUT_FILENO);
 	ft_putnbr_fd(num, STDOUT_FILENO);
 	ft_putchar('\n');
 	// exit(0);

@@ -55,7 +55,8 @@ int		cmd_usercmd(t_cmd *cmd)
 		cmd->args[0] = ft_strjoin_sep(dir, sep, cmd->args[0]);
 		free(tmp);
 
-
+		signal(SIGQUIT, quit_handler);
+		// signal(SIGINT, SIG_DFL);
 		pid = fork();
 		if (pid == -1)
 		{
@@ -64,8 +65,6 @@ int		cmd_usercmd(t_cmd *cmd)
 		}
 		else if (pid == 0)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, handler_quit);
 			code = execve(cmd->args[0], cmd->args, env);
 			if (code == -1)
 			{
