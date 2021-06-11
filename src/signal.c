@@ -1,25 +1,24 @@
 #include "minishell.h"
 
-void handler_int(int num)
+void int_handler(int num)
 {
-	(void)num;
 	t_sh *sh;
 	
+	(void)num;
 	sh = get_sh(0);
 	sh->exit_code = 1;
-	// ft_putnbr_fd(num, STDOUT_FILENO);
-	//for chingiz
+	ft_memset(sh->hptr->data, 0, ft_strlen(sh->hptr->data));
+	sh->line_len = 0;
+	sh->curs_pos = 0;
+	ft_putchar('\n');
+	// if pid != 0
+	ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
+	tputs(sh->caps.sc, 1, ft_putchar);
 }
 
-void handler_quit(int num)
+void quit_handler(int num)
 {
-	t_sh *sh;
-	
-	sh = get_sh(0);
-	sh->enable = 0; // It shouldnt be here
-	ft_putendl_fd("", STDOUT_FILENO);
 	ft_putstr_fd("Quit: ", STDOUT_FILENO);
 	ft_putnbr_fd(num, STDOUT_FILENO);
-	ft_putendl_fd("", STDOUT_FILENO);
-	exit(0);
+	ft_putchar('\n');
 }

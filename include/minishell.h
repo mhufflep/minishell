@@ -12,11 +12,11 @@
 # include <signal.h>
 # include <termios.h>
 
+# include <dirent.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <sys/ioctl.h>
 # include <sys/types.h>
-# include <dirent.h>
 
 # include "egg.h"
 # include "libft.h"
@@ -26,10 +26,10 @@
 # include "error_messages.h"
 # include "bidirectional_list.h"
 
-// 0, 255, 197
 # define SHELL_NAME "e-bash"
 # define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
 # define HISTORY_FILENAME ".e-bash_history"
+
 # define QUOTE '\''
 # define DQOUTE '"'
 # define SLASH '\\'
@@ -47,7 +47,6 @@ typedef enum e_stream
 	UNDEFINED = -1,
 	IN = 0,
 	OUT = 1
-	// ERR = 2
 }			t_stream;
 
 typedef struct	s_caps
@@ -86,7 +85,7 @@ typedef struct  s_cmd
 {
 	int			is_child;
 	pid_t		pid;
-	int			rdir[2];		// change name
+	int			rdir[2];			// change name
 	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
@@ -94,7 +93,6 @@ typedef struct  s_cmd
 	int			rr_flag;
 	t_blst		*out;
 	t_blst		*in;
-	// t_blst	*err;
 }               t_cmd;
 
 typedef struct	s_sh
@@ -152,7 +150,7 @@ int			cmd_clear(t_sh *sh, t_cmd *cmd);
 int			cmd_unset(t_sh *sh, t_cmd *cmd);
 int			cmd_learnc(t_cmd *cmd);
 int			cmd_export(t_sh *sh, t_cmd *cmd);
-int			cmd_usercmd(t_cmd *cmd);
+int			cmd_usercmd(t_sh *sh, t_cmd *cmd);
 int			cmd_history(t_sh *sh, t_cmd *cmd);
 int			cmd_not_found(t_cmd *cmd);
 
@@ -208,7 +206,7 @@ char		**key_val_split(char *str, char *sep);
 
 /* GETTERS */
 t_sh		*get_sh(t_sh *sh);
-t_blst	*env_llist(void);
+t_blst		*env_llist(void);
 
 
 /* PARSER */
@@ -217,7 +215,6 @@ int			parse_redirect(t_cmd *cmd, char **str);
 void		parse_dollar(char **s, int code);
 void		parse_tilda(char **s);
 int			is_slash(char *s, int i);
-// int			escape_pair(char **str);
 int			escape_symbols(char **arr_str);
 char		**shell_split(char *s, char separator);
 int			skip_in_quote(char **s, int i, char quote_mark);
@@ -247,14 +244,12 @@ int			export_add(t_sh *sh, t_env *env);
 
 
 /* SIGNAL */
-void		handler_int(int num);
-void		handler_quit(int num);
+void		int_handler(int num);
+void		quit_handler(int num);
 
 /* DIR_UTILS */
 int			is_dir(char *directory);
 int			is_in_dir(char *name, char *directory);
-
-int 		redirect(t_blst *io);//, t_stream sid);
-
+int 		redirect(t_blst *io);
 int			shell_exit(t_sh *sh);
 #endif

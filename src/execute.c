@@ -25,7 +25,7 @@ int		execute_cmd(t_sh *sh, t_cmd *cmd)
 	else if (!bd_strcmp(CMD_21SCHOOL, cmd->args[0]))
 		return (cmd_21school(sh, cmd));
 	else
-		return (cmd_usercmd(cmd));
+		return (cmd_usercmd(sh, cmd));
 }
 
 void	free_cmd(void *data)
@@ -37,33 +37,143 @@ void	free_cmd(void *data)
 	free(cmd);
 }
 
-// void	print_cmd(t_cmd *cmd)
-// {
-// 	int i;
+void	restore_fd(int fd[2])
+{
+	//close temporary fd struct
+	if (!isatty(IN))
+	{
+		dup2(fd[IN], IN);
+		close(fd[IN]);
+	}
+	if (!isatty(OUT))
+	{
+		dup2(fd[OUT], OUT);
+		close(fd[OUT]);
+	}
+}
 
-// 	i = 1;
-// 	ft_putstr_fd("CURRENT COMMAND: ", STDOUT_FILENO);
-// 	ft_putstr_fd(cmd->args[0], STDOUT_FILENO);
-// 	while (cmd->args[i])
-// 	{
-// 		ft_putstr_fd(" ", STDOUT_FILENO);
-// 		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
-// 		i++;
-// 	}
-// 	ft_putendl_fd("", STDOUT_FILENO);
-// }
 
-// void	dup_and_close(t_sh *sh, t_cmd *cmd, t_stream sid)
-// {
-// 	if (!isatty(sid))
-// 	{
-// 		close(cmd->rdir[sid]);
-// 		dup2(sh->io[sid], sid); //CHANGED
-// 	}
-// }
-
+t_cmd *create_pipes(t_sh *sh, t_blst *lst)
+{
+	t_cmd *cmd;
+   
+	cmd = (t_cmd *)lst->data;
+    cmd->pid = -1;
+    if (lst->next)
+    {
+		pipe(cmd->pipe);
+		cmd->pid = fork();
+		if (cmd->pid < 0)
+		{
+			shell_exit(sh);
+		}
+		else if (cmd->pid > 0)
+		{
+			close(cmd->pipe[0]);
+        	dup2(cmd->pipe[1], 1);
+		}
+		else if (cmd->pid == 0)
+		{
+			close(cmd->pipe[1]);
+			dup2(cmd->pipe[0], 0);
+			cmd->is_child = 1;
+			create_pipes(sh, lst->next);
+			exit(0);
+		}
+    }
+    else
+	{
+        dup2(sh->io[1], 1);
+	}
+	return (cmd);
+}
 
 int pipes(t_sh *sh, t_blst *lst)
+{
+	t_cmd *cmd;
+	int status;
+   
+	cmd = (t_cmd *)lst->data;
+    cmd->pid = -1;
+    if (lst->next)
+    {
+		pipe(cmd->pipe);
+		cmd->pid = fork();
+		if (cmd->pid < 0)
+		{
+			shell_exit(sh);
+		}
+		else if (cmd->pid > 0)
+		{
+			close(cmd->pipe[0]);
+        	dup2(cmd->pipe[1], 1);
+		}
+		else if (cmd->pid == 0)
+		{
+			close(cmd->pipe[1]);
+			dup2(cmd->pipe[0], 0);
+			cmd->is_child = 1;
+			pipes(sh, lst->next);
+			exit(0);
+		}
+    }
+    else
+        dup2(sh->io[1], 1);
+	
+	//redirects
+
+	if (cmd->in)
+	{
+		cmd->rdir[0] = redirect(cmd->in);
+		if (cmd->rdir[0] == INVALID)
+			return (1);
+		dup2(cmd->rdir[0], 0);
+	}
+
+	if (cmd->out)
+	{
+		cmd->rdir[1] = redirect(cmd->out);
+		if (cmd->rdir[1] != INVALID)
+			return (1);
+		dup2(cmd->rdir[1], 1);
+	}
+
+	//execute
+	sh->exit_code = execute_cmd(sh, cmd);
+
+	//close pipes
+	close(cmd->pipe[0]);
+	close(cmd->pipe[1]);
+
+	restore_fd(sh->io);
+
+	waitpid(cmd->pid, &status, 0);
+	if (cmd->is_child)
+        exit(0);
+
+	return (0);
+}
+
+
+int		check_rp(t_sh *sh, t_blst *lst)
+{
+	if (lst->next)
+	{
+		sh->io[0] = dup(0);
+		sh->io[1] = dup(1);
+
+        pipes(sh, lst);
+
+		
+	}
+	else
+	{
+		sh->exit_code = execute_cmd(sh, lst->data);
+	}
+	return (0);
+}
+
+int		pipes_consecutive(t_sh *sh, t_blst *lst)
 {
 	int tmpin = dup(0);
     int tmpout = dup(1);
@@ -101,7 +211,8 @@ int pipes(t_sh *sh, t_blst *lst)
         close(fd[1]);
 
 		// Create child process
-		sh->exit_code = execute_cmd(sh, cmd);
+		if (cmd->args[0])
+			sh->exit_code = execute_cmd(sh, cmd);
 		lst = lst->next;
 	}
 
@@ -121,9 +232,11 @@ void	executor(t_sh *sh)
 	int i;
 
 	i = 0;
+
+	
 	while (sh->cmds && sh->cmds[i] != NULL)
 	{
-		sh->exit_code = pipes(sh, sh->cmds[i]);
+		check_rp(sh, sh->cmds[i]);
 		bd_lstclear(&(sh->cmds[i]), free_cmd);
 		i++;
 	}

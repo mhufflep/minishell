@@ -9,7 +9,7 @@ int		setup_parameters(t_sh **sh)
 	return (0);
 }
 
-void		update_shlvl(t_sh *sh)
+void	update_shlvl(t_sh *sh)
 {
 	t_env *shlvl;
 	int res;
@@ -96,13 +96,6 @@ void	setup_caps(t_sh *sh)
 	sh->caps.cl = init_tcap(sh, "cl");		// clear screen
 }
 
-void	setup_def_fd(t_sh *sh)
-{
-	sh->io[IN] = dup(IN);
-	sh->io[OUT] = dup(OUT);
-	// sh->io[2] = dup(ERR);
-}
-
 t_sh	*setup_settings(int argc, char **argv, char **env)
 {
 	t_sh	*sh;
@@ -115,7 +108,6 @@ t_sh	*setup_settings(int argc, char **argv, char **env)
 	sh->env = env;
 	setup_caps(sh);
 	setup_env_lists(sh);
-	// setup_def_fd(sh);
 	history_read(sh);
 	update_path();
 	update_shlvl(sh);

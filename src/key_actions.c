@@ -59,7 +59,7 @@ void	key_left_action(t_sh *sh)
 void	key_home_action(t_sh *sh)
 {
 	sh->curs_pos = 0;
-	tputs(sh->caps.rc, 1, ft_putchar);
+	tputs(sh->caps.rc, 5, ft_putchar);
 }
 
 void	key_end_action(t_sh *sh)

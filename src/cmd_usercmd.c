@@ -1,6 +1,8 @@
 #include "minishell.h"
 
-int		cmd_usercmd(t_cmd *cmd)
+// int		
+
+int		cmd_usercmd(t_sh *sh, t_cmd *cmd)
 {
 	int code = 0;
 	char **bin;
@@ -59,12 +61,13 @@ int		cmd_usercmd(t_cmd *cmd)
 	cmd->args[0] = ft_strjoin_sep(dir, sep, cmd->args[0]);
 	free(tmp);
 	free(dir);
-
+	signal(SIGQUIT, quit_handler);
+	// signal(SIGINT, SIG_DFL);
 	pid = fork();
 	if (pid == -1)
 	{
 		ft_putstr_fd("fork failed", STDERR_FILENO);
-		return -1; //NEED TO FREE RESOURSES
+		shell_exit(sh);
 	}
 	else if (pid == 0)
 	{
@@ -75,6 +78,7 @@ int		cmd_usercmd(t_cmd *cmd)
 			exit(127);
 		}
 	}
+
 	if (env != NULL)
 		free_array(env);
 
@@ -92,7 +96,5 @@ int		cmd_usercmd(t_cmd *cmd)
 		// printf("exit status was %d\n", code);
 	}
 
-
-	
 	return (code);
 }

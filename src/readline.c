@@ -59,14 +59,13 @@ void	restore_tcap_sh(t_sh *sh)
 
 void	reader(t_sh *sh)
 {
-	signal(SIGQUIT, handler_quit);
-	signal(SIGINT, handler_int);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, int_handler);
 	set_tcap_sh(sh);
 	while (1)
 	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
-		tputs(sh->caps.sc, 1, ft_putchar);
+		tputs(sh->caps.sc, 5, ft_putchar);
 	
 		//initial params
 		sh->line_len = 0;
