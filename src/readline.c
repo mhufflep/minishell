@@ -64,6 +64,7 @@ void	reader(t_sh *sh)
 	set_tcap_sh(sh);
 	while (1)
 	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
 		tputs(sh->caps.sc, 1, ft_putchar);
 	
