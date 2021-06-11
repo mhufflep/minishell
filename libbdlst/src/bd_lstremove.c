@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-void		bd_lstremove(t_bd_lst **head, t_bd_lst *cur, void (*del)(void *))
+void		bd_lstremove(t_blst **head, t_blst *cur, void (*del)(void *))
 {
 	if (cur->prev)
 		cur->prev->next = cur->next;

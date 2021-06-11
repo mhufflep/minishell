@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-void		bd_lstrelink(t_bd_lst *n1, t_bd_lst *n2, t_bd_lst *new)
+void		bd_lstrelink(t_blst *n1, t_blst *n2, t_blst *new)
 {
 	new->next = n2;
 	new->prev = n1;
@@ -8,9 +8,9 @@ void		bd_lstrelink(t_bd_lst *n1, t_bd_lst *n2, t_bd_lst *new)
 	n2->prev = new;	
 }
 
-void		bd_lstpush_sort(t_bd_lst **lst, t_bd_lst *new, int (*comp)(t_bd_lst *, t_bd_lst *))
+void		bd_lstpush_sort(t_blst **lst, t_blst *new, int (*comp)(t_blst *, t_blst *))
 {
-	t_bd_lst *tmp;
+	t_blst *tmp;
 
 	if (lst == NULL)
 		return ;

@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-void		bd_lstiter(t_bd_lst *lst, void (*f)(void *))
+void		bd_lstiter(t_blst *lst, void (*f)(void *))
 {
 	if (lst && f)
 	{

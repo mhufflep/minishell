@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-int		execute_cmd(t_prm *prm, t_cmd *cmd)
+int		execute_cmd(t_sh *sh, t_cmd *cmd)
 {
 	if (!bd_strcmp(CMD_EXIT, cmd->args[0]))
-		return (cmd_exit(prm, cmd));
+		return (cmd_exit(sh, cmd));
 	else if (!bd_strcmp(CMD_CD, cmd->args[0]))
 		return (cmd_cd(cmd));
 	else if (!bd_strcmp(CMD_ENV, cmd->args[0]))
@@ -13,19 +13,19 @@ int		execute_cmd(t_prm *prm, t_cmd *cmd)
 	else if (!bd_strcmp(CMD_ECHO, cmd->args[0]))
 		return (cmd_echo(cmd));
 	else if (!bd_strcmp(CMD_UNSET, cmd->args[0]))
-		return (cmd_unset(prm, cmd));
+		return (cmd_unset(sh, cmd));
 	else if (!bd_strcmp(CMD_CLEAR, cmd->args[0]))
-		return (cmd_clear(prm, cmd));
+		return (cmd_clear(sh, cmd));
 	else if (!bd_strcmp(CMD_EXPORT, cmd->args[0]))
-		return (cmd_export(prm, cmd));
+		return (cmd_export(sh, cmd));
 	else if (!bd_strcmp(CMD_LEARNC, cmd->args[0]))
 		return (cmd_learnc(cmd));
 	else if (!bd_strcmp(CMD_HISTORY, cmd->args[0]))
-		return (cmd_history(prm, cmd));
+		return (cmd_history(sh, cmd));
 	else if (!bd_strcmp(CMD_21SCHOOL, cmd->args[0]))
-		return (cmd_21school(prm, cmd));
+		return (cmd_21school(sh, cmd));
 	else
-		return (cmd_usercmd(cmd));
+		return (cmd_usercmd(sh, cmd));
 }
 
 void	free_cmd(void *data)
@@ -37,66 +37,96 @@ void	free_cmd(void *data)
 	free(cmd);
 }
 
-void	print_cmd(t_cmd *cmd)
-{
-	int i;
+// void	print_cmd(t_cmd *cmd)
+// {
+// 	int i;
 
-	i = 1;
-	ft_putstr_fd("CURRENT COMMAND: ", STDOUT_FILENO);
-	ft_putstr_fd(cmd->args[0], STDOUT_FILENO);
-	while (cmd->args[i])
-	{
-		ft_putstr_fd(" ", STDOUT_FILENO);
-		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
-		i++;
-	}
-	ft_putendl_fd("", STDOUT_FILENO);
-}
+// 	i = 1;
+// 	ft_putstr_fd("CURRENT COMMAND: ", STDOUT_FILENO);
+// 	ft_putstr_fd(cmd->args[0], STDOUT_FILENO);
+// 	while (cmd->args[i])
+// 	{
+// 		ft_putstr_fd(" ", STDOUT_FILENO);
+// 		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
+// 		i++;
+// 	}
+// 	ft_putendl_fd("", STDOUT_FILENO);
+// }
 
-void	dup_and_close(t_prm *prm, t_cmd *cmd, t_stream sid)
-{
-	if (!isatty(sid))
-	{
-		close(cmd->rdir[sid]);
-		dup2(prm->def[sid], sid);
-	}
-}
+// void	dup_and_close(t_sh *sh, t_cmd *cmd, t_stream sid)
+// {
+// 	if (!isatty(sid))
+// 	{
+// 		close(cmd->rdir[sid]);
+// 		dup2(sh->io[sid], sid); //CHANGED
+// 	}
+// }
 
-int		execute_block(t_prm *prm, t_bd_lst *lst)
+
+int pipes(t_sh *sh, t_blst *lst)
 {
+	int tmpin = dup(0);
+    int tmpout = dup(1);
+
 	t_cmd *cmd;
-	int code;
+	int fd[2];
 
-	while (lst != NULL)
-	{
-		// pipe(cmd->pipe);			// echo hello | grep l | wc -l
+	fd[0] = dup(tmpin);
+	while (lst)
+    {
 		cmd = (t_cmd *)lst->data;
-		print_cmd(cmd);				//PRINT CMD!!!!!!!!!!!!!!!!!!!
-		
-		cmd->rdir[0] = redirect(cmd->in, IN);
-		cmd->rdir[1] = redirect(cmd->out, OUT);
-		if (cmd->rdir[0] != INVALID && cmd->rdir[1] != INVALID)
+        
+		//rdir in
+		if (cmd->in)
+			fd[0] = redirect(cmd->in);
+
+        dup2(fd[0], 0);
+        close(fd[0]);
+
+		//pipes
+		if (!lst->next)
 		{
-			code = execute_cmd(prm, cmd);
-			dup_and_close(prm, cmd, IN);
-			dup_and_close(prm, cmd, OUT);
+			fd[1] = dup(tmpout);
+        }
+        else
+		{
+			pipe(fd);
 		}
+
+		//rdir out
+		if (cmd->out)
+			fd[1] = redirect(cmd->out);
+	
+        dup2(fd[1], 1);
+        close(fd[1]);
+
+		// Create child process
+		sh->exit_code = execute_cmd(sh, cmd);
 		lst = lst->next;
 	}
-	return (code);
+
+    dup2(tmpin, 0);
+    dup2(tmpout, 1);
+    close(tmpin);
+    close(tmpout);
+
+	close(fd[0]);
+	close(fd[1]);
+
+    return (sh->exit_code);
 }
 
-void	executor(t_prm *prm)
+void	executor(t_sh *sh)
 {
 	int i;
 
 	i = 0;
-	while (prm->cmds && prm->cmds[i] != NULL)
+	while (sh->cmds && sh->cmds[i] != NULL)
 	{
-		prm->exit_code = execute_block(prm, prm->cmds[i]);
-		bd_lstclear(&(prm->cmds[i]), free_cmd);
+		sh->exit_code = pipes(sh, sh->cmds[i]);
+		bd_lstclear(&(sh->cmds[i]), free_cmd);
 		i++;
 	}
-	free(prm->cmds);	//MAY CAUSE AN ERROR
-	prm->cmds = NULL;
+	free(sh->cmds);
+	sh->cmds = NULL;
 }

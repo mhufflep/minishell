@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-// void		bd_lstdelone(t_bd_lst **head, t_bd_lst *lst, void (*del)(void*))
+// void		bd_lstdelone(t_blst **head, t_blst *lst, void (*del)(void*))
 // {
 // 	if (lst && del)
 // 	{
@@ -15,9 +15,9 @@
 // 	}
 // }
 
-// void		bd_lstclear(t_bd_lst **lst, void (*del)(void*))
+// void		bd_lstclear(t_blst **lst, void (*del)(void*))
 // {
-// 	t_bd_lst *last;
+// 	t_blst *last;
 
 // 	if (lst && *lst && del)
 // 	{
@@ -31,7 +31,7 @@
 // 	}
 // }
 
-void	bd_lstdelone(t_bd_lst *lst, void (*del)(void*))
+void	bd_lstdelone(t_blst *lst, void (*del)(void*))
 {
 	if (lst && del)
 	{
@@ -40,7 +40,7 @@ void	bd_lstdelone(t_bd_lst *lst, void (*del)(void*))
 	}
 }
 
-void	bd_lstclear(t_bd_lst **lst, void (*del)(void *))
+void	bd_lstclear(t_blst **lst, void (*del)(void *))
 {
 	if (lst && *lst && del)
 	{

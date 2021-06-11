@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-int			bd_lstsize(t_bd_lst *lst)
+int			bd_lstsize(t_blst *lst)
 {
 	int	size;
 

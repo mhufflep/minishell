@@ -128,9 +128,9 @@ void	set_color(const char *color)
 	printf("%s", color);
 }
 
-int	cmd_21school(t_prm *prm, t_cmd *cmd)
+int	cmd_21school(t_sh *sh, t_cmd *cmd)
 {
-	(void)prm;
+	(void)sh;
 	(void)cmd;
 	print_logo();
 	return (0);

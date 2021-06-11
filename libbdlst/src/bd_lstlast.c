@@ -1,6 +1,6 @@
 #include "bidirectional_list.h"
 
-t_bd_lst	*bd_lstlast(t_bd_lst *lst)
+t_blst	*bd_lstlast(t_blst *lst)
 {
 	if (lst == NULL)
 		return (lst);

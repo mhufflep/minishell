@@ -4,7 +4,7 @@ void	change_term_settings(t_term *term)
 {
 	term->c_lflag &= ~(ECHO);
 	term->c_lflag &= ~(ICANON);
-	// term->c_lflag &= ~(ISIG); // отключит работу сигналов
+	// term->c_lflag |= ISIG; // отключит работу сигналов
 	// term->c_cc[VMIN] = 1;
 	// term->c_cc[VTIME] = 0;
 }
@@ -22,10 +22,4 @@ t_term *create_term_struct(void)
 		return (NULL);
 	}
 	return (term);
-}
-
-void	reset_parameters(t_prm *prm)
-{
-	tcsetattr(0, TCSANOW, prm->def_term);
-	exit(prm->exit_code);
 }

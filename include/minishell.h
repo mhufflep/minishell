@@ -31,7 +31,7 @@
 # define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
 # define HISTORY_FILENAME ".e-bash_history"
 # define QUOTE '\''
-# define D_QUOTE '"'
+# define DQOUTE '"'
 # define SLASH '\\'
 
 # define ENV_SEP "="
@@ -84,20 +84,22 @@ typedef struct	s_redir
 
 typedef struct  s_cmd
 {
+	int			is_child;
+	pid_t		pid;
 	int			rdir[2];		// change name
 	int			pipe[2];
 	char		**args;				//аргументы (и опции) команды
     int			is_pipe;			//стоит ли после команды pipe
     int			r_flag;				//стоит ли после команды redir, если значение 2 - значит двойной
 	int			rr_flag;
-	t_bd_lst	*out;
-	t_bd_lst	*in;
-	// t_bd_lst	*err;
+	t_blst		*out;
+	t_blst		*in;
+	// t_blst	*err;
 }               t_cmd;
 
-typedef struct	s_prm
+typedef struct	s_sh
 {
-	int	def[3];
+	int	io[3];
 	char **env;
 	char **argv;
 	int argc;
@@ -112,68 +114,68 @@ typedef struct	s_prm
 	t_term	*term;
 	t_term	*def_term;
 
-	t_bd_lst	*history;
-	t_bd_lst	*hptr;
-	t_bd_lst	*env_list;
-	t_bd_lst	*cmds_ptr;
-	t_bd_lst	**cmds; 			//массив листов команд, в поле data каждой будет лежать t_cmd *
-}					t_prm;
+	t_blst	*history;
+	t_blst	*hptr;
+	t_blst	*env_list;
+	t_blst	*cmds_ptr;
+	t_blst	**cmds; 			//массив листов команд, в поле data каждой будет лежать t_cmd *
+}					t_sh;
 
-void		reader(t_prm *);
+void		reader(t_sh *);
 int			lexer(char *str);
-int			parser(t_prm *);
-void		executor(t_prm *);
-int			expander(t_prm *);
+int			parser(t_sh *);
+void		executor(t_sh *);
+int			expander(t_sh *);
 
 
 /* MAIN FUNCTIONS */
-t_prm		*setup_settings(int, char **, char **);
-void		reset_parameters(t_prm *);
+t_sh		*setup_settings(int, char **, char **);
+void		reset_parameters(t_sh *);
 
 /* HISTORY */
-void		history_read(t_prm *prm);
-void		history_add(t_prm *prm);
-void		history_save(t_prm *prm);
-void		history_if_prev(t_prm *prm);
+void		history_read(t_sh *sh);
+void		history_add(t_sh *sh);
+void		history_save(t_sh *sh);
+void		history_if_prev(t_sh *sh);
 
 /* BUILTIN */
-int			cmd_21school(t_prm *prm, t_cmd *cmd);
+int			cmd_21school(t_sh *sh, t_cmd *cmd);
 
 int			redirects(t_cmd *cmd);
 
 int			cmd_cd(t_cmd *cmd);
 int			cmd_pwd(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd);
-int			cmd_exit(t_prm *prm, t_cmd *cmd);
+int			cmd_exit(t_sh *sh, t_cmd *cmd);
 int			cmd_echo(t_cmd *cmd);
-int			cmd_clear(t_prm *prm, t_cmd *cmd);
-int			cmd_unset(t_prm *prm, t_cmd *cmd);
+int			cmd_clear(t_sh *sh, t_cmd *cmd);
+int			cmd_unset(t_sh *sh, t_cmd *cmd);
 int			cmd_learnc(t_cmd *cmd);
-int			cmd_export(t_prm *prm, t_cmd *cmd);
-int			cmd_usercmd(t_cmd *cmd);
-int			cmd_history(t_prm *prm, t_cmd *cmd);
+int			cmd_export(t_sh *sh, t_cmd *cmd);
+int			cmd_usercmd(t_sh *sh, t_cmd *cmd);
+int			cmd_history(t_sh *sh, t_cmd *cmd);
 int			cmd_not_found(t_cmd *cmd);
 
 /* TERMINAL */
 void		change_term_settings(t_term *term);
-int			setup_terminal(t_prm *prm);
+int			setup_terminal(t_sh *sh);
 t_term		*create_term_struct(void);
 
 /* KEYS */
 int			is_printable_sym(unsigned int input);
 int			is_printable(char *input);
-void		key_up_action(t_prm *prm);
-void		key_down_action(t_prm *prm);
-void		key_left_action(t_prm *prm);
-void		key_right_action(t_prm *prm);
+void		key_up_action(t_sh *sh);
+void		key_down_action(t_sh *sh);
+void		key_left_action(t_sh *sh);
+void		key_right_action(t_sh *sh);
 void		key_tab_action(void);
-void		key_ctrl_l_action(t_prm *prm);
-void		key_ctrl_d_action(t_prm *prm);
-void		key_bspace_action(t_prm *prm);
-void		key_other_action(t_prm *prm);
-void		key_home_action(t_prm *prm);
-void		key_end_action(t_prm *prm);
-void		clear_prompt(t_prm *prm);
+void		key_ctrl_l_action(t_sh *sh);
+void		key_ctrl_d_action(t_sh *sh);
+void		key_bspace_action(t_sh *sh);
+void		key_other_action(t_sh *sh);
+void		key_home_action(t_sh *sh);
+void		key_end_action(t_sh *sh);
+void		clear_prompt(t_sh *sh);
 
 
 
@@ -190,23 +192,23 @@ char		*insert_into2(char **src, char *add, int index, void (*free_ctl)(void *));
 char		*insert_into(char *src, char *add, int index, void (*free_ctl)(void *));
 char 		*remove_from(char *src, int index);
 char		*replace_by(char **src, int index, int len, char *add, void (*free_ctl)(void *));
-void		recognize_symbol(t_prm *prm);
+void		recognize_symbol(t_sh *sh);
 void		print_export_node(void *data);
 char 		*asterisk(char *pattern);
 int			is_option(char *opt, char *valid_opt);
-void 		clrscr(t_prm *prm);
+void 		clrscr(t_sh *sh);
 
 /* INIT */
-t_prm		*setup_settings(int argc, char **argv, char **env);
-int			setup_env_lists(t_prm	*prm);
-int			setup_parameters(t_prm **prm);
-int			setup_terminal(t_prm	*prm);
-void		reset_settings(t_prm	*prm);
+t_sh		*setup_settings(int argc, char **argv, char **env);
+int			setup_env_lists(t_sh	*sh);
+int			setup_parameters(t_sh **sh);
+int			setup_terminal(t_sh	*sh);
+void		reset_settings(t_sh	*sh);
 char		**key_val_split(char *str, char *sep);
 
 /* GETTERS */
-t_prm		*get_prm(t_prm *prm);
-t_bd_lst	*env_llist(void);
+t_sh		*get_sh(t_sh *sh);
+t_blst	*env_llist(void);
 
 
 /* PARSER */
@@ -220,7 +222,7 @@ int			escape_symbols(char **arr_str);
 char		**shell_split(char *s, char separator);
 int			skip_in_quote(char **s, int i, char quote_mark);
 size_t		read_str(char **s, int i, char separator, int is_escaped);
-void		cmds_arr_create(t_prm *prm, int size);
+void		cmds_arr_create(t_sh *sh, int size);
 t_cmd		*command_create(char **args);
 
 /* ERROR */
@@ -241,7 +243,7 @@ void		*copy_to_env(void *str);
 void		*copy_from_env(void *node);
 
 int			export_update(t_env *found, t_env *replacer);
-int			export_add(t_prm *prm, t_env *env);
+int			export_add(t_sh *sh, t_env *env);
 
 
 /* SIGNAL */
@@ -252,5 +254,11 @@ void		quit_handler(int num);
 int			is_dir(char *directory);
 int			is_in_dir(char *name, char *directory);
 
-int 		redirect(t_bd_lst *io, t_stream sid);
+int 		redirect(t_blst *io);//, t_stream sid);
+
+int			shell_exit(t_sh *sh);
+
+void	set_tcap_sh(t_sh *sh);
+
+void	restore_tcap_sh(t_sh *sh);
 #endif

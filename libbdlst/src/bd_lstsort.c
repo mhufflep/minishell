@@ -1,9 +1,9 @@
 #include "bidirectional_list.h"
 
-void		bd_lstsort(t_bd_lst *lst) //not working well, need to know bad cases
+void		bd_lstsort(t_blst *lst) //not working well, need to know bad cases
 {
 	int			len;
-	t_bd_lst	*tmp;
+	t_blst	*tmp;
 	int			sorted;
 	char		*str;
 	sorted = 0;

@@ -41,7 +41,7 @@ int		is_space(char *s, int i)
 // 		{
 // 			if ((*str)[i + 1] == SLASH)
 // 				*str = remove_from(*str, i);
-// 			else if ((*str)[i + 1] == D_QUOTE)
+// 			else if ((*str)[i + 1] == DQOUTE)
 // 				*str = remove_from(*str, i);
 // 		}
 // 		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
@@ -76,7 +76,7 @@ int		escape_symbols(char **s)
 				j = skip_in_quote(&(s[i]), j, QUOTE);
 				s[i] = remove_from(s[i], j - 1);
 			}
-			else if (s[i][j] == D_QUOTE)
+			else if (s[i][j] == DQOUTE)
 				s[i] = remove_from(s[i], j);
 			else
 				j++;

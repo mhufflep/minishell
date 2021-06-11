@@ -8,7 +8,7 @@ void	node_print(void *data)
 		printf("NULL\n");
 }
 
-void		bd_lstprint(t_bd_lst *lst, void (*print)(void *))
+void		bd_lstprint(t_blst *lst, void (*print)(void *))
 {
 	bd_lstiter(lst, print);
 }

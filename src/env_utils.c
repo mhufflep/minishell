@@ -76,7 +76,7 @@ int		env_cmp(void *data1, void *data2, size_t n)
 
 t_env	*env_get_local(char *key)
 {
-	t_bd_lst	*found;
+	t_blst	*found;
 	t_env		*got;
 	t_env		*env;
 
