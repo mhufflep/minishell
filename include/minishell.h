@@ -43,8 +43,8 @@ typedef struct termios t_term;
 
 typedef enum e_stream
 {
-	INVALID = -2,
-	UNDEFINED = -1,
+	UNDEFINED = -2,
+	INVALID= -1,
 	IN = 0,
 	OUT = 1
 }			t_stream;
@@ -97,6 +97,7 @@ typedef struct  s_cmd
 
 typedef struct	s_sh
 {
+	int ch_pid;
 	int	io[3];
 	char **env;
 	char **argv;
@@ -107,6 +108,10 @@ typedef struct	s_sh
 	int enable;
 	char *line;
 	char input[5];
+
+	int		have_pipes;
+	int		have_redir;
+	int		have_rredir;
 
 	t_caps	caps;
 	t_term	*term;

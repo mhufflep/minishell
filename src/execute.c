@@ -40,58 +40,22 @@ void	free_cmd(void *data)
 void	restore_fd(int fd[2])
 {
 	//close temporary fd struct
-	if (!isatty(IN))
-	{
+	// if (!isatty(IN))
+	// {
 		dup2(fd[IN], IN);
 		close(fd[IN]);
-	}
-	if (!isatty(OUT))
-	{
+	// }
+	// if (!isatty(OUT))
+	// {
 		dup2(fd[OUT], OUT);
 		close(fd[OUT]);
-	}
+	// }
 }
 
 
-t_cmd *create_pipes(t_sh *sh, t_blst *lst)
+t_cmd *pipes(t_sh *sh, t_blst *lst)
 {
 	t_cmd *cmd;
-   
-	cmd = (t_cmd *)lst->data;
-    cmd->pid = -1;
-    if (lst->next)
-    {
-		pipe(cmd->pipe);
-		cmd->pid = fork();
-		if (cmd->pid < 0)
-		{
-			shell_exit(sh);
-		}
-		else if (cmd->pid > 0)
-		{
-			close(cmd->pipe[0]);
-        	dup2(cmd->pipe[1], 1);
-		}
-		else if (cmd->pid == 0)
-		{
-			close(cmd->pipe[1]);
-			dup2(cmd->pipe[0], 0);
-			cmd->is_child = 1;
-			create_pipes(sh, lst->next);
-			exit(0);
-		}
-    }
-    else
-	{
-        dup2(sh->io[1], 1);
-	}
-	return (cmd);
-}
-
-int pipes(t_sh *sh, t_blst *lst)
-{
-	t_cmd *cmd;
-	int status;
    
 	cmd = (t_cmd *)lst->data;
     cmd->pid = -1;
@@ -118,58 +82,208 @@ int pipes(t_sh *sh, t_blst *lst)
 		}
     }
     else
+	{
         dup2(sh->io[1], 1);
-	
-	//redirects
+	}
+	return (cmd);
+}
 
+int rr(t_cmd *cmd)
+{
 	if (cmd->in)
 	{
 		cmd->rdir[0] = redirect(cmd->in);
-		if (cmd->rdir[0] == INVALID)
+		if (cmd->rdir[0] > 2)
+		{
+			dup2(cmd->rdir[0], 0);
 			return (1);
+		}
+		return (0);
+	}
+	return (1);
+	// if (cmd->out)
+	// {
+	// 	cmd->rdir[1] = redirect(cmd->out);
+	// 	if (cmd->rdir[1] > 2)
+	// 	{
+	// 		dup2(cmd->rdir[1], 1);
+	// 	}
+	// }
+}
+
+void	close_pipe(int fd[2])
+{
+	// if (fd[IN] != INVALID)
+		close(fd[IN]);
+	// if (fd[OUT] != INVALID)
+		close(fd[OUT]);
+}
+
+int spawn_pipes(t_sh *sh, t_blst *lst)
+{
+	t_cmd *cmd;
+	int status;
+   
+	cmd = (t_cmd *)lst->data;
+    cmd->pid = -1;
+	cmd->pipe[0] = UNDEFINED;
+	cmd->pipe[1] = UNDEFINED;
+    if (lst->next)
+    {
+		if (pipe(cmd->pipe) < 0)
+		{
+			shell_exit(sh);
+		}
+		cmd->pid = fork();
+		if (cmd->pid < 0)
+		{
+			shell_exit(sh);
+		}
+		else if (cmd->pid > 0)
+		{
+			sh->ch_pid = cmd->pid;
+			close(cmd->pipe[0]);
+        	dup2(cmd->pipe[1], 1);
+		}
+		else if (cmd->pid == 0)
+		{
+			close(cmd->pipe[1]);
+			dup2(cmd->pipe[0], 0);
+			cmd->is_child = 1;
+			spawn_pipes(sh, lst->next);
+			exit(0);
+		}
+    }
+    else
+        dup2(sh->io[1], 1);
+
+	cmd->rdir[0] = redirect(cmd->in);
+	if (cmd->rdir[0] > 2)
+	{
 		dup2(cmd->rdir[0], 0);
 	}
 
-	if (cmd->out)
+	cmd->rdir[1] = redirect(cmd->out);
+	if (cmd->rdir[1] > 2)
 	{
-		cmd->rdir[1] = redirect(cmd->out);
-		if (cmd->rdir[1] != INVALID)
-			return (1);
 		dup2(cmd->rdir[1], 1);
 	}
 
-	//execute
-	sh->exit_code = execute_cmd(sh, cmd);
+	if (cmd->rdir[0] != INVALID && cmd->rdir[1] != INVALID)
+	{
+		sh->exit_code = execute_cmd(sh, cmd);
+	}
 
-	//close pipes
-	close(cmd->pipe[0]);
-	close(cmd->pipe[1]);
+	// close_pipe(cmd->pipe);
+	if (cmd->pipe[0] != UNDEFINED)
+		close(cmd->pipe[0]);
+	if (cmd->pipe[1] != UNDEFINED)
+		close(cmd->pipe[1]);
 
-	restore_fd(sh->io);
+	if (cmd->rdir[0] > 2)
+		close(cmd->rdir[0]);
+
+	if (cmd->rdir[1] > 2)
+		close(cmd->rdir[1]);
+
+	if (sh->have_pipes)
+	{
+		dup2(sh->io[IN], IN);
+		close(sh->io[IN]);
+		dup2(sh->io[OUT], OUT);
+		close(sh->io[OUT]);
+	}
+	else 
+	{
+		if (sh->have_redir)
+		{
+			dup2(sh->io[OUT], OUT);
+			close(sh->io[OUT]);
+		}
+		if (sh->have_rredir)
+		{
+			dup2(sh->io[IN], IN);
+			close(sh->io[IN]);
+		}
+	}
 
 	waitpid(cmd->pid, &status, 0);
 	if (cmd->is_child)
-        exit(0);
-
+		exit(0);
 	return (0);
 }
 
 
+
+
 int		check_rp(t_sh *sh, t_blst *lst)
 {
+	t_cmd *cmd;
+
+	cmd = (t_cmd *)lst->data;
 	if (lst->next)
 	{
+		sh->have_pipes = 1;
 		sh->io[0] = dup(0);
 		sh->io[1] = dup(1);
-
-        pipes(sh, lst);
-
-		
 	}
 	else
 	{
-		sh->exit_code = execute_cmd(sh, lst->data);
+		if (cmd->in)
+		{
+			sh->have_rredir = 1; 
+			sh->io[0] = dup(0);
+		}
+		if (cmd->out)
+		{
+			sh->have_redir = 1;
+			sh->io[1] = dup(1);
+		}
 	}
+	spawn_pipes(sh, lst);
+	// }
+	// else
+	// {
+	// 	if (cmd->in)
+	// 	{
+	// 		cmd->rdir[0] = redirect(cmd->in);
+	// 		if (cmd->rdir[0] > 2)
+	// 		{
+	// 			sh->io[0] = dup(0);
+	// 			dup2(cmd->rdir[0], 0);
+	// 		}
+	// 	}
+		
+	// 	if (cmd->out)
+	// 	{
+	// 		cmd->rdir[1] = redirect(cmd->out);
+	// 		if (cmd->rdir[1] > 2)
+	// 		{
+	// 			sh->io[1] = dup(1);
+	// 			dup2(cmd->rdir[1], 1);
+	// 		}
+	// 	}
+
+	// 	sh->exit_code = execute_cmd(sh, lst->data);
+		
+	// 	if (cmd->rdir[0] > 2)
+	// 	{
+	// 		close(cmd->rdir[0]);
+	// 		// restore_fd(sh, IN);
+	// 		dup2(sh->io[IN], IN);
+	// 		close(sh->io[IN]);
+	// 	}
+
+	// 	if (cmd->rdir[1] > 2)
+	// 	{
+	// 		close(cmd->rdir[1]);
+	// 		// restore_fd(sh, OUT);
+	// 		dup2(sh->io[OUT], OUT);
+	// 		close(sh->io[OUT]);
+	// 	}
+
+
+	// }
 	return (0);
 }
 
@@ -232,10 +346,9 @@ void	executor(t_sh *sh)
 	int i;
 
 	i = 0;
-
-	
 	while (sh->cmds && sh->cmds[i] != NULL)
 	{
+		// execute_pipeline(sh, sh->cmds[i]);
 		check_rp(sh, sh->cmds[i]);
 		bd_lstclear(&(sh->cmds[i]), free_cmd);
 		i++;
