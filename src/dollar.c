@@ -28,7 +28,7 @@ void			parse_dollar(char **s, int code)
 	char	*exit_;
 
 	i = 0;
-	while ((*s)[i])
+	while (*s && (*s)[i])
 	{	
 		// в строгих кавычках все символы экранируются, соответственно здесь пропускаем key
 		if ((*s)[i] == QUOTE && !is_slash(*s, i - 1))

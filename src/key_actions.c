@@ -124,7 +124,8 @@ void	key_ctrl_l_action(t_sh *sh)
 void	key_ctrl_c_action(t_sh *sh)
 {
 	free(sh->hptr->data);
-	ft_memset(sh->hptr->data, 0, ft_strlen(sh->hptr->data));
+	ft_memset(sh->hptr->data, 0, sh->line_len);
+	sh->hptr->data = 0;
 	sh->line_len = 0;
 	sh->curs_pos = 0;
 	sh->exit_code = 1;
