@@ -22,6 +22,8 @@ void	recognize_symbol(t_sh *sh)
 		key_ctrl_l_action(sh);
 	else if (!ft_strcmp(sh->input, KEY_CTRL_D))
 		key_ctrl_d_action(sh);
+	else if (!ft_strcmp(sh->input, KEY_CTRL_C))
+		key_ctrl_c_action(sh);
 	else
 		key_other_action(sh);
 }
@@ -41,6 +43,7 @@ int		is_endinput(char *input)
 {
 	return (!ft_strcmp(input, KEY_ENTER) || 
 			!ft_strcmp(input, KEY_CTRL_L) || 
+			!ft_strcmp(input, KEY_CTRL_C) ||
 			!ft_strcmp(input, KEY_CTRL_D));
 }
 
@@ -48,25 +51,27 @@ void	set_tcap_sh(t_sh *sh)
 {
 	sh->term->c_lflag &= ~(ECHO);
 	sh->term->c_lflag &= ~(ICANON);
+	sh->term->c_lflag &= ~(ISIG);
 	tcsetattr(0, TCSANOW, sh->term);
 }
 
 void	restore_tcap_sh(t_sh *sh)
 {
-	sh->term->c_lflag |= (ECHO | ICANON);
+	sh->term->c_lflag |= (ECHO | ICANON | ISIG);
 	tcsetattr(0, TCSANOW, sh->term);
 }
 
 void	reader(t_sh *sh)
 {
-	signal(SIGQUIT, SIG_IGN);
+	// sh->exit_code = 0; 
+	// signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, int_handler);
 	set_tcap_sh(sh);
 	while (1)
 	{
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
 		tputs(sh->caps.sc, 5, ft_putchar);
-	
+
 		//initial params
 		sh->line_len = 0;
 		sh->curs_pos = 0;

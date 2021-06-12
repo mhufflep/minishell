@@ -175,6 +175,7 @@ void		key_tab_action(void);
 void		key_ctrl_l_action(t_sh *sh);
 void		key_ctrl_d_action(t_sh *sh);
 void		key_bspace_action(t_sh *sh);
+void		key_ctrl_c_action(t_sh *sh);
 void		key_other_action(t_sh *sh);
 void		key_home_action(t_sh *sh);
 void		key_end_action(t_sh *sh);
@@ -200,6 +201,8 @@ void		print_export_node(void *data);
 char 		*asterisk(char *pattern);
 int			is_option(char *opt, char *valid_opt);
 void 		clrscr(t_sh *sh);
+int 		redirect(t_blst *io);
+int			shell_exit(t_sh *sh);
 
 /* INIT */
 t_sh		*setup_settings(int argc, char **argv, char **env);
@@ -255,6 +258,5 @@ void		quit_handler(int num);
 /* DIR_UTILS */
 int			is_dir(char *directory);
 int			is_in_dir(char *name, char *directory);
-int 		redirect(t_blst *io);
-int			shell_exit(t_sh *sh);
+
 #endif

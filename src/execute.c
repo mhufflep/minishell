@@ -2,6 +2,8 @@
 
 int		execute_cmd(t_sh *sh, t_cmd *cmd)
 {
+	if (!cmd->args || !cmd->args[0])
+		return (0);
 	if (!bd_strcmp(CMD_EXIT, cmd->args[0]))
 		return (cmd_exit(sh, cmd));
 	else if (!bd_strcmp(CMD_CD, cmd->args[0]))
@@ -174,7 +176,6 @@ int spawn_pipes(t_sh *sh, t_blst *lst)
 		sh->exit_code = execute_cmd(sh, cmd);
 	}
 
-	// close_pipe(cmd->pipe);
 	if (cmd->pipe[0] != UNDEFINED)
 		close(cmd->pipe[0]);
 	if (cmd->pipe[1] != UNDEFINED)
@@ -214,8 +215,6 @@ int spawn_pipes(t_sh *sh, t_blst *lst)
 }
 
 
-
-
 int		check_rp(t_sh *sh, t_blst *lst)
 {
 	t_cmd *cmd;
@@ -241,49 +240,6 @@ int		check_rp(t_sh *sh, t_blst *lst)
 		}
 	}
 	spawn_pipes(sh, lst);
-	// }
-	// else
-	// {
-	// 	if (cmd->in)
-	// 	{
-	// 		cmd->rdir[0] = redirect(cmd->in);
-	// 		if (cmd->rdir[0] > 2)
-	// 		{
-	// 			sh->io[0] = dup(0);
-	// 			dup2(cmd->rdir[0], 0);
-	// 		}
-	// 	}
-		
-	// 	if (cmd->out)
-	// 	{
-	// 		cmd->rdir[1] = redirect(cmd->out);
-	// 		if (cmd->rdir[1] > 2)
-	// 		{
-	// 			sh->io[1] = dup(1);
-	// 			dup2(cmd->rdir[1], 1);
-	// 		}
-	// 	}
-
-	// 	sh->exit_code = execute_cmd(sh, lst->data);
-		
-	// 	if (cmd->rdir[0] > 2)
-	// 	{
-	// 		close(cmd->rdir[0]);
-	// 		// restore_fd(sh, IN);
-	// 		dup2(sh->io[IN], IN);
-	// 		close(sh->io[IN]);
-	// 	}
-
-	// 	if (cmd->rdir[1] > 2)
-	// 	{
-	// 		close(cmd->rdir[1]);
-	// 		// restore_fd(sh, OUT);
-	// 		dup2(sh->io[OUT], OUT);
-	// 		close(sh->io[OUT]);
-	// 	}
-
-
-	// }
 	return (0);
 }
 

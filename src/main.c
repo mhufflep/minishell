@@ -13,7 +13,6 @@ int main(int argc, char **argv, char **env)
 		history_save(sh);
 		if (parser(sh))
 			executor(sh);
-		// expander(sh);
 	}
 	shell_exit(sh);
 }

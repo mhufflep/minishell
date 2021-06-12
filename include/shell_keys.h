@@ -10,6 +10,7 @@
 # define KEY_ENTER			"\n"
 # define KEY_CTRL_D			"\4"
 # define KEY_CTRL_L			"\f"
+# define KEY_CTRL_C         "\3"
 # define KEY_HOME			"\e[H"
 # define KEY_END			"\e[F"
 
