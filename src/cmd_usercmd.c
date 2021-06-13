@@ -61,8 +61,11 @@ int		cmd_usercmd(t_sh *sh, t_cmd *cmd)
 	cmd->args[0] = ft_strjoin_sep(dir, sep, cmd->args[0]);
 	free(tmp);
 	free(dir);
-	signal(SIGQUIT, quit_handler);
-	// signal(SIGINT, SIG_DFL);
+	if (!bd_strcmp("minishell", &cmd->args[0][ft_strlen(cmd->args[0]) - 9]))
+	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
+	}
 	pid = fork();
 	if (pid == -1)
 	{

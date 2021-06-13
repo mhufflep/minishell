@@ -1,26 +1,5 @@
 #include "minishell.h"
 
-// char *replace_by(char **src, char *add, int index, int len, void (*free_ctl)(void *));
-
-// int		is_separator(char c)
-// {
-// 	return (c != ' ' || c != '<' || c != '>' || c != '|' | c != ';' | c != '$');
-// }
-
-int		amount_spaces(char *str)
-{
-	int j;
-
-	j = 0;
-	while (str[j] != '\0')
-	{
-		if (str[j] != ' ')
-			break;
-		j++;
-	}
-	return (j);
-}
-
 t_cmd *cmd_alloc(void)
 {
 	t_cmd *cmd;
@@ -30,11 +9,6 @@ t_cmd *cmd_alloc(void)
 		throw_error(BAD_ALLOC, 7);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	return (cmd);
-}
-
-void	cmd_fill(t_cmd *node, char **args)
-{
-	node->args = array_copy(args, ft_strdup);
 }
 
 int	add_cmd_node(t_sh *sh, t_cmd *cmd, int i)
@@ -67,10 +41,13 @@ void	redirect_print(void *data)
 
 int split_on_pipe(t_sh *sh, char **arr_commands)
 {
-	int i = 0;
-	int j;
-	char		**arr_pipe;
-	char		**arr_args;
+	int 	i;
+	int		j;
+	char	**arr_pipe;
+	char	**arr_args;
+	t_cmd	*cmd;
+
+	i = 0;
 	while (arr_commands && arr_commands[i])
 	{
 		j = 0;
@@ -79,12 +56,13 @@ int split_on_pipe(t_sh *sh, char **arr_commands)
 			throw_error(BAD_ALLOC, 12);
 		while (arr_pipe && arr_pipe[j])
 		{	
-			t_cmd *cmd = cmd_alloc();
+			cmd = cmd_alloc();
 				// printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
 				// else
 			if (amount_spaces(arr_pipe[j]) == (int)ft_strlen(arr_pipe[j]))
 			{
 				free_array(arr_pipe);
+				free_array(arr_commands);
 				sh->exit_code = 258;
 				print_error(SYNTAX_ERROR_PIPE, 0);
 				return (0);
@@ -99,21 +77,20 @@ int split_on_pipe(t_sh *sh, char **arr_commands)
 			//
 			parse_dollar(&(arr_pipe[j]), sh->exit_code);
 			arr_args = shell_split(arr_pipe[j], ' ');
-			escape_symbols(arr_args);
-			parse_tilda(arr_args);
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);
+			escape_symbols(arr_args);
+			parse_tilda(arr_args);
 			// ---- //
 			// for (int z = 0; arr_args[z]; z++) // deubg
 			// 	printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
 			// --- //
-			cmd_fill(cmd, arr_args);
+			cmd->args = array_copy(arr_args, ft_strdup);
 			add_cmd_node(sh, cmd, i);
-			if (arr_pipe[j + 1] == NULL)
-				cmd->is_pipe = 0;
 			free_array(arr_args); //now we can delete it and modify cmd_fill
 			j++;
 		}
+		cmd->is_pipe = 0;
 		if (arr_pipe != NULL)
 			free_array(arr_pipe);
 		i++;
@@ -149,10 +126,7 @@ int split_on_semicolon(t_sh *sh)
 	}
 	cmds_arr_create(sh, amount_commands + 1);
 	if (!split_on_pipe(sh, arr_commands))
-	{
-		free_array(arr_commands);
 		return (0);
-	}
 	return (1);
 }
 

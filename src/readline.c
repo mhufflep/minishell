@@ -63,8 +63,7 @@ void	restore_tcap_sh(t_sh *sh)
 
 void	reader(t_sh *sh)
 {
-	// sh->exit_code = 0; 
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, quit_handler);
 	signal(SIGINT, int_handler);
 	set_tcap_sh(sh);
 	while (1)

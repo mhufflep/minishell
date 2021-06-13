@@ -223,6 +223,8 @@ int			parse_redirect(t_cmd *cmd, char **str);
 void		parse_dollar(char **s, int code);
 void		parse_tilda(char **s);
 int			is_slash(char *s, int i);
+void		skip_spaces(char *str, int *i);
+int			amount_spaces(char *str);
 int			escape_symbols(char **arr_str);
 char		**shell_split(char *s, char separator);
 int			skip_in_quote(char **s, int i, char quote_mark);

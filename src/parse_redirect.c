@@ -1,11 +1,5 @@
 #include "minishell.h"
 
-void	skip_spaces(char *str, int *i)
-{
-	while (str[*i] == ' ')
-		(*i)++;
-}
-
 static	int		skip_in_quote2(char **s, int i, char quote_mark)
 {
 	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
@@ -125,7 +119,7 @@ void		write_in(t_cmd *cmd, char **str, int *i)
 
 int		parse_redirect(t_cmd *cmd, char **str)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	while ((*str)[i])
