@@ -157,7 +157,9 @@ int spawn_pipes(t_sh *sh, t_blst *lst)
 		}
     }
     else
+	{
         dup2(sh->io[1], 1);
+	}
 
 	cmd->rdir[0] = redirect(cmd->in);
 	if (cmd->rdir[0] > 2)

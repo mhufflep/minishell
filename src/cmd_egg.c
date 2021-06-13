@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+#include <time.h>
+
 const char   *FG_COLOR_BLACK = "\033[0;30m";
 const char   *FG_COLOR_RED =	"\033[0;31m";
 const char   *FG_COLOR_GREEN = "\033[0;32m";
@@ -11,18 +13,19 @@ const char   *FG_COLOR_WHITE = "\033[0;37m";
 
 // const char	*FG_COLOR_PURPLE = "\e[38;2;120;61;1852\e[0m";
 // const char	*FG_COLOR_GREENCYAN = "\e[38;2;116;245;1762\e[0m";
-//purple 120, 61, 185
-//green 116, 245, 176
-//const char   *FG_COLOR_BEFORE = FG_COLOR_GREEN;
-//const char   *FG_COLOR_AFTER = FG_COLOR_WHITE;
+// purple 120, 61, 185
+// green 116, 245, 176
+// const char   *FG_COLOR_BEFORE = FG_COLOR_GREEN;
+// const char   *FG_COLOR_AFTER = FG_COLOR_WHITE;
+
 const int    DELAY_VALUE_MMS = 7500;
 const int    DELAY_BTWN_ITER = 1000000;
 const int    MAX_COUNTER = 500;
 const int    KEYS = 10;
 const int    DIVIDER = MAX_COUNTER / KEYS;
-const int    ARR_ROWS = 10;
-const int    ARR_COLS = 16;
-const int    ARR_LETTERS = 2;
+# define ARR_ROWS 10
+# define ARR_COLS 16
+# define ARR_LETTERS 2
 const char    EMPTY = ' ';
 
 const char    arr[ARR_LETTERS][ARR_ROWS][ARR_COLS] = {
