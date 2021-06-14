@@ -1,5 +1,11 @@
-history, read from file, write to file
-history up and down
-library fix (insert)
+cd ~ Causes invalid read size of 1 in valgrind
 
-commands with arguments
+ctrl + c Causes invalid read size of 1 in valgrind (cause we're using the value that was free'd)
+
+many usercmd causes leak of 1 byte per call
+
+signals are not turned off in shell
+
+leak when pressing enter with an empty line
+
+ctrl + D finishes input but shouldn't + not printing \n
