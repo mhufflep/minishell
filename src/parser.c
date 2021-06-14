@@ -13,30 +13,14 @@ t_cmd *cmd_alloc(void)
 
 int	add_cmd_node(t_sh *sh, t_cmd *cmd, int i)
 {
-	// t_cmd		*cmd;
 	t_blst	*new;
 
-	// cmd = command_create(arr_args); // cmd, args
 	cmd->is_pipe = 1;
 	new = bd_lstnew(cmd);
 	if (!new)
 		throw_error(BAD_ALLOC, 11);
 	bd_lstadd_back(&(sh->cmds[i]), new);
 	return (1);
-}
-
-void	redirect_print(void *data)
-{
-	t_redir *redir;
-
-	redir = (t_redir *)data;
-	if (redir)
-	{
-		// if (redir->filename)
-		// 	printf("%s\n", redir->filename);
-		// else
-		// 	printf("<null>\n");
-	}
 }
 
 int split_on_pipe(t_sh *sh, char **arr_commands)
@@ -57,8 +41,6 @@ int split_on_pipe(t_sh *sh, char **arr_commands)
 		while (arr_pipe && arr_pipe[j])
 		{	
 			cmd = cmd_alloc();
-				// printf("\n%zu|%s|\n", ft_strlen(arr_pipe[j]), arr_pipe[j]); // debug
-				// else
 			if (amount_spaces(arr_pipe[j]) == (int)ft_strlen(arr_pipe[j]))
 			{
 				free_array(arr_pipe);
@@ -68,23 +50,13 @@ int split_on_pipe(t_sh *sh, char **arr_commands)
 				return (0);
 			}
 			parse_redirect(cmd, &(arr_pipe[j]));
-			// printf("====== FILENAMES OUT ======\n");
-			// bd_lstprint(cmd->out, redirect_print);
-			// printf("====== FILENAMES IN ======\n");
-			// bd_lstprint(cmd->in, redirect_print);
-			//
-			// printf("|%s|\n", arr_pipe[j]);
-			//
 			parse_dollar(&(arr_pipe[j]), sh->exit_code);
 			arr_args = shell_split(arr_pipe[j], ' ');
 			if (!arr_args)
 				throw_error(BAD_ALLOC, 13);
 			escape_symbols(arr_args);
 			parse_tilda(arr_args);
-			// ---- //
-			// for (int z = 0; arr_args[z]; z++) // deubg
-			// 	printf("%zu-|%s|-\n", ft_strlen(arr_args[z]), arr_args[z]);
-			// --- //
+
 			cmd->args = array_copy(arr_args, ft_strdup);
 			add_cmd_node(sh, cmd, i);
 			free_array(arr_args); //now we can delete it and modify cmd_fill
