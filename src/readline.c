@@ -27,7 +27,7 @@ void	recognize_symbol(t_sh *sh)
 	else
 		key_other_action(sh);
 }
-
+// "env": {"TERM":"xterm-256color"}
 void	read_symbol(char *input)
 {
 	int readed;
@@ -61,10 +61,14 @@ void	restore_tcap_sh(t_sh *sh)
 	tcsetattr(0, TCSANOW, sh->term);
 }
 
+int		is_empty(char *str)
+{
+	return (str && !ft_strcmp(str, ""));	
+}
+
 void	reader(t_sh *sh)
 {
-	// sh->exit_code = 0; 
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, quit_handler);
 	signal(SIGINT, int_handler);
 	set_tcap_sh(sh);
 	while (1)
@@ -75,8 +79,12 @@ void	reader(t_sh *sh)
 		//initial params
 		sh->line_len = 0;
 		sh->curs_pos = 0;
-		sh->hptr->data = bd_strdup(""); 
-
+		sh->hptr->data = bd_strdup("");
+		//в идеале надо было иметь еще одну переменную отвественную за активную строку a hptr только чтобы за вверх-вниз отвечал
+		// или наоборот hptr->data за строку, а отдельная переменная за стрелку
+		//ну можно и так, просто по логике hptr больше подходит
+		//очень странно, что это только на пустой строке 
+		// 
 		//clean buffer
 		ft_memset(sh->input, 0, 5);
 		while (1)
@@ -86,8 +94,10 @@ void	reader(t_sh *sh)
 			read_symbol(sh->input);
 			recognize_symbol(sh);
 		}
-		if (sh->hptr->data && ft_strcmp(sh->hptr->data, ""))
+
+		if (!is_empty(sh->hptr->data))
 			break ;
+		free(sh->hptr->data);
 	}
 	restore_tcap_sh(sh);
 }

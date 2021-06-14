@@ -31,7 +31,7 @@ char *replace_by(char **src, int index, int len, char *add, void (*free_ctl)(voi
 	src_len = ft_strlen(*src);
 	add_len = ft_strlen(add);
 
-	dst = (char *)malloc((src_len - len + add_len) * sizeof(char));
+	dst = (char *)malloc((src_len - len + add_len + 1) * sizeof(char));
 	if (dst == NULL)
 		throw_error(BAD_ALLOC, 0);
 	ft_memset(dst, 0, src_len - len + add_len);

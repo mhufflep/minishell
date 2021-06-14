@@ -1,5 +1,26 @@
 #include "minishell.h"
 
+void	skip_spaces(char *str, int *i)
+{
+	while (str[*i] == ' ')
+		(*i)++;
+}
+
+// Возвращает подсчитанное количество пробелов, содержанных в строке
+int		amount_spaces(char *str)
+{
+	int j;
+
+	j = 0;
+	while (str[j] != '\0')
+	{
+		if (str[j] != ' ')
+			break;
+		j++;
+	}
+	return (j);
+}
+
 // Проверяет есть ли за символом ряд слэшей и считает его экранированным,
 // зависимо от четности количества слэшей подряд
 int		is_slash(char *s, int i)
@@ -19,37 +40,6 @@ int		is_slash(char *s, int i)
 	else
 		return (1);
 }
-
-// Проверяет является текущий символ по индексу пробелом при условии, что это не последний символ и не -1
-int		is_space(char *s, int i)
-{
-	if ((i >= 0 && i <= (int)ft_strlen(s)) && s[i] != 0)
-		if (s[i] == ' ')
-			return (1);
-	return (0);
-}
-
-// // Удаляет символ экранирования, если экранируется кавычка или сам слэш - работает и в кавычках, и без кавычек
-// int		escape_pair(char **str)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while ((*str)[i])
-// 	{
-// 		if (i != ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
-// 		{
-// 			if ((*str)[i + 1] == SLASH)
-// 				*str = remove_from(*str, i);
-// 			else if ((*str)[i + 1] == DQOUTE)
-// 				*str = remove_from(*str, i);
-// 		}
-// 		else if (i == ((int)ft_strlen(*str) - 1) && (*str)[i] == SLASH)
-// 			throw_error(NOT_PROVIDED, 99);
-// 		i++;
-// 	}
-// 	return (0);
-// }
 
 int		escape_symbols(char **s)
 {

@@ -30,12 +30,25 @@ int		execute_cmd(t_sh *sh, t_cmd *cmd)
 		return (cmd_usercmd(sh, cmd));
 }
 
+void	free_redir(void *data)
+{
+	t_redir	*rd;
+
+	rd = (t_redir *)data;
+	free(rd->filename);
+	free(rd);
+}
+
 void	free_cmd(void *data)
 {
 	t_cmd	*cmd;
 
 	cmd = (t_cmd *)data;
 	free_array(cmd->args);
+	if (cmd->in)
+		bd_lstclear(&cmd->in, free_redir);
+	if (cmd->out)
+		bd_lstclear(&cmd->out, free_redir);
 	free(cmd);
 }
 

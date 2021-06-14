@@ -29,7 +29,7 @@ GNL_DIR		= get_next_line
 ######################### SOURCES ############################
 
 SOURCES			=	main.c \
-					split_utils.c \
+					parser_utils.c \
 					shell_split.c \
 					parser.c \
 					parse_redirect.c \

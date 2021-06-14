@@ -7,14 +7,17 @@ void int_handler(int num)
 	(void)num;
 	signal(SIGINT, SIG_IGN);
 	sh = get_sh(0);
-	sh->exit_code = 1;
+	sh->exit_code = 130;
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	signal(SIGINT, int_handler);
 }
 
 void quit_handler(int num)
 {
-	signal(SIGQUIT, SIG_IGN);
+	t_sh *sh;
+	
+	sh = get_sh(0);
+	sh->exit_code = 131;
 	ft_putstr_fd("Quit: ", STDOUT_FILENO);
 	ft_putnbr_fd(num, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);

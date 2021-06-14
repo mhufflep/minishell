@@ -27,6 +27,7 @@ void	update_curs_pos(t_sh *sh)
 	ft_putstr_fd(sh->hptr->data, STDOUT_FILENO);
 }
 
+
 void	key_up_action(t_sh *sh)
 {
 	if (sh->hptr && sh->hptr->prev != NULL)
@@ -116,15 +117,12 @@ void 	clrscr(t_sh *sh)
 
 void	key_ctrl_l_action(t_sh *sh)
 {
-	free(sh->hptr->data);
-	sh->hptr->data = NULL;
 	clrscr(sh);
 }
 
 void	key_ctrl_c_action(t_sh *sh)
 {
-	free(sh->hptr->data);
-	ft_memset(sh->hptr->data, 0, ft_strlen(sh->hptr->data));
+	ft_memset(sh->hptr->data, 0, sh->line_len);
 	sh->line_len = 0;
 	sh->curs_pos = 0;
 	sh->exit_code = 1;
@@ -135,22 +133,41 @@ void	key_ctrl_d_action(t_sh *sh)
 {
 	if (sh->hptr->data && !ft_strcmp(sh->hptr->data, ""))
 	{
-		free(sh->hptr->data);
 		ft_putendl_fd("exit", STDERR_FILENO);
-		sh->enable = 0;
 		shell_exit(sh);
 	}
+	else
+	{
+		ft_memset(sh->input, 0, 5);
+	}
+}
+
+int		is_ascii(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isascii(str[i]))
+			return (0);	
+		i++;
+	}
+	return (1);
 }
 
 void	key_other_action(t_sh *sh)
 {
-	if (is_printable(sh->input))
+	if (is_ascii(sh->input))
 	{
-		sh->hptr->data = insert_into(sh->hptr->data, sh->input, sh->curs_pos, free);
-		sh->line_len += bd_strlen(sh->input);
-		sh->curs_pos += bd_strlen(sh->input);	
+		if (is_printable(sh->input))
+		{
+			sh->hptr->data = insert_into(sh->hptr->data, sh->input, sh->curs_pos, free); //leak волгринд как-то вот тут выловил, но надо будет еще тестить
+			sh->line_len += bd_strlen(sh->input);
+			sh->curs_pos += bd_strlen(sh->input);	
+		}
+		tputs(enter_insert_mode, 1, ft_putchar);
+		ft_putstr_fd(sh->input, STDOUT_FILENO);
+		tputs(exit_insert_mode, 1, ft_putchar);
 	}
-	tputs(enter_insert_mode, 1, ft_putchar);
-	ft_putstr_fd(sh->input, STDOUT_FILENO);
-	tputs(exit_insert_mode, 1, ft_putchar);
 }

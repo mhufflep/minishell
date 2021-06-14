@@ -65,6 +65,8 @@ void	history_if_prev(t_sh *sh)
 	{
 		temp = sh->hptr->data;
 		sh->hptr = bd_lstlast(sh->history);
+		if (sh->hptr->data)
+			free(sh->hptr->data);
 		sh->hptr->data = bd_strdup(temp);
 	}
 }
