@@ -44,6 +44,11 @@ int		lexer(char *str)
 			print_error(SYNTAX_ERROR_PIPE, 0);
 			return (0);
 		}
+		else if (str[i] == '>' && str[i + 1] == '<')
+		{
+			print_error(SYNTAX_ERROR_RREDIR, 0);
+			return (0);
+		}
 		else if (str[i] == '>' && !str[i + 1])
 		{
 			print_error(SYNTAX_ERROR_NEWLINE, 0);
