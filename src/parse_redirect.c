@@ -132,6 +132,8 @@ int		parse_redirect(t_cmd *cmd, char **str)
 			write_in(cmd, str, &i);
 		else if ((*str)[i] == '<' && is_slash(*str, i - 1))
 			*str = remove_from(*str, i - 1);
+		else if (((*str)[i] == QUOTE || (*str)[i] == DQOUTE) && !is_slash(*str, i - 1))
+			i = read_str2(str, i, " ");
 		else
 			i++;
 	}
