@@ -1,19 +1,19 @@
 #include "minishell.h"
 
-int		is_in_range(char *arg)
+int	is_in_range(char *arg)
 {
-	int res;
+	int	res;
 
 	res = ft_atoi(arg);
-	if ((res == 0 && ft_strcmp(arg, "0")) || 
-		(res == -1 && ft_strcmp(arg, "-1")))
+	if ((res == 0 && ft_strcmp(arg, "0"))
+		|| (res == -1 && ft_strcmp(arg, "-1")))
 	{
 		return (0);
 	}
 	return (1);
 }
 
-int		is_numeric(char *arg)
+int	is_numeric(char *arg)
 {
 	if (*arg == '+' || *arg == '-')
 		arg++;
@@ -26,14 +26,16 @@ int		is_numeric(char *arg)
 	return (1);
 }
 
-int		cmd_exit(t_sh *sh, t_cmd *cmd)
+int	cmd_exit(t_sh *sh, t_cmd *cmd)
 {
-	int size;
+	int	size;
 
-	ft_putendl_fd(cmd->args[0], STDERR_FILENO);
 	size = sizeof_array(&cmd->args[1]);
 	if (!cmd->is_pipe)
-		sh->enable = 0; //Maybe another way
+	{
+		sh->enable = 0;
+		ft_putendl_fd(cmd->args[0], STDERR_FILENO);
+	}
 	if (size >= 1)
 	{
 		if (!is_numeric(cmd->args[1]) || !is_in_range(cmd->args[1]))
@@ -48,9 +50,7 @@ int		cmd_exit(t_sh *sh, t_cmd *cmd)
 			sh->enable = 1;
 		}
 		else
-		{
 			sh->exit_code = (unsigned char)ft_atoi(cmd->args[1]);
-		}
 	}
 	return (sh->exit_code);
 }

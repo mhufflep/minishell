@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-int		cmd_pwd(t_cmd *cmd)
+int	cmd_pwd(t_cmd *cmd)
 {
-	(void)cmd;
-	char *cwd;
+	char	*cwd;
 
+	(void)cmd;
 	cwd = getcwd(NULL, 0);
 	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);

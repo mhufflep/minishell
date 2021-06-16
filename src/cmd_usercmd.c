@@ -1,103 +1,107 @@
 #include "minishell.h"
 
-// int		
-
-int		cmd_usercmd(t_sh *sh, t_cmd *cmd)
+char	*get_dir(t_cmd *cmd, char **dir, char **sep)
 {
-	int code = 0;
-	char **bin;
-	char **env;
-	t_env *path;
-	pid_t pid;
-	char *dir = NULL;
-	char *sep = "/";
+	char	**bin;
+	t_env	*path;
+	int		i;
 
-
-	//Check if first arg is a directory
-	if (is_dir(cmd->args[0]))
-	{
-		cmd_error(cmd->args[0], NULL, CMD_IS_DIR);
-		return (126);
-	}
-
-
+	i = 0;
+	*dir = NULL;
 	path = env_get_local("PATH");
-	// Check if relative or absolute path given to the first arg OR it is commmand
 	if (ft_strchr(cmd->args[0], '/'))
 	{
 		if (cmd->args[0][0] == '.')
 		{
-			sep = "";
+			*sep = "";
 		}
-		dir = ft_strdup("");
+		*dir = ft_strdup("");
 	}
-	else
+	else if (path)
 	{
 		bin = ft_split(path->val, ":");
-
-		//find corrent bin directory
-		int i = 0;
 		while (bin[i] && !is_in_dir(cmd->args[0], bin[i]))
 			i++;
-
-		dir = ft_strdup(bin[i]);
-		// dir = ft_strdup("/bin");
-
+		*dir = ft_strdup(bin[i]);
 		if (bin != NULL)
 			free_array(bin);
 	}
+	return (*dir);
+}
 
-	
-	if (dir == NULL)
-	{
-		return (cmd_not_found(cmd));
-	}
+void	get_abs_name(t_cmd *cmd, char *dir, char *sep)
+{
+	char	*tmp;
 
-
-	
-	env = bd_parse_to_arr(env_llist(), copy_from_env);
-	// Get fullname of exec
-	char *tmp = cmd->args[0];
+	tmp = cmd->args[0];
 	cmd->args[0] = ft_strjoin_sep(dir, sep, cmd->args[0]);
 	free(tmp);
 	free(dir);
-	if (!bd_strcmp("minishell", &cmd->args[0][ft_strlen(cmd->args[0]) - 9]))
+}
+
+void	cmd_exec(t_sh *sh, t_cmd *cmd, pid_t *pid, int *code)
+{
+	char	**env;
+
+	sh->sig_code = 0;
+	env = bd_parse_to_arr(env_llist(), copy_from_env);
+	*pid = fork();
+	if (*pid == -1)
 	{
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, SIG_IGN);
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		ft_putstr_fd("fork failed", STDERR_FILENO);
+		ft_putstr_fd("fork failed\n", STDERR_FILENO);
 		shell_exit(sh);
 	}
-	else if (pid == 0)
+	else if (*pid == 0)
 	{
-		code = execve(cmd->args[0], cmd->args, env);
-		if (code == -1)
+		*code = execve(cmd->args[0], cmd->args, env);
+		if (*code == -1)
 		{
 			cmd_error(cmd->args[0], cmd->args[1], strerror(errno));
 			exit(127);
 		}
 	}
-
 	if (env != NULL)
 		free_array(env);
+}
 
-	// Parent process will wait for child's exit or ret
-	
-	int status;
-	if ( waitpid(pid, &status, 0) == -1 )
+void	cmd_wait(pid_t pid, int *code)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
 	{
 		ft_putstr_fd("waitpid failed", STDERR_FILENO);
 	}
-
-	if ( WIFEXITED(status) )
+	if (WIFEXITED(status))
 	{
-		code = WEXITSTATUS(status);
-		// printf("exit status was %d\n", code);
+		*code = WEXITSTATUS(status);
 	}
+}
 
+int	cmd_usercmd(t_sh *sh, t_cmd *cmd)
+{
+	int		code;
+	pid_t	pid;
+	char	*dir;
+	char	*sep;
+
+	code = 0;
+	sep = "/";
+	if (is_dir(cmd->args[0]))
+	{
+		cmd_error(cmd->args[0], 0, CMD_IS_DIR);
+		return (126);
+	}
+	if (get_dir(cmd, &dir, &sep) == NULL)
+	{
+		return (cmd_not_found(cmd));
+	}
+	get_abs_name(cmd, dir, sep);
+	if (ends_with(cmd->args[0], sh->name))
+		signals_off();
+	cmd_exec(sh, cmd, &pid, &code);
+	cmd_wait(pid, &code);
+	if (sh->sig_code != 0)
+		code = sh->sig_code;
 	return (code);
 }

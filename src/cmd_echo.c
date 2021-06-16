@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int is_option(char *opt, char *valid_opt)
+int	is_option(char *opt, char *valid_opt)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!opt || opt[0] != '-')
@@ -16,7 +16,7 @@ int is_option(char *opt, char *valid_opt)
 	return (1);
 }
 
-int		cmd_echo(t_cmd *cmd)
+int	cmd_echo(t_cmd *cmd)
 {
 	if (is_option(cmd->args[1], "n"))
 	{

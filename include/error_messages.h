@@ -1,10 +1,10 @@
-#ifndef ERROR_MESSAGES
-# define ERROR_MESSAGES
+#ifndef ERROR_MESSAGES_H
+# define ERROR_MESSAGES_H
 
 # define READ_ERR "Read function failed"
 # define BAD_ALLOC "Bad alloc"
 # define NOT_PROVIDED "Not provided by the terms of the task"
-# define QUOTE_NOT_FOUND "Closing quotation mark is not found. Multilines is not provided by the terms of the task"
+# define QUOTE_NOT_FOUND "Multilines is not provided by the terms of the task"
 # define SYNTAX_ERROR_SEMICOLON "syntax error near unexpected token `;'"
 # define SYNTAX_ERROR_PIPE "syntax error near unexpected token `|'"
 # define SYNTAX_ERROR_NEWLINE "syntax error near unexpected token `newline'"

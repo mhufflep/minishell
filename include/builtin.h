@@ -1,5 +1,5 @@
-#ifndef BUILTIN
-# define BUILTIN
+#ifndef BUILTIN_H
+# define BUILTIN_H
 
 # define CMD_CD			"cd"
 # define CMD_ENV		"env"
@@ -11,6 +11,5 @@
 # define CMD_CLEAR		"clear"
 # define CMD_LEARNC		"learnc"
 # define CMD_HISTORY	"history"
-# define CMD_21SCHOOL	"21school"
 
 #endif

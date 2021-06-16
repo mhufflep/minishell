@@ -1,8 +1,24 @@
 #include "minishell.h"
 
+int	env_valid(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(env->key[0]))
+		return (0);
+	while (env->key[i] != '\0')
+	{
+		if (!(ft_isalnum(env->key[i]) || env->key[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	print_export_node(void *data)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = (t_env *)data;
 	if (env != NULL)
@@ -20,25 +36,7 @@ void	print_export_node(void *data)
 	}
 }
 
-int		export_update(t_env *found, t_env *replacer)
-{
-	free(found->val);
-	found->val = bd_strdup(replacer->val);
-	return (0);
-}
-
-int		export_add(t_sh *sh, t_env *env)
-{
-	t_blst *new;
-
-	new = bd_lstnew(env_dup(env));
-	if (new == NULL)
-		throw_error(BAD_ALLOC, 1);
-	bd_lstadd_back(&sh->env_list, new);
-	return (0);
-}
-
-int		export_try_add(t_sh *sh, t_cmd *cmd)
+int	export_try_add(t_sh *sh, t_cmd *cmd)
 {
 	t_env	*found;
 	t_env	*env;
@@ -52,9 +50,9 @@ int		export_try_add(t_sh *sh, t_cmd *cmd)
 		{
 			found = env_get_local(env->key);
 			if (found != NULL && found->val != NULL)
-				export_update(found, env);
+				env_update(found, env);
 			else
-				export_add(sh, env);
+				env_add(sh, env);
 		}
 		else
 		{
@@ -66,9 +64,9 @@ int		export_try_add(t_sh *sh, t_cmd *cmd)
 	return (0);
 }
 
-int		cmd_export(t_sh *sh, t_cmd *cmd)
+int	cmd_export(t_sh *sh, t_cmd *cmd)
 {
-	t_blst *lst_copy;
+	t_blst	*lst_copy;
 
 	if (sizeof_array(&cmd->args[1]) == 0)
 	{	

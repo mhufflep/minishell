@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-int		cmd_unset(t_sh *sh, t_cmd *cmd)
+int	cmd_unset(t_sh *sh, t_cmd *cmd)
 {
 	t_blst	*found;
-	t_env		*env;
-	int i;
+	t_env	*env;
+	int		i;
 
 	i = 1;
 	while (cmd->args[i])

@@ -2,10 +2,9 @@
 
 void	print_env_node(void *node)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = (t_env *)node;
-
 	if (env && env->val)
 	{
 		ft_putstr_fd(env->key, STDOUT_FILENO);
@@ -15,7 +14,7 @@ void	print_env_node(void *node)
 	}
 }
 
-int		cmd_env(t_cmd *cmd)
+int	cmd_env(t_cmd *cmd)
 {
 	if (sizeof_array(&cmd->args[1]) == 0)
 		bd_lstiter(env_llist(), print_env_node);

@@ -2,14 +2,14 @@
 
 void	update_pwd(void)
 {
-	t_env *pwd;
-	t_env *oldpwd;
+	t_env	*pwd;
+	t_env	*oldpwd;
 
 	pwd = env_get_local("PWD");
 	oldpwd = env_get_local("OLDPWD");
 	if (oldpwd)
 	{
-		free(oldpwd->val); 
+		free(oldpwd->val);
 		oldpwd->val = pwd->val;
 	}
 	if (pwd)
@@ -18,7 +18,7 @@ void	update_pwd(void)
 	}
 }
 
-int		cmd_cd(t_cmd *cmd)
+int	cmd_cd(t_cmd *cmd)
 {
 	t_env	*env;
 	char	*dir;
@@ -33,8 +33,6 @@ int		cmd_cd(t_cmd *cmd)
 		}
 		dir = env->val;
 	}
-	else if (!ft_strcmp(cmd->args[1], "~")) //THIS SHOULD BE IN EXPANDER !!!!!!!!
-		dir = env_get_val("HOME");
 	else
 		dir = cmd->args[1];
 	if (chdir(dir) == -1)

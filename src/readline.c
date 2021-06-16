@@ -27,10 +27,10 @@ void	recognize_symbol(t_sh *sh)
 	else
 		key_other_action(sh);
 }
-// "env": {"TERM":"xterm-256color"}
+
 void	read_symbol(char *input)
 {
-	int readed;
+	int	readed;
 
 	readed = read(0, input, 5);
 	if (readed == -1)
@@ -38,66 +38,34 @@ void	read_symbol(char *input)
 	input[readed] = 0;
 }
 
-
-int		is_endinput(char *input)
+int	is_endinput(char *input)
 {
-	return (!ft_strcmp(input, KEY_ENTER) || 
-			!ft_strcmp(input, KEY_CTRL_L) || 
-			!ft_strcmp(input, KEY_CTRL_C) ||
-			!ft_strcmp(input, KEY_CTRL_D));
-}
-
-void	set_tcap_sh(t_sh *sh)
-{
-	sh->term->c_lflag &= ~(ECHO);
-	sh->term->c_lflag &= ~(ICANON);
-	sh->term->c_lflag &= ~(ISIG);
-	tcsetattr(0, TCSANOW, sh->term);
-}
-
-void	restore_tcap_sh(t_sh *sh)
-{
-	sh->term->c_lflag |= (ECHO | ICANON | ISIG);
-	tcsetattr(0, TCSANOW, sh->term);
-}
-
-int		is_empty(char *str)
-{
-	return (str && !ft_strcmp(str, ""));	
+	return (!ft_strcmp(input, KEY_ENTER)
+		|| !ft_strcmp(input, KEY_CTRL_L)
+		|| !ft_strcmp(input, KEY_CTRL_C)
+		|| !ft_strcmp(input, KEY_CTRL_D));
 }
 
 void	reader(t_sh *sh)
 {
-	signal(SIGQUIT, quit_handler);
-	signal(SIGINT, int_handler);
 	set_tcap_sh(sh);
 	while (1)
 	{
 		ft_putstr_fd(SHELL_PROMPT, STDOUT_FILENO);
 		tputs(sh->caps.sc, 5, ft_putchar);
-
-		//initial params
 		sh->line_len = 0;
 		sh->curs_pos = 0;
 		sh->hptr->data = bd_strdup("");
-		//в идеале надо было иметь еще одну переменную отвественную за активную строку a hptr только чтобы за вверх-вниз отвечал
-		// или наоборот hptr->data за строку, а отдельная переменная за стрелку
-		//ну можно и так, просто по логике hptr больше подходит
-		//очень странно, что это только на пустой строке 
-		// 
-		//clean buffer
 		ft_memset(sh->input, 0, 5);
-		while (1)
+		while (!is_endinput(sh->input))
 		{
-			if (is_endinput(sh->input))
-				break ;
 			read_symbol(sh->input);
 			recognize_symbol(sh);
 		}
-
-		if (!is_empty(sh->hptr->data))
+		if (!ft_isempty(sh->hptr->data))
 			break ;
 		free(sh->hptr->data);
 	}
 	restore_tcap_sh(sh);
+	signals_on();
 }

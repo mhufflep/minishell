@@ -2,8 +2,8 @@
 
 int	cmd_history(t_sh *sh, t_cmd *cmd)
 {
-	t_blst *tmp;
-	int			i;
+	t_blst	*tmp;
+	int		i;
 
 	i = 0;
 	tmp = sh->history;
