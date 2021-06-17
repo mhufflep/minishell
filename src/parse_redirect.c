@@ -1,9 +1,8 @@
 #include "minishell.h"
 
-static	int		skip_in_quote2(char **s, int i, char quote_mark)
+int		skip_in_quote2(char **s, int i, char quote_mark)
 {
-	// т.к. ф-ия вызывается, когда встречается кавычка, мы уже икрементируем счетчик,
-	// чтобы войти в цикл и дойти до закрывающей кавычки
+	// Эта ф-ия, в отличие от skip_in_quote, не инкрементирует счетчик, а сразу ищет кавычку
 	// Пока текущий символ не равняется кавычке или текущий символ равняется кавычке, но перед ним слэш,
 	// и пока текущий символ не равняется концу строки
 	while ((*s)[i] && ((*s)[i] != quote_mark || ((*s)[i] == quote_mark && is_slash(*s, i - 1))))
@@ -133,7 +132,7 @@ int		parse_redirect(t_cmd *cmd, char **str)
 		else if ((*str)[i] == '<' && is_slash(*str, i - 1))
 			*str = remove_from(*str, i - 1);
 		else if (((*str)[i] == QUOTE || (*str)[i] == DQOUTE) && !is_slash(*str, i - 1))
-			i = read_str2(str, i, " ");
+			i = read_str(str, i, ' ', 0);
 		else
 			i++;
 	}

@@ -228,6 +228,7 @@ int			amount_spaces(char *str);
 int			escape_symbols(char **arr_str);
 char		**shell_split(char *s, char separator);
 int			skip_in_quote(char **s, int i, char quote_mark);
+int			skip_in_quote2(char **s, int i, char quote_mark);
 size_t		read_str(char **s, int i, char separator, int is_escaped);
 void		cmds_arr_create(t_sh *sh, int size);
 t_cmd		*command_create(char **args);
