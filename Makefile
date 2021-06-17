@@ -10,7 +10,11 @@ LIBBDLST_NAME	= libbdlst.a
 
 CC		= gcc 	# clang
 DEBUG	= -g 	# -fsanitize=address
-CFLAGS	= -Wall -Wextra -Werror 
+
+CFLAGS	= -Wall -Wextra -Werror
+ifdef (BONUS)
+CFLAGS += -D BONUS=1
+endif
 
 TERMCAP 		= -ltermcap
 LIBFT_FLAGS		= -L $(LFT_DIR) -lft
@@ -28,50 +32,57 @@ GNL_DIR		= get_next_line
 
 ######################### SOURCES ############################
 
-SOURCES			=	main.c \
-					parser_utils.c \
-					shell_split.c \
-					parser.c \
-					parse_redirect.c \
-					dollar.c \
-					tilda.c \
-					asterisk.c \
-					lexer.c \
-					history.c \
-					dir_utils.c \
-					commands.c \
-					execute.c \
-					key_actions.c \
-					term_utils.c \
-					init.c \
-					error.c \
-					expander.c \
-					readline.c \
-					shell_exit.c \
-					signal.c \
-					redirects.c \
-					main_functions.c \
-					array_utils.c \
-					env_utils.c \
+SOURCES			=	array_utils.c \
+					clean.c \
 					cmd_cd.c \
-					cmd_pwd.c \
-					cmd_env.c \
-					cmd_egg.c \
-					cmd_echo.c \
-					cmd_exit.c \
-					cmd_unset.c \
 					cmd_clear.c \
+					cmd_echo.c \
+					cmd_env.c \
+					cmd_exit.c \
 					cmd_export.c \
 					cmd_history.c \
+					cmd_not_found.c \
+					cmd_pwd.c \
+					cmd_unset.c \
 					cmd_usercmd.c \
 					cmd_utils.c \
-					cmd_not_found.c \
-					
+					cursor.c \
+					dir_utils.c \
+					dollar.c \
+					env_copy.c \
+					env_get.c \
+					env_update.c \
+					env_utils.c \
+					error.c \
+					execute.c \
+					fds.c \
+					history.c \
+					init.c \
+					key_actions.c \
+					key_arrows.c \
+					key_signals.c \
+					key_utils.c \
+					lexer.c \
+					main.c \
+					main_functions.c \
+					parse_redirect.c \
+					parser.c \
+					parser_utils.c \
+					pipes.c \
+					pipes_utils.c \
+					readline.c \
+					redirects.c \
+					shell_exit.c \
+					shell_split.c \
+					signal.c \
+					term_utils.c \
+					termcaps.c \
+					tilda.c \
+
 HEADER_FILES	=	minishell.h \
-					get_next_line.h \
-					shell_keys.h \
 					builtin.h \
-					egg.h \
+					shell_keys.h \
+					get_next_line.h \
 
 GNL_SRC			=	get_next_line.c
 

@@ -11,7 +11,6 @@ char	**key_val_split(char *str, char *sep)
 		throw_error(BAD_ALLOC, 3);
 	ft_memset(arr, 0, sizeof(char *) * 3);
 	arr[0] = str;
-	arr[2] = NULL;
 	while (str && str[i] != '\0')
 	{
 		if (ft_strchr(sep, str[i]))
@@ -53,7 +52,10 @@ void	*copy_to_env(void *str)
 	t_env	*env;
 
 	arr = key_val_split((char *)str, ENV_SEP);
-	env = env_create(arr[0], ENV_SEP, arr[1]);
+	if (arr[1] == NULL)
+		env = env_create(arr[0], "", arr[1]);
+	else
+		env = env_create(arr[0], ENV_SEP, arr[1]);
 	free_array(arr);
 	return (env);
 }

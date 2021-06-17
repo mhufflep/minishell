@@ -20,9 +20,9 @@ static	void	insert_value(char **s, int i)
 	var = env_get_local(key);
 	free(key);
 	if (var)
-		replace_by(s, start, len, var->val, free);
+		replace_by(s, start, len, var->val);
 	else
-		replace_by(s, start, len, "", free);
+		replace_by(s, start, len, "");
 }
 
 void			parse_dollar(char **s, int code)
@@ -39,13 +39,13 @@ void			parse_dollar(char **s, int code)
 		else if ((*s)[i] == '$' && !is_slash(*s, i - 1) && (*s)[i + 1] != '?')
 		{
 			if (ft_isdigit((*s)[i + 1]))
-				replace_by(s, i, 2, "", free);
+				replace_by(s, i, 2, "");
 			else
 				insert_value(s, i);
 		}
 		else if ((*s)[i] == '$' && !is_slash(*s, i - 1) && (*s)[i + 1] == '?')
 		{
-			replace_by(s, i, 2, exit_num = ft_itoa(code), free);
+			replace_by(s, i, 2, exit_num = ft_itoa(code));
 			i += ft_strlen(exit_num);
 			free(exit_num);
 		}

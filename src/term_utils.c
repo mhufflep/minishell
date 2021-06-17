@@ -1,19 +1,10 @@
 #include "minishell.h"
 
-void	change_term_settings(t_term *term)
+struct termios	*create_term_struct(void)
 {
-	term->c_lflag &= ~(ECHO);
-	term->c_lflag &= ~(ICANON);
-	// term->c_lflag &= ~(ISIG); // отключит работу сигналов
-	// term->c_cc[VMIN] = 1;
-	// term->c_cc[VTIME] = 0;
-}
+	struct termios	*term;
 
-t_term *create_term_struct(void)
-{
-	t_term *term;
-
-	term = (t_term *)malloc(sizeof(t_term));
+	term = (struct termios *)malloc(sizeof(struct termios));
 	if (term == NULL)
 		return (NULL);
 	if (tcgetattr(STDIN_FILENO, term) == -1)

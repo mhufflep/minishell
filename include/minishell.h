@@ -18,6 +18,7 @@
 # include <sys/ioctl.h>
 # include <sys/types.h>
 
+# include "egg.h"
 # include "libft.h"
 # include "builtin.h"
 # include "shell_keys.h"
@@ -261,7 +262,7 @@ int				is_slash(char *s, int i);
 void			skip_spaces(char *str, int *i);
 int				amount_spaces(char *str);
 int				escape_symbols(char **arr_str);
-char			**shell_split(char *s, char spc, size_t amount, int is_esc);
+char			**shell_split(char *s, char sep);
 int				skip_in_quote(char **s, int i, char quote_mark);
 size_t			read_str(char **s, int i, char separator, int is_escaped);
 void			cmds_arr_create(t_sh *sh, int size);
@@ -305,5 +306,10 @@ void			quit_handler(int num);
 */
 int				is_dir(char *directory);
 int				is_in_dir(char *name, char *directory);
+
+/*
+** ASTERISK
+*/
+char *asterisk(char *pattern);
 
 #endif

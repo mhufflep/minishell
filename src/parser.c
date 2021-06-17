@@ -1,28 +1,5 @@
 #include "minishell.h"
 
-t_cmd *cmd_alloc(void)
-{
-	t_cmd *cmd;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		throw_error(BAD_ALLOC, 7);
-	ft_memset(cmd, 0, sizeof(t_cmd));
-	return (cmd);
-}
-
-int	add_cmd_node(t_sh *sh, t_cmd *cmd, int i)
-{
-	t_blst	*new;
-
-	cmd->is_pipe = 1;
-	new = bd_lstnew(cmd);
-	if (!new)
-		throw_error(BAD_ALLOC, 11);
-	bd_lstadd_back(&(sh->cmds[i]), new);
-	return (1);
-}
-
 int split_on_pipe(t_sh *sh, char **arr_commands)
 {
 	int 	i;
@@ -58,7 +35,7 @@ int split_on_pipe(t_sh *sh, char **arr_commands)
 			parse_tilda(arr_args);
 
 			cmd->args = array_copy(arr_args, ft_strdup);
-			add_cmd_node(sh, cmd, i);
+			cmd_add_node(sh, cmd, i);
 			free_array(arr_args); //now we can delete it and modify cmd_fill
 			j++;
 		}

@@ -12,7 +12,7 @@ char	*ft_realloc_str(char *src, size_t size)
 
 char	*ft_strjoin_free(char *dst, char *src)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = dst;
 	dst = ft_strjoin(dst, src);

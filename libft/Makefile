@@ -21,7 +21,7 @@ SRCS	=	ft_atoi.c		ft_bzero.c		ft_isalnum.c \
 			ft_putstr_fd.c	ft_putendl_fd.c	ft_putnbr_fd.c \
 			ft_strjoin.c	ft_strtrim.c 	ft_strmapi.c \
 			ft_realloc_str.c ft_split.c		ft_strjoin_sep.c \
-			ft_isspace.c \
+			ft_isspace.c	ft_isempty.c \
 
 SRCS_B	= 	ft_lstmap.c \
 			ft_lstnew.c \
@@ -29,7 +29,6 @@ SRCS_B	= 	ft_lstmap.c \
 			ft_lstiter.c \
 			ft_lstlast.c \
 			ft_lstclear.c \
-			ft_lstsort.c \
 			ft_lstcopy.c \
 			ft_lstdelone.c \
 			ft_lstadd_back.c \

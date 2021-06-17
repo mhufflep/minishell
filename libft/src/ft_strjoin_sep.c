@@ -24,7 +24,7 @@ char	*ft_strjoin_sep(char *s1, char *sep, char *s2)
 
 char	*ft_strjoin_sepf(char *s1, char *sep, char *s2)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = s1;
 	s1 = ft_strjoin_sep(s1, sep, s2);

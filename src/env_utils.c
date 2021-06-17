@@ -20,6 +20,8 @@ void	env_del(void *node)
 int	env_update(t_env *old, t_env *new)
 {
 	free(old->val);
+	free(old->sep);
+	old->sep = bd_strdup(new->sep);
 	old->val = bd_strdup(new->val);
 	return (0);
 }
@@ -53,10 +55,8 @@ int	env_cmp(void *data1, void *data2, size_t n)
 	t_env	*env1;
 	t_env	*env2;
 
+	(void)n;
 	env1 = (t_env *)data1;
 	env2 = (t_env *)data2;
-	if (env1 && env2)
-		return (ft_strncmp(env1->key, env2->key, n));
-	else
-		return (2021);
+	return (ft_strcmp(env1->key, env2->key));
 }

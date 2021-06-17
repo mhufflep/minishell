@@ -49,7 +49,7 @@ int	export_try_add(t_sh *sh, t_cmd *cmd)
 		if (env_valid(env))
 		{
 			found = env_get_local(env->key);
-			if (found != NULL && found->val != NULL)
+			if (found != NULL)
 				env_update(found, env);
 			else
 				env_add(sh, env);

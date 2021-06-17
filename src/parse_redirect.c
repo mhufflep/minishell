@@ -42,17 +42,6 @@ static size_t	read_str2(char **s, int i, char *separators)
 	return (i);
 }
 
-t_redir 	*redir_alloc(void)
-{
-	t_redir *redir;
-
-	redir = (t_redir *)malloc(sizeof(t_redir));
-	if (redir == NULL)
-		throw_error(BAD_ALLOC, 9999);
-	ft_memset(redir, 0, sizeof(t_redir));
-	return (redir);
-}
-
 void		write_out(t_cmd *cmd, char **str, int *i)
 {
 	char	*copy_str;
@@ -81,7 +70,7 @@ void		write_out(t_cmd *cmd, char **str, int *i)
 	if (!new)
 		throw_error(BAD_ALLOC, 10);
 	bd_lstadd_back(&cmd->out, new);
-	replace_by(str, *i, read_str2(str, *i, " ><") - *i, "", free);
+	replace_by(str, *i, read_str2(str, *i, " ><") - *i, "");
 	free(copy_str);
 }
 
@@ -113,7 +102,7 @@ void		write_in(t_cmd *cmd, char **str, int *i)
 	if (!new)
 		throw_error(BAD_ALLOC, 10);
 	bd_lstadd_back(&cmd->in, new);
-	replace_by(str, *i, read_str2(str, *i, " ><") - *i, "", free);
+	replace_by(str, *i, read_str2(str, *i, " ><") - *i, "");
 	free(copy_str);
 }
 

@@ -23,7 +23,7 @@ void	replace_tilda(char **dst)
 	if (index != -1)
 	{
 		home = env_get_val("HOME");
-		insert_into2(dst, home, index, free);
+		insert(dst, home, index, free);
 	}
 }
 
@@ -37,7 +37,7 @@ void	replace_asterisk(char **args, int i)
 	if (index != -1)
 	{
 		ast = asterisk(*args);
-		insert_into2(args, ast, index, free);
+		insert(args, ast, index, free);
 		free(ast);
 	}
 }
