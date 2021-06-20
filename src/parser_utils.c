@@ -63,8 +63,7 @@ int		escape_symbols(char **s)
 			else if (s[i][j] == QUOTE)
 			{
 				s[i] = remove_from(s[i], j);
-				j = skip_in_quote(&(s[i]), j, QUOTE);
-				s[i] = remove_from(s[i], j - 1);
+				j = skip_in_quote2(&(s[i]), j, QUOTE);
 			}
 			else if (s[i][j] == DQOUTE)
 				s[i] = remove_from(s[i], j);
