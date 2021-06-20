@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	execute_cmd(t_sh *sh, t_cmd *cmd)
 {

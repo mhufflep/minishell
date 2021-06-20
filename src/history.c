@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	history_read(t_sh *sh)
 {

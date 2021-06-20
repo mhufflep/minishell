@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	cmd_history(t_sh *sh, t_cmd *cmd)
 {

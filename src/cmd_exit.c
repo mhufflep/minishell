@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	is_in_range(char *arg)
 {

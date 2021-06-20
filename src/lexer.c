@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int		check_rredir(char *str)
 {

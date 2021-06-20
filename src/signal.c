@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	int_handler(int num)
 {

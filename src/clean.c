@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	clean_prompt(t_sh *sh)
 {

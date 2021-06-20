@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	cmd_error(char *cmd, char *arg, char *msg)
 {

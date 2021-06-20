@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 t_env	*env_get_local(char *key)
 {

@@ -4,9 +4,9 @@
 *.o
 test.c
 *.dSYM
-.e-bash_history
+.msh_history
 *.a
-minishell
+msh
 /.theia
 test*.c
 file*

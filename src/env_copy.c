@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 char	**key_val_split(char *str, char *sep)
 {

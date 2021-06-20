@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	restore_fds(t_sh *sh)
 {

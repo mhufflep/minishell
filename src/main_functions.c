@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 char	*insert(char **src, char *add, int index, void (*del)(void *))
 {

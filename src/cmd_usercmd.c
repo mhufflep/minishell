@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 char	*get_dir(t_cmd *cmd, char **dir, char **sep)
 {

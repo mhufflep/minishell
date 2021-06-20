@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	key_home_action(t_sh *sh)
 {

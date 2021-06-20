@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	setup_parameters(t_sh **sh)
 {

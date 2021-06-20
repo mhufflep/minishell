@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	env_valid(t_env *env)
 {

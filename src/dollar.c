@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 static	void	insert_value(char **s, int i)
 {

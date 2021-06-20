@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	sizeof_array(char **arr)
 {

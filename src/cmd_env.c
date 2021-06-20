@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	print_env_node(void *node)
 {

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	cmd_not_found(t_cmd *cmd)
 {

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int split_on_pipe(t_sh *sh, char **arr_commands)
 {

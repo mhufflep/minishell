@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	recognize_symbol(t_sh *sh)
 {

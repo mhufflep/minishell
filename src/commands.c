@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int		cmd_learnc(t_cmd *cmd)
 {

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int		index_of(char *str, char c)
 {

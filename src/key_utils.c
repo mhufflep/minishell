@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	ends_with(char *str, char *end)
 {

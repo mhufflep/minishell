@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	child_pipes(t_sh *sh, t_blst *lst, t_cmd *cmd)
 {

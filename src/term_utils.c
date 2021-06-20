@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 struct termios	*create_term_struct(void)
 {

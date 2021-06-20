@@ -1,5 +1,5 @@
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MSH_H
+# define MSH_H
 
 # include <fcntl.h>
 # include <stdio.h>
@@ -26,9 +26,9 @@
 # include "error_messages.h"
 # include "bidirectional_list.h"
 
-# define SHELL_NAME "e-bash"
-# define SHELL_PROMPT "\e[38;2;247;219;1672me-bash # \e[0m"
-# define HISTORY_FILENAME ".e-bash_history"
+# define SHELL_NAME "msh"
+# define SHELL_PROMPT "\e[38;2;247;219;1672mmsh # \e[0m"
+# define HISTORY_FILENAME ".msh_history"
 
 # define QUOTE '\''
 # define DQOUTE '"'
@@ -264,6 +264,7 @@ int				amount_spaces(char *str);
 int				escape_symbols(char **arr_str);
 char			**shell_split(char *s, char sep);
 int				skip_in_quote(char **s, int i, char quote_mark);
+int				skip_in_quote2(char **s, int i, char quote_mark);
 size_t			read_str(char **s, int i, char separator, int is_escaped);
 void			cmds_arr_create(t_sh *sh, int size);
 t_cmd			*command_create(char **args);

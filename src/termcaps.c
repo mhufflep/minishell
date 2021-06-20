@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 char	*init_tcap(t_sh *sh, char *key)
 {

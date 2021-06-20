@@ -1,7 +1,7 @@
 .PHONY: all clean fclean re bonus libft libbdlst create_dir debug_sh
 .SILENT: libft libbdlst
 
-NAME			= minishell
+NAME			= msh
 LIBFT_NAME		= libft.a
 LIBBDLST_NAME	= libbdlst.a
 
@@ -79,7 +79,7 @@ SOURCES			=	array_utils.c \
 					termcaps.c \
 					tilda.c \
 
-HEADER_FILES	=	minishell.h \
+HEADER_FILES	=	msh.h \
 					builtin.h \
 					shell_keys.h \
 					get_next_line.h \
@@ -145,6 +145,6 @@ bonus: clean_bonus
 	@$(MAKE) BONUS=1 all --no-print-directory
 
 run: all
-	./minishell
+	./msh
 
 re: fclean all

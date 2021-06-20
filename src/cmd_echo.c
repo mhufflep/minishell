@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int	is_option(char *opt, char *valid_opt)
 {

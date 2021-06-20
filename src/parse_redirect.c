@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 int		skip_in_quote2(char **s, int i, char quote_mark)
 {

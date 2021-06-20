@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void 	print_error(char *msg, int code_status)
 {

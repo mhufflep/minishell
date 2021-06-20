@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "msh.h"
 
 void	free_redir(void *data)
 {
