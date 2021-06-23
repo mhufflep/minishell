@@ -1,3 +1,6 @@
 [submodule "libbdlst"]
 	path = libbdlst
 	url = https://github.com/mhufflep/bidir-list.git
+[submodule "bidir-list"]
+	path = bidir-list
+	url = https://github.com/mhufflep/bidir-list.git
