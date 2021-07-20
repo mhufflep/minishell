@@ -1,10 +1,10 @@
-#msh &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/levensta/msh/blob/master/LICENSE)
+# msh &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/levensta/msh/blob/master/LICENSE)
 --
 msh – maxishell is a light reproduction of Bourne Shell (bash).
 
 ![msh-test](https://media.giphy.com/media/AId9i2zooNa9MTq3yK/giphy.gif)
 
-##Features that has been implement
+## Features that has been implement
 - History.
 - Search and launch the right executable (based on the **PATH** variable or by usingrelative or absolute path).
 - Builtins functions:
